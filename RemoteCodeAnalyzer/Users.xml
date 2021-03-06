@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Users xmlns="">
+  <User FirstName="Sameer" LastName="Rizvi">
+    <Login Email="srizvi@syr.edu" Password="something" />
+  </User>
+</Users>

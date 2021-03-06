@@ -1,0 +1,101 @@
+﻿<Page x:Class="RemoteCodeAnalyzer.LoginOrCreateAccount"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RemoteCodeAnalyzer"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="600"
+      Title="LoginOrCreateAccount">
+
+    <DockPanel Height="300" Width="600" Background="AliceBlue" IsMouseDirectlyOverChanged="DockPanel_IsMouseDirectlyOverChanged">
+        <DockPanel.Resources>
+            <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
+        </DockPanel.Resources>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File"/>
+        </Menu>
+        <GroupBox x:Name="loginBox" Height="120" VerticalAlignment="Center" HorizontalAlignment="Right" Width="300" DockPanel.Dock="Right">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Already have an account?"/>
+                <Label Content="Sign in:" />
+                <TextBox Name="EmailTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged">
+                    Email
+                </TextBox>
+                <TextBox Name="PasswordTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged">
+                    Password
+                </TextBox>
+                <Button Content="Login" Width="100" HorizontalAlignment="Left" Click="Login_Click"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="newAccountBox" Height="120" VerticalAlignment="Center" HorizontalAlignment="Left" Width="300" DockPanel.Dock="Left">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Don't have an account?" HorizontalAlignment="Center"/>
+                <Label Content="Create a new one:" HorizontalAlignment="Center"/>
+                <Button Content="Create" Width="100" HorizontalAlignment="Center" Click="Create_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!--<GroupBox x:Name="loginBox">
+            <Label Content="Create New Account?" />
+            <Button Content="Create" />
+
+            <Label Content="Already have an account?"/>
+            <Label Content="Sign in:" />
+            <TextBox Name="EmailText">
+                Email
+            </TextBox>
+            <TextBox Name="PasswordText" >
+                Password
+            </TextBox>
+            <Button Content="Login" />
+        </GroupBox>-->
+    </DockPanel>
+
+    <!--<Canvas Height="350" Width="700" Background="AliceBlue">
+        <Canvas.Resources>
+            <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
+        </Canvas.Resources>
+        <Menu>
+            <MenuItem Header="File"/>
+        </Menu>
+        <Label Content="Create New Account?" Canvas.Left="155" Canvas.Top="150" RenderTransformOrigin="1.629,0.686"/>
+        <Button Content="Create" Canvas.Left="167" Canvas.Top="181" Width="100" Height="30" RenderTransformOrigin="1.581,0.472"/>
+
+        <Label Content="Already have an account?" Canvas.Right="100" Canvas.Top="109" Canvas.Left="408"/>
+        <Label Content="Sign in:" Canvas.Right="150" Canvas.Top="133" Canvas.Left="408" RenderTransformOrigin="-0.53,-0.813"/>
+        <TextBox Name="EmailText" Canvas.Right="150" Canvas.Top="158" Width="100" Height="Auto" RenderTransformOrigin="1.203,-0.038" Canvas.Left="408">
+            Email
+        </TextBox>
+        <TextBox Name="PasswordText" Canvas.Right="150" Canvas.Top="181" Width="100" Height="Auto" Canvas.Left="408" RenderTransformOrigin="-0.425,-1.774">
+            Password
+        </TextBox>
+        <Button Content="Login" Canvas.Left="408" Canvas.Top="204" Width="100" Height="30"/>
+    
+    </Canvas>-->
+    <!--<Grid>
+        <Grid.Resources>
+            <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition />
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Content="Create New Account?" Grid.Column="0" Grid.Row="1"/>
+        <Button Content="Create" Grid.Column="0" Grid.Row="1" Width="100" Height="30"/>
+
+        <Label Content="Already have an account?" Grid.Column="1" Grid.Row="1"/>
+        <Label Content="Sign in:" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Name="EmailText" Width="100" Height="100" Grid.Column="1" Grid.Row="1">
+            Email
+        </TextBox>
+        <TextBox Name="PasswordText" Canvas.Right="150" Canvas.Top="220" Width="100" Height="Auto">
+            Password
+        </TextBox>
+    </Grid>-->
+</Page>
