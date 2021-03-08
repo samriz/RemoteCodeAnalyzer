@@ -13,7 +13,7 @@ namespace WCF
         static ServiceHost CreateChannel(string url)
         {
             //"url" is the url we are going to listen on
-            BasicHttpBinding binding = new BasicHttpBinding();
+            BasicHttpBinding binding = new BasicHttpBinding(); //describes how messages are going to be encoded and how they are going to be transfered over the network
             Uri address = new Uri(url);
             Type service = typeof(Service);
             ServiceHost host = new ServiceHost(service, address);
