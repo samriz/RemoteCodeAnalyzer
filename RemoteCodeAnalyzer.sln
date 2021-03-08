@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCodeAnalyzer", "RemoteCodeAnalyzer\RemoteCodeAnalyzer.csproj", "{FE923CBA-EF05-4645-8533-D915CC8FB52D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF", "WCF\WCF.csproj", "{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FE923CBA-EF05-4645-8533-D915CC8FB52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE923CBA-EF05-4645-8533-D915CC8FB52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE923CBA-EF05-4645-8533-D915CC8FB52D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
