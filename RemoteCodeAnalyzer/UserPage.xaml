@@ -9,9 +9,8 @@
       Title="User">
 
     <DockPanel Height="350" Width="700" Background="AliceBlue">
-        <Label Name="UserEmailLabel" Content="Label" Height="Auto" VerticalAlignment="Top" Width="Auto" FontSize="20"/>
-        <ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" Margin="10,0,0,10.4" VerticalAlignment="Bottom" Width="679" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373"/>
-        <Label Name="label" Content="Label" HorizontalAlignment="Left" Margin="682,10,0,0" VerticalAlignment="Top" Height="48" Width="100"/>
-        
+        <Label Name="FullNameLabel" Content="Label" Height="Auto" VerticalAlignment="Top" Width="Auto" FontSize="20"/>
+        <ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="578" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373"/>
+        <!--<Label Name="label" Content="Label" HorizontalAlignment="Left" Margin="682,10,0,0" VerticalAlignment="Top" Height="48" Width="100"/>-->
     </DockPanel>
 </Page>

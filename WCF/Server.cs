@@ -23,10 +23,10 @@ namespace WCF
     }
 
     [MessageContract]
-    public class RemoteFileInfo : IDisposable
-    {
+    //public class RemoteFileInfo : IDisposable
+    //{
 
-    }
+    //}
     class Server
     {
     }

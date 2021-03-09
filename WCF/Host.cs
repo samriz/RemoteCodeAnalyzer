@@ -20,5 +20,9 @@ namespace WCF
             host.AddServiceEndpoint(typeof(IBasicService), binding, address);
             return host;
         }
+        static void Main(string[] args)
+        {
+
+        }
     }
 }

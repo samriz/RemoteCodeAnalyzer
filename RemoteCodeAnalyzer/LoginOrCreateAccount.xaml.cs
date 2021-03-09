@@ -22,10 +22,15 @@ namespace RemoteCodeAnalyzer
     public partial class LoginOrCreateAccount : Page
     {
         User user;
+        //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
+        private string xmlFileName;
+
         public LoginOrCreateAccount()
         {
             InitializeComponent();
             InitializeTextBoxes();
+            user = new User();
+            xmlFileName = @"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml";
         }
         private void InitializeTextBoxes()
         {
@@ -42,7 +47,7 @@ namespace RemoteCodeAnalyzer
             //if the user's email address is in Users.xml and if matches the password that corresponds with it, return true;
             return false;
         }
-        
+
         private void Login_Click(object sender, RoutedEventArgs e) //event handler
         {
             /*
@@ -53,33 +58,42 @@ namespace RemoteCodeAnalyzer
             Click?.Invoke(sender,e); //invoke handler(s)
             */
             //sender is button
+            string firstName = "";
+            string lastName = "";
+        
             user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Text);
-            UserPage userpage = new UserPage(user);
+            UserPage userpage;
 
-            //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
-            string xmlFileName = @"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml";
-
-            if (UserExists(xmlFileName, user.GetEmail(), user.GetPassword()))
+            if (UserExists(out firstName, out lastName, user.GetEmail(), user.GetPassword()))
             {
+                user.SetFirstName(firstName);
+                user.SetLastName(lastName);
+                userpage = new UserPage(user);
                 this.NavigationService.Navigate(userpage);
             }
             else MessageBox.Show("User doesn't exist. Please create a new account");
         }
 
-        private bool UserExists(string xmlfilename, string email, string password)
+        private bool UserExists(out string firstName, out string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(xmlfilename);
+            UsersXML.Load(xmlFileName);
 
             XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
             for (int i = 0; i < elemList.Count; i++)
-            {
+            {               
                 if (elemList[i].Attributes.GetNamedItem("Email").Value == email && elemList[i].Attributes.GetNamedItem("Password").Value == password)
                 //if (elemList[i].OuterXml.Contains(email) && elemList[i].OuterXml.Contains(password))
                 {
+                    firstName = elemList[i].ParentNode.Attributes.GetNamedItem("FirstName").Value;
+                    lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
+                    //firstName = elemList[i].Attributes.GetNamedItem("Email").ParentNode.Attributes.GetNamedItem("FirstName").Value;
+                    //lastName = elemList[i].Attributes.GetNamedItem("Email").ParentNode.Attributes.GetNamedItem("LastName").Value;
                     return true;
                 }
             }
+            firstName = "";
+            lastName = "";
             return false;
         }
 

@@ -74,6 +74,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Client.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserPage.xaml.cs">
       <DependentUpon>UserPage.xaml</DependentUpon>
@@ -121,6 +122,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Users.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WCF\WCF.csproj">
+      <Project>{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}</Project>
+      <Name>WCF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

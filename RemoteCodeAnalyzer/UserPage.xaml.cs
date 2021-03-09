@@ -19,15 +19,14 @@ namespace RemoteCodeAnalyzer
     /// Interaction logic for Login.xaml
     /// </summary>
     public partial class UserPage : Page
-    {
-        
+    {    
         public UserPage()
         {
             InitializeComponent();
         }
         public UserPage(User user): this()
         {
-            UserEmailLabel.Content = user.GetEmail();
+            FullNameLabel.Content = user.GetFirstName() + " " + user.GetLastName();
         }
         private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
