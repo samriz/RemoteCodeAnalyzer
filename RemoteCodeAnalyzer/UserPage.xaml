@@ -5,10 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:RemoteCodeAnalyzer"
       mc:Ignorable="d" 
-      d:DesignHeight="350" d:DesignWidth="700"
+      d:DesignHeight="400" d:DesignWidth="600"
       Title="User">
 
-    <DockPanel Height="350" Width="700" Background="AliceBlue">
+    <DockPanel Height="400" Width="600" Background="AliceBlue">
         <Label Name="FullNameLabel" Content="Label" Height="Auto" VerticalAlignment="Top" Width="Auto" FontSize="20"/>
         <ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="578" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373"/>
         <!--<Label Name="label" Content="Label" HorizontalAlignment="Left" Margin="682,10,0,0" VerticalAlignment="Top" Height="48" Width="100"/>-->

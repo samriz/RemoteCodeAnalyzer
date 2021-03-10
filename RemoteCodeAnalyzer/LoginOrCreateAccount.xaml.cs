@@ -42,12 +42,6 @@ namespace RemoteCodeAnalyzer
             //PasswordTextBox.IsEnabled = false;
         }
 
-        private bool AuthenticateUser()
-        {
-            //if the user's email address is in Users.xml and if matches the password that corresponds with it, return true;
-            return false;
-        }
-
         private void Login_Click(object sender, RoutedEventArgs e) //event handler
         {
             /*
@@ -58,9 +52,13 @@ namespace RemoteCodeAnalyzer
             Click?.Invoke(sender,e); //invoke handler(s)
             */
             //sender is button
+            AuthenticateUser();
+        }
+        private void AuthenticateUser()
+        {
             string firstName = "";
             string lastName = "";
-        
+
             user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Text);
             UserPage userpage;
 

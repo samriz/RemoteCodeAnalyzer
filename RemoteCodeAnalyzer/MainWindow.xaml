@@ -5,5 +5,5 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RemoteCodeAnalyzer"
         mc:Ignorable="d"
-        Title="Code Analyzer" Height="300" Width="600" Source="LoginOrCreateAccount.xaml">
+        Title="Code Analyzer" Height="400" Width="600" Source="LoginOrCreateAccount.xaml">
 </NavigationWindow>
