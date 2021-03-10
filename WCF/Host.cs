@@ -22,7 +22,18 @@ namespace WCF
         }
         static void Main(string[] args)
         {
-
+            ServiceHost host = null;
+            try
+            {
+                host = CreateChannel("http://localhost:8080/Service");
+                host.Open();
+                Console.ReadKey();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            host.Close();
         }
     }
 }
