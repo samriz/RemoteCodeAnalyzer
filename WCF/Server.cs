@@ -13,13 +13,13 @@ namespace WCF
     {
         //clients have to use this interface to communicate with server
         [OperationContract]
-        void sendMessage(string message);
+        void SendMessage(string message);
         
         [OperationContract]
-        void sendMessage(XmlDocument xmlMessage);
+        void SendMessage(XmlDocument xmlMessage);
 
         [OperationContract]
-        string getMessage();
+        string GetMessage();
         
         [OperationContract] //exposed to client 
         void Login();

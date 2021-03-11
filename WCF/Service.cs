@@ -20,17 +20,17 @@ namespace WCF
             throw new NotImplementedException();
         }
 
-        public void sendMessage(string message)
+        public void SendMessage(string message)
         {
             Console.WriteLine("Message received by service: {0}", message);
         }
 
-        public void sendMessage(XmlDocument xmlMessage)
+        public void SendMessage(XmlDocument xmlMessage)
         {
             throw new NotImplementedException();
         }
 
-        public string getMessage()
+        public string GetMessage()
         {
             return "New message from Service.";
         }

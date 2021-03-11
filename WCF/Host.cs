@@ -17,21 +17,25 @@ namespace WCF
             Uri address = new Uri(url);
             Type service = typeof(Service);
             ServiceHost host = new ServiceHost(service, address);
-            host.AddServiceEndpoint(typeof(IBasicService), binding, address);
+            host.AddServiceEndpoint(typeof(IBasicService), binding, address); //exposes client to IBasicService class
             return host;
         }
         static void Main(string[] args)
         {
+            Console.Title = "BasicHttp Service Host";
+            Console.WriteLine("Starting programmatic basic service");
             ServiceHost host = null;
             try
             {
-                host = CreateChannel("http://localhost:8080/Service");
+                host = CreateChannel("http://localhost:8080/Service"); //opening up connection on port 8080 for clients
                 host.Open();
+                Console.WriteLine("Started Service - Press key to exit.");
                 Console.ReadKey();
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return;
             }
             host.Close();
         }
