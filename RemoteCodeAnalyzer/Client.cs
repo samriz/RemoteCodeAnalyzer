@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WCF;
 
@@ -23,7 +24,38 @@ namespace RemoteCodeAnalyzer
 
         void SendMessage(string message)
         {
-
+            Func<string> fnc = () =>
+            {
+                svc.SendMessage(message);
+                return "Service succeeded";
+            };
+            ServiceRetryWrapper(fnc);
+        }
+        //make sure service is up and running
+        string ServiceRetryWrapper(Func<string> fnc)
+        {
+            int count = 0;
+            string message;
+            while (true)
+            {
+                try
+                {
+                    message = fnc.Invoke();
+                    break;
+                }
+                catch(Exception exc)
+                {
+                    if(count > 4)
+                    {
+                        return "Max retries exceeded";
+                    }
+                    Console.WriteLine(exc.Message);
+                    Console.WriteLine("Service failed {0} times - trying again.", ++count);
+                    Thread.Sleep(100);
+                    continue;
+                }
+            }
+            return message;
         }
         static void Main(string[] args)
         {
