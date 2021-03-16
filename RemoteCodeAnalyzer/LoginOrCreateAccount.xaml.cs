@@ -103,13 +103,13 @@ namespace RemoteCodeAnalyzer
             this.NavigationService.Navigate(NA);
         }
 
-        private void EmailTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void EmailTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActivateBox(EmailTextBox, "Email");
             InactivateBox(PasswordTextBox);
         }
 
-        private void PasswordTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void PasswordTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActivateBox(PasswordTextBox);
             InactivateBox(EmailTextBox);

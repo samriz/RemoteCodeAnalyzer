@@ -18,10 +18,10 @@
         <Label Content="Sign in:" />
         <Label Content="Already have an account?" Canvas.Left="357" Canvas.Top="60" RenderTransformOrigin="0.327,0.484"/>
         
-        <TextBox Name="EmailTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged" Canvas.Left="381" Canvas.Top="91" KeyDown="EmailTextBox_KeyDown">
+        <TextBox Name="EmailTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="381" Canvas.Top="91" KeyDown="EmailTextBox_KeyDown">
             Email
         </TextBox>
-        <PasswordBox Name="PasswordTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged" Canvas.Left="381" Canvas.Top="109" RenderTransformOrigin="0.076,0.841"></PasswordBox>
+        <PasswordBox Name="PasswordTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="381" Canvas.Top="109" RenderTransformOrigin="0.076,0.841"></PasswordBox>
         <Button Name="LoginButton" Content="Login" Width="100" HorizontalAlignment="Left" Click="Login_Click" Canvas.Left="381" Canvas.Top="140"/>
         <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="91" Canvas.Top="83"/>
         <Label Content="Create a new one:" HorizontalAlignment="Center" Canvas.Left="102" Canvas.Top="105" RenderTransformOrigin="1.156,0.922"/>
