@@ -10,7 +10,7 @@
 
     <Canvas Background="AliceBlue">
         <Label Name="FullNameLabel" Content="Label" Height="Auto" VerticalAlignment="Top" Width="Auto" FontSize="20"/>
-        <Button Name="SearchFiles" Content="Search" Width="75" Height="20" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="72"/>
+        <Button Name="SearchFiles" Content="Search" Width="75" Height="20" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="72" Click="SearchFiles_Click"/>
         <ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" VerticalAlignment="Bottom" Width="476" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373" Canvas.Left="62" Canvas.Top="365"/>
         <Button x:Name="UploadFiles" Content="Upload" Width="75" Height="20" RenderTransformOrigin="0.496,-3.53" Canvas.Left="90" Canvas.Top="72"/>
         <!--<Label Name="label" Content="Label" HorizontalAlignment="Left" Margin="682,10,0,0" VerticalAlignment="Top" Height="48" Width="100"/>-->
