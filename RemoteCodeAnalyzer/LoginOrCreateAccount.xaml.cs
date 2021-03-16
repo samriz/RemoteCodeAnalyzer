@@ -41,7 +41,6 @@ namespace RemoteCodeAnalyzer
             //EmailTextBox.IsEnabled = false;
             //PasswordTextBox.IsEnabled = false;
         }
-
         private void Login_Click(object sender, RoutedEventArgs e) //event handler
         {
             /*
@@ -52,27 +51,32 @@ namespace RemoteCodeAnalyzer
             Click?.Invoke(sender,e); //invoke handler(s)
             */
             //sender is button
-            AuthenticateUser();
+
+            if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
+            else
+            {
+                Error.Text = "Email or Password fields cannot be empty.";
+            }
         }
         private void AuthenticateUser()
         {
             string firstName = "";
             string lastName = "";
 
-            user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Text);
+            user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Password);
             UserPage userpage;
 
-            if (UserExists(out firstName, out lastName, user.GetEmail(), user.GetPassword()))
+            if (UserExists(ref firstName, ref lastName, user.GetEmail(), user.GetPassword()))
             {
                 user.SetFirstName(firstName);
                 user.SetLastName(lastName);
                 userpage = new UserPage(user);
                 this.NavigationService.Navigate(userpage);
             }
-            else MessageBox.Show("User doesn't exist. Please create a new account");
+            else MessageBox.Show("Incorrect Login.");
         }
 
-        private bool UserExists(out string firstName, out string lastName, string email, string password)
+        private bool UserExists(ref string firstName, ref string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
             UsersXML.Load(xmlFileName);
@@ -81,17 +85,15 @@ namespace RemoteCodeAnalyzer
             for (int i = 0; i < elemList.Count; i++)
             {               
                 if (elemList[i].Attributes.GetNamedItem("Email").Value == email && elemList[i].Attributes.GetNamedItem("Password").Value == password)
-                //if (elemList[i].OuterXml.Contains(email) && elemList[i].OuterXml.Contains(password))
                 {
                     firstName = elemList[i].ParentNode.Attributes.GetNamedItem("FirstName").Value;
                     lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
-                    //firstName = elemList[i].Attributes.GetNamedItem("Email").ParentNode.Attributes.GetNamedItem("FirstName").Value;
-                    //lastName = elemList[i].Attributes.GetNamedItem("Email").ParentNode.Attributes.GetNamedItem("LastName").Value;
                     return true;
                 }
+
             }
-            firstName = "";
-            lastName = "";
+            //firstName = "";
+            //lastName = "";
             return false;
         }
 
@@ -103,34 +105,44 @@ namespace RemoteCodeAnalyzer
 
         private void EmailTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            EmailTextBox.Foreground = Brushes.Black;
-            EmailTextBox.FontStyle = FontStyles.Normal;
-
-            PasswordTextBox.Background = Brushes.White;
-            EmailTextBox.Background = Brushes.AliceBlue;
-            if(EmailTextBox.Text == "Email") EmailTextBox.Text = "";
+            ActivateBox(EmailTextBox, "Email");
+            InactivateBox(PasswordTextBox);
         }
 
         private void PasswordTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            PasswordTextBox.Foreground = Brushes.Black;
-            PasswordTextBox.FontStyle = FontStyles.Normal;
-
-            EmailTextBox.Background = Brushes.White;
-            PasswordTextBox.Background = Brushes.AliceBlue;
-            if (PasswordTextBox.Text == "Password") PasswordTextBox.Text = "";
+            ActivateBox(PasswordTextBox);
+            InactivateBox(EmailTextBox);
         }
-
-        private void DockPanel_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(EmailTextBox.Text.Length == 0)
+            if (EmailTextBox.Text.Length == 0) EmailTextBox.Background = Brushes.White;
+            if (PasswordTextBox.Password.Length == 0) PasswordTextBox.Background = Brushes.White;
+        }
+        private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
             {
-                EmailTextBox.Background = Brushes.White;
-            }
-            if (PasswordTextBox.Text.Length == 0)
-            {
-                PasswordTextBox.Background = Brushes.White;
+                ActivateBox(PasswordTextBox);
+                InactivateBox(EmailTextBox);
             }
         }
+        private void ActivateBox(TextBox newlyActiveBox, string text)
+        {
+            newlyActiveBox.Foreground = Brushes.Black;
+            newlyActiveBox.FontStyle = FontStyles.Normal;
+            newlyActiveBox.Background = Brushes.AliceBlue;
+            if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
+        }
+
+        private void ActivateBox(PasswordBox newlyActiveBox)
+        {
+            newlyActiveBox.Foreground = Brushes.Black;
+            newlyActiveBox.FontStyle = FontStyles.Normal;
+            newlyActiveBox.Background = Brushes.AliceBlue;
+        }
+        private void InactivateBox(TextBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
+        
+        private void InactivateBox(PasswordBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
     }
 }

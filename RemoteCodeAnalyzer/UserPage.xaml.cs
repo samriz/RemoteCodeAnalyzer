@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace RemoteCodeAnalyzer
 {
@@ -36,8 +37,11 @@ namespace RemoteCodeAnalyzer
 
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog searchDirectory = new OpenFileDialog();
-            searchDirectory.ShowDialog();
+            OpenFileDialog DirectoryExplorer = new OpenFileDialog();
+            DirectoryExplorer.Multiselect = true;
+            DirectoryExplorer.ShowDialog();
+
+            //Process.Start("explorer.exe");
         }
     }
 }
