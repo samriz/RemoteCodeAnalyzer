@@ -57,9 +57,9 @@ namespace RemoteCodeAnalyzer
             }
             return message;
         }
-        static void Main(string[] args)
-        {
+        //static void Main(string[] args)
+        //{
 
-        }
+        //}
     }
 }
