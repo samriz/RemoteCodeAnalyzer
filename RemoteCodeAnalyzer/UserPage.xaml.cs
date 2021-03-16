@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace RemoteCodeAnalyzer
 {
@@ -37,8 +38,8 @@ namespace RemoteCodeAnalyzer
 
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog DirectoryExplorer = new OpenFileDialog();
-            DirectoryExplorer.Multiselect = true;
+            FolderBrowserDialog DirectoryExplorer = new FolderBrowserDialog();
+            //OpenFileDialog DirectoryExplorer = new OpenFileDialog();
             DirectoryExplorer.ShowDialog();
 
             //Process.Start("explorer.exe");
