@@ -23,14 +23,15 @@ namespace RemoteCodeAnalyzer
     {
         User user;
         //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
-        private string xmlFileName;
+        private readonly string xmlFileName;
 
         public LoginOrCreateAccount()
         {
             InitializeComponent();
             InitializeTextBoxes();
             user = new User();
-            xmlFileName = @"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml";
+            //xmlFileName = @"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml";
+            xmlFileName = @"../../Users.xml";
         }
         private void InitializeTextBoxes()
         {
@@ -38,8 +39,6 @@ namespace RemoteCodeAnalyzer
             PasswordTextBox.Foreground = Brushes.Gray;
             EmailTextBox.FontStyle = FontStyles.Italic;
             PasswordTextBox.FontStyle = FontStyles.Italic;
-            //EmailTextBox.IsEnabled = false;
-            //PasswordTextBox.IsEnabled = false;
         }
         private void Login_Click(object sender, RoutedEventArgs e) //event handler
         {
@@ -92,8 +91,6 @@ namespace RemoteCodeAnalyzer
                 }
 
             }
-            //firstName = "";
-            //lastName = "";
             return false;
         }
 

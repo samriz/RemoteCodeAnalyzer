@@ -10,10 +10,7 @@ namespace RemoteCodeAnalyzer
     {
         private string firstName, lastName, email, password;
         
-        public User()
-        {
-
-        }
+        public User(){}
         public User(string email, string password)
         {
             this.firstName = "";

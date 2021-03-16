@@ -23,19 +23,13 @@ namespace RemoteCodeAnalyzer
     /// </summary>
     public partial class UserPage : Page
     {    
-        public UserPage()
-        {
-            InitializeComponent();
-        }
+        public UserPage(){InitializeComponent();}
         public UserPage(User user): this()
         {
             FullNameLabel.Content = user.GetFirstName() + " " + user.GetLastName();
         }
         private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
-        }
-
+        {}
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog DirectoryExplorer = new FolderBrowserDialog();

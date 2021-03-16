@@ -21,10 +21,12 @@ namespace RemoteCodeAnalyzer
     /// </summary>
     public partial class NewAccount : Page
     {
+        private readonly string xmlFileName;
         public NewAccount()
         {
             InitializeComponent();
             InitializeTextBoxes();
+            xmlFileName = @"../../Users.xml";
         }
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {
@@ -32,10 +34,11 @@ namespace RemoteCodeAnalyzer
             LoginOrCreateAccount login = new LoginOrCreateAccount();
             this.NavigationService.Navigate(login);
         }
-        public static void AddNewUser(string FirstName, string LastName, string email, string password)
+        public void AddNewUser(string FirstName, string LastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
+            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
+            UsersXML.Load(xmlFileName);
 
             XmlElement userElem = UsersXML.CreateElement("User");
             userElem.SetAttribute("FirstName", FirstName);
