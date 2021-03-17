@@ -6,12 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace WCF
+namespace Server
 {
     //implement functions defined in Server.cs
     //what server will do when request comes from client
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    public class Service : IBasicService
+
+    [ServiceBehavior(InstanceContextMode =InstanceContextMode.PerSession)]
+
+    //[ServiceBehavior(IncludeExceptionDetailInFaults = true)]
+    public class BasicService : IBasicService
     {
         /*static void Main(string[] args)
         {
@@ -25,11 +28,11 @@ namespace WCF
             //print message that client had sent
             Console.WriteLine("Message received by service: {0}", message);
         }
-        public void SendMessage(XmlDocument xmlMessage)
-        {
-            //print message that client had sent
-            throw new NotImplementedException();
-        }
+        //public void SendMessage(XmlDocument xmlMessage)
+        //{
+        //    //print message that client had sent
+        //    throw new NotImplementedException();
+        //}
         public string GetMessage()
         {
             return "New message from Service.";

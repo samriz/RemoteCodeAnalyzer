@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Xml;
 
-namespace WCF
+namespace Server
 {
     [ServiceContract]
     public interface IBasicService
@@ -15,8 +15,8 @@ namespace WCF
         [OperationContract]
         void SendMessage(string message);
         
-        [OperationContract]
-        void SendMessage(XmlDocument xmlMessage);
+        //[OperationContract]
+        //void SendMessage(XmlDocument xmlMessage);
 
         [OperationContract]
         string GetMessage();
@@ -49,8 +49,5 @@ namespace WCF
                 FileByteStream = null;
             }
         }
-    }
-    class IService
-    {
     }
 }

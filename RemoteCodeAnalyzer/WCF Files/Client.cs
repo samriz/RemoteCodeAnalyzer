@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WCF;
+using Server;
 
 namespace RemoteCodeAnalyzer
 {
@@ -14,7 +14,7 @@ namespace RemoteCodeAnalyzer
         IBasicService svc;//we're going to use this object to communicate with the service i.e. use it to call the functions declared in the interface. basically like we're invoking methods on the server
         Client(string url)
         {
-            BasicHttpBinding binding = new BasicHttpBinding();
+            WSHttpBinding binding = new WSHttpBinding();
             EndpointAddress address = new EndpointAddress(url);
 
             //A factory that creates channels of different types that are used by clients to send messages to variously configured service endpoints.
@@ -67,9 +67,20 @@ namespace RemoteCodeAnalyzer
             }
             return message;
         }
-        //static void Main(string[] args)
-        //{
+        static void Main(string[] args)
+        {
+            Console.Title = "BasicHttp Client";
+            Console.WriteLine("\n Starting Programmatic Basic Service Client");
+            Console.WriteLine("===============================");
+            string message = args[0];
+            string url = "http://localhost:8080/BasicService";
+            Client client = new Client(url);
 
-        //}
+            client.SendMessage(message);
+            client.SendMessage(message);
+            client.SendMessage(message);
+            client.SendMessage(message);
+
+        }
     }
 }

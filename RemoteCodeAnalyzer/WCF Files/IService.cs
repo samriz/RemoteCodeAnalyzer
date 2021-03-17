@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Xml;
 
-namespace WCF
+namespace Server
 {
     [ServiceContract]
     public interface IBasicService
