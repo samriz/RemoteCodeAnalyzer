@@ -25,15 +25,15 @@ namespace WCF
         void Login();
         
         [OperationContract]
-        void UploadFiles();
+        void UploadFiles(RemoteFileInfo request);
     }
 
     [MessageContract]
-    //public class RemoteFileInfo : IDisposable
-    //{
+    public class RemoteFileInfo : IDisposable
+    {
 
-    //}
-    class Server
+    }
+    class IService
     {
     }
 }
