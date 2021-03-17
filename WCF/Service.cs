@@ -9,6 +9,7 @@ using System.Xml;
 namespace WCF
 {
     //implement functions defined in Server.cs
+    //what server will do when request comes from client
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class Service : IBasicService
     {
@@ -19,23 +20,21 @@ namespace WCF
         {
             throw new NotImplementedException();
         }
-
         public void SendMessage(string message)
         {
+            //print message that client had sent
             Console.WriteLine("Message received by service: {0}", message);
         }
-
         public void SendMessage(XmlDocument xmlMessage)
         {
+            //print message that client had sent
             throw new NotImplementedException();
         }
-
         public string GetMessage()
         {
             return "New message from Service.";
         }
-
-        public void UploadFiles()
+        public void UploadFiles(RemoteFileInfo request)
         {
             throw new NotImplementedException();
         }

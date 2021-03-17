@@ -15,8 +15,8 @@ namespace WCF
             //"url" is the url we are going to listen on
             BasicHttpBinding binding = new BasicHttpBinding(); //describes how messages are going to be encoded and how they are going to be transfered over the network
             Uri address = new Uri(url);
-            Type service = typeof(Service);
-            ServiceHost host = new ServiceHost(service, address);
+            Type serviceType = typeof(Service);
+            ServiceHost host = new ServiceHost(serviceType, address);
             host.AddServiceEndpoint(typeof(IBasicService), binding, address); //exposes client to IBasicService class
             return host;
         }
