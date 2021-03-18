@@ -19,18 +19,70 @@ namespace Server
         /*static void Main(string[] args)
         {
         }*/
+        private readonly string usersData;
         string errorMessage;
-        public void Login(string email, string password)
+        User user;
+
+        public BasicService()
         {
-            if (email.Length > 0 && password.Length > 0) AuthenticateUser(email, password);
+            usersData = @"../../Users.xml";
+        }
+        public bool Login(string email, string password, out string infoMessage)
+        {
+            if (email.Length > 0 && password.Length > 0) 
+            { 
+                User user = AuthenticateUser(email, password); 
+                if(user == null)
+                {
+                    infoMessage = "Incorrect Login.";
+                    return false;
+                }
+                else
+                {
+                    infoMessage = "Success! Returned page!";
+                    return true;
+                }
+            }
             else
             {
-                errorMessage = "Email or Password fields cannot be empty.";
+                infoMessage = "Email or Password fields cannot be empty.";
+                return false;
             }
         }
-        void AuthenticateUser(string email, string password)
+        User AuthenticateUser(string email, string password)
         {
-            throw new NotImplementedException();
+            string firstName = "";
+            string lastName = "";
+
+            user = new User(email, password);
+            UserPage userpage;
+
+            if (UserExists(ref firstName, ref lastName, user.GetEmail(), user.GetPassword()))
+            {
+                user.SetFirstName(firstName);
+                user.SetLastName(lastName);
+                userpage = new UserPage(user);
+                //this.NavigationService.Navigate(userpage);
+                return userpage;
+            }
+            else return null;//MessageBox.Show("Incorrect Login.");
+        }
+        private bool UserExists(ref string firstName, ref string lastName, string email, string password)
+        {
+            XmlDocument UsersXML = new XmlDocument();
+            UsersXML.Load(usersData);
+
+            XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
+            for (int i = 0; i < elemList.Count; i++)
+            {
+                if (elemList[i].Attributes.GetNamedItem("Email").Value == email && elemList[i].Attributes.GetNamedItem("Password").Value == password)
+                {
+                    firstName = elemList[i].ParentNode.Attributes.GetNamedItem("FirstName").Value;
+                    lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
+                    return true;
+                }
+            }
+            return false;
         }
         public void SendMessage(string message)
         {
@@ -50,7 +102,5 @@ namespace Server
         {
             throw new NotImplementedException();
         }
-
-        
     }
 }

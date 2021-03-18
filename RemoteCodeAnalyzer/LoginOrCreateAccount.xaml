@@ -26,7 +26,7 @@
         <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="91" Canvas.Top="83"/>
         <Label Content="Create a new one:" HorizontalAlignment="Center" Canvas.Left="102" Canvas.Top="105" RenderTransformOrigin="1.156,0.922"/>
         <Button Content="Create" Width="100" HorizontalAlignment="Center" Click="Create_Click" Canvas.Left="102" Canvas.Top="140"/>
-        <TextBlock Name="Error" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" Foreground="Red"/>
+        <TextBlock Name="ErrorLabel" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" Foreground="Red"/>
     </Canvas>
 
     <!--<Canvas Height="350" Width="700" Background="AliceBlue">

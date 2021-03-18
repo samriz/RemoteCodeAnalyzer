@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Xml;
+using System.Windows;
 
 namespace Server
 {
@@ -22,9 +23,11 @@ namespace Server
         string GetMessage();
         
         [OperationContract] //exposed to client 
-        void Login(string email, string password);
+        UserPage Login(string email, string password, out string infoMessage);
 
-        void AuthenticateUser(string email, string password);
+        UserPage AuthenticateUser(string email, string password);
+
+        bool UserExists(ref string firstName, ref string lastName, string email, string password);
         
         [OperationContract]
         void UploadFile(RemoteFileInfo request);

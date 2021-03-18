@@ -41,8 +41,7 @@ namespace RemoteCodeAnalyzer
             EmailTextBox.FontStyle = FontStyles.Italic;
             PasswordTextBox.FontStyle = FontStyles.Italic;
         }
-        private void Login_Click(object sender, RoutedEventArgs e) //event handler
-        {
+
             /*
             public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
             public event RoutedEventHandler Click;
@@ -50,17 +49,16 @@ namespace RemoteCodeAnalyzer
             Click += Login_Click //we are registering Login_Click method to the Click event
             Click?.Invoke(sender,e); //invoke handler(s)
             */
-            //sender is button
-
-            client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password);
-
-            /*if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
+        //sender is button
+        /*private void Login_Click(object sender, RoutedEventArgs e) //event handler
+        {
+            if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
             else
             {
-                Error.Text = "Email or Password fields cannot be empty.";
-            }*/
-        }
-        private void AuthenticateUser()
+                ErrorLabel.Text = "Email or Password fields cannot be empty.";
+            }
+        }*/
+        /*private void AuthenticateUser()
         {
             string firstName = "";
             string lastName = "";
@@ -76,9 +74,8 @@ namespace RemoteCodeAnalyzer
                 this.NavigationService.Navigate(userpage);
             }
             else MessageBox.Show("Incorrect Login.");
-        }
-
-        private bool UserExists(ref string firstName, ref string lastName, string email, string password)
+        }*/
+        /*private bool UserExists(ref string firstName, ref string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
             UsersXML.Load(usersData);
@@ -92,11 +89,20 @@ namespace RemoteCodeAnalyzer
                     lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
                     return true;
                 }
-
             }
             return false;
+        }*/
+        private void Login_Click(object sender, RoutedEventArgs e) //event handler
+        {
+            string message;
+            UserPage userpage;
+            if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password, out message))
+            {
+                userpage = new UserPage(new User(EmailTextBox.Text, PasswordTextBox.Password));
+                this.NavigationService.Navigate(userpage);
+            }
+            else ErrorLabel.Text = message;
         }
-
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             NewAccount NA = new NewAccount();
@@ -142,7 +148,6 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
         }
         private void InactivateBox(TextBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
-        
         private void InactivateBox(PasswordBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
     }
 }
