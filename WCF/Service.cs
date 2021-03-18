@@ -19,7 +19,16 @@ namespace Server
         /*static void Main(string[] args)
         {
         }*/
-        public void Login()
+        string errorMessage;
+        public void Login(string email, string password)
+        {
+            if (email.Length > 0 && password.Length > 0) AuthenticateUser(email, password);
+            else
+            {
+                errorMessage = "Email or Password fields cannot be empty.";
+            }
+        }
+        void AuthenticateUser(string email, string password)
         {
             throw new NotImplementedException();
         }
@@ -37,9 +46,11 @@ namespace Server
         {
             return "New message from Service.";
         }
-        public void UploadFiles(RemoteFileInfo request)
+        public void UploadFile(RemoteFileInfo request)
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

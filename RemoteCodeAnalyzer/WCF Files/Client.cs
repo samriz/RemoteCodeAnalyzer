@@ -9,10 +9,10 @@ using Server;
 
 namespace RemoteCodeAnalyzer
 {
-    class Client
+    class Client/* : System.ServiceModel.ClientBase<IBasicService>, IBasicService*/
     {
-        IBasicService svc;//we're going to use this object to communicate with the service i.e. use it to call the functions declared in the interface. basically like we're invoking methods on the server
-        Client(string url)
+        private IBasicService svc;//we're going to use this object to communicate with the service i.e. use it to call the functions declared in the interface. basically like we're invoking methods on the server
+        public Client(string url)
         {
             WSHttpBinding binding = new WSHttpBinding();
             EndpointAddress address = new EndpointAddress(url);
@@ -22,7 +22,9 @@ namespace RemoteCodeAnalyzer
             svc = factory.CreateChannel();
         }
 
-        void SendMessage(string message)
+        public IBasicService GetSVC() => svc;
+
+        public void SendMessage(string message)
         {
             Func<string> fnc = () =>
             {
@@ -31,7 +33,7 @@ namespace RemoteCodeAnalyzer
             };
             ServiceRetryWrapper(fnc); //make sure service is up and running
         }
-        string GetMessage()
+        public string GetMessage()
         {
             string message;
             Func<string> fnc = () =>
@@ -67,7 +69,7 @@ namespace RemoteCodeAnalyzer
             }
             return message;
         }
-        static void Main(string[] args)
+        /*static void Main(string[] args)
         {
             Console.Title = "BasicHttp Client";
             Console.WriteLine("\n Starting Programmatic Basic Service Client");
@@ -80,7 +82,6 @@ namespace RemoteCodeAnalyzer
             client.SendMessage(message);
             client.SendMessage(message);
             client.SendMessage(message);
-
-        }
+        }*/
     }
 }

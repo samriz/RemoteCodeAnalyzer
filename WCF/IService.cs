@@ -22,10 +22,15 @@ namespace Server
         string GetMessage();
         
         [OperationContract] //exposed to client 
-        void Login();
+        void Login(string email, string password);
+
+        void AuthenticateUser(string email, string password);
         
         [OperationContract]
-        void UploadFiles(RemoteFileInfo request);
+        void UploadFile(RemoteFileInfo request);
+
+        [OperationContract]
+        string GetErrorMessage();
     }
 
     [MessageContract]

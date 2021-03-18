@@ -13,14 +13,13 @@ namespace Server
         static ServiceHost CreateChannel(string url)
         {
             //"url" is the url we are going to listen on
-            WSHttpBinding binding = new WSHttpBinding(); //describes how messages are going to be encoded and how they are going to be transfered over the network
+            WSHttpBinding binding = new WSHttpBinding(); //describes how messages are going to be encoded and how they are going to be transferred over the network
             Uri address = new Uri(url);
             Type serviceType = typeof(BasicService);
             ServiceHost host = new ServiceHost(serviceType, address);
             host.AddServiceEndpoint(typeof(IBasicService), binding, address); //exposes client to IBasicService class
             return host;
         }
-#if (host)
         static void Main(string[] args)
         {
             Console.Title = "BasicHttp Service Host";
@@ -41,6 +40,5 @@ namespace Server
                 host.Abort();
             }   
         }
-#endif
     }
 }

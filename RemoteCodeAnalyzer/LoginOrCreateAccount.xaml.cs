@@ -23,15 +23,16 @@ namespace RemoteCodeAnalyzer
     {
         User user;
         //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
-        private readonly string xmlFileName;
+        private readonly string usersData;
+        Client client;
 
         public LoginOrCreateAccount()
         {
             InitializeComponent();
             InitializeTextBoxes();
             user = new User();
-            //xmlFileName = @"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml";
-            xmlFileName = @"../../Users.xml";
+            client = new Client("http://localhost:8080/BasicService");
+            usersData = @"../../Users.xml";
         }
         private void InitializeTextBoxes()
         {
@@ -51,11 +52,13 @@ namespace RemoteCodeAnalyzer
             */
             //sender is button
 
-            if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
+            client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password);
+
+            /*if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
             else
             {
                 Error.Text = "Email or Password fields cannot be empty.";
-            }
+            }*/
         }
         private void AuthenticateUser()
         {
@@ -78,7 +81,7 @@ namespace RemoteCodeAnalyzer
         private bool UserExists(ref string firstName, ref string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(xmlFileName);
+            UsersXML.Load(usersData);
 
             XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
             for (int i = 0; i < elemList.Count; i++)
