@@ -14,32 +14,49 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.Windows.Forms; //for FolderBrowserDialog
+using System.IO;
 
 namespace RemoteCodeAnalyzer
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for UserPage.xaml
     /// </summary>
     public partial class UserPage : Page
     {
-        Client client;
-        public UserPage(){InitializeComponent();}
+        private readonly Client client;
+        FolderBrowserDialog DirectoryExplorer;
+        public UserPage()
+        {
+            InitializeComponent();
+            FilesList.IsEnabled = false;
+            DirectoryExplorer = new FolderBrowserDialog();
+        }
         public UserPage(User user): this()
         {
             FullNameLabel.Content = user.GetFirstName() + " " + user.GetLastName();
             client = new Client("http://localhost:8080/Service");
         }
-        private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {}
+        private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e){}
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog DirectoryExplorer = new FolderBrowserDialog();
             //OpenFileDialog DirectoryExplorer = new OpenFileDialog();
             DirectoryExplorer.ShowDialog();
-            client.GetSVC().Analyze(DirectoryExplorer.SelectedPath);
-
+            FolderPathLabel.Content = DirectoryExplorer.SelectedPath;
+            
             //Process.Start("explorer.exe");
         }
+        private void UploadFiles_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + ".cs", SearchOption.AllDirectories).ToList();
+            FilesList.IsEnabled = true;
+            FilesList.ItemsSource = files;
+        }
+        private void PickItem()
+        {
+            System.Windows.MessageBox.Show(FilesList.SelectedItem.ToString());
+        }
+
+
     }
 }

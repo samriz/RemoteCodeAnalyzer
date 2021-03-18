@@ -20,7 +20,7 @@ namespace Server
             host.AddServiceEndpoint(typeof(IBasicService), binding, address); //exposes client to IBasicService class
             return host;
         }
-        static void Main(string[] args)
+        static void Main(/*string[] args*/)
         {
             Console.Title = "BasicHttp Service Host";
             Console.WriteLine("Starting programmatic basic service");

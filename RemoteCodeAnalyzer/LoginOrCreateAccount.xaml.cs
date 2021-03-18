@@ -21,10 +21,10 @@ namespace RemoteCodeAnalyzer
     /// </summary>
     public partial class LoginOrCreateAccount : Page
     {
-        User user;
+        private User user;
         //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
-        private readonly string usersData;
-        Client client;
+        //private readonly string usersData;
+        readonly Client client;
 
         public LoginOrCreateAccount()
         {
@@ -32,7 +32,7 @@ namespace RemoteCodeAnalyzer
             InitializeTextBoxes();
             //user = new User();
             client = new Client("http://localhost:8080/Service");
-            usersData = @"../../Users.xml";
+            //usersData = @"../../Users.xml";
         }
         private void InitializeTextBoxes()
         {
@@ -41,7 +41,6 @@ namespace RemoteCodeAnalyzer
             EmailTextBox.FontStyle = FontStyles.Italic;
             PasswordTextBox.FontStyle = FontStyles.Italic;
         }
-
             /*
             public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
             public event RoutedEventHandler Click;
@@ -92,20 +91,20 @@ namespace RemoteCodeAnalyzer
             }
             return false;
         }*/
-        private void Login_Click(object sender, RoutedEventArgs e) //event handler
+        private void Login_Click(object sender, RoutedEventArgs e)//event handler
         {
-            string message;
+            //string message;
             UserPage userpage;
-            
-            if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password, out message))
+            if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
             {
                 user = new User(client.GetSVC().GetUser().GetFirstName(), client.GetSVC().GetUser().GetLastName(), client.GetSVC().GetUser().GetEmail(), client.GetSVC().GetUser().GetPassword());
                 userpage = new UserPage(user);
                 this.NavigationService.Navigate(userpage);
             }
-            else ErrorLabel.Text = message;
+            //else ErrorLabel.Text = message;
+            else ErrorLabel.Text = client.GetSVC().GetMessageFromServer();
         }
-        private void Create_Click(object sender, RoutedEventArgs e)
+        private void NewAccount_Click(object sender, RoutedEventArgs e)
         {
             NewAccount NA = new NewAccount();
             this.NavigationService.Navigate(NA);
@@ -115,7 +114,6 @@ namespace RemoteCodeAnalyzer
             ActivateBox(EmailTextBox, "Email");
             InactivateBox(PasswordTextBox);
         }
-
         private void PasswordTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActivateBox(PasswordTextBox);
@@ -141,7 +139,6 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
         }
-
         private void ActivateBox(PasswordBox newlyActiveBox)
         {
             newlyActiveBox.Foreground = Brushes.Black;

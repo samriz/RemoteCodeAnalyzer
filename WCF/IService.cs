@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ServiceModel;
+using System.ServiceModel; //need this for WCF
 using System.Xml;
 using System.Windows;
 
@@ -20,10 +20,11 @@ namespace Server
         //void SendMessage(XmlDocument xmlMessage);
 
         [OperationContract]
-        string GetMessage();
-        
+        string GetMessageFromServer();
+
         [OperationContract] //exposed to client 
-        bool Login(string email, string password, out string infoMessage);
+        //bool Login(string email, string password, out string infoMessage);
+        bool Login(string email, string password);
 
         void AuthenticateUser(string email, string password);
 
@@ -47,6 +48,9 @@ namespace Server
     {
         [MessageHeader(MustUnderstand = true)]
         public string FileName;
+
+        [MessageHeader(MustUnderstand = true)]
+        public List<string> FileLines;
 
         [MessageHeader(MustUnderstand = true)]
         public long Length;

@@ -11,7 +11,7 @@ namespace RemoteCodeAnalyzer
 {
     class Client/* : System.ServiceModel.ClientBase<IBasicService>, IBasicService*/
     {
-        private IBasicService svc;//we're going to use this object to communicate with the service i.e. use it to call the functions declared in the interface. basically like we're invoking methods on the server
+        private readonly IBasicService svc;//we're going to use this object to communicate with the service i.e. use it to call the functions declared in the interface. basically like we're invoking methods on the server
         public Client(string url)
         {
             WSHttpBinding binding = new WSHttpBinding();
@@ -38,7 +38,7 @@ namespace RemoteCodeAnalyzer
             string message;
             Func<string> fnc = () =>
             {
-                message = svc.GetMessage();
+                message = svc.GetMessageFromServer();
                 return message;
             };
             return ServiceRetryWrapper(fnc);

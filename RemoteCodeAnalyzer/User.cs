@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RemoteCodeAnalyzer
 {
-    public class User
+    public class User//represents a user by encapsulating their first name, last name, email address, and password
     {
         private string firstName, lastName, email, password;
         
