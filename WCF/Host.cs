@@ -27,7 +27,7 @@ namespace Server
             ServiceHost host = null;
             try
             {
-                host = CreateChannel("http://localhost:8080/BasicService"); //opening up connection on port 8080 for clients
+                host = CreateChannel("http://localhost:8080/Service"); //opening up connection on port 8080 for clients
                 host.Open(); //after this, server can accept requests (starts listening)
                 Console.WriteLine("Started Service - Press key to exit.");
                 Console.ReadKey();

@@ -30,8 +30,8 @@ namespace RemoteCodeAnalyzer
         {
             InitializeComponent();
             InitializeTextBoxes();
-            user = new User();
-            client = new Client("http://localhost:8080/BasicService");
+            //user = new User();
+            client = new Client("http://localhost:8080/Service");
             usersData = @"../../Users.xml";
         }
         private void InitializeTextBoxes()
@@ -96,9 +96,11 @@ namespace RemoteCodeAnalyzer
         {
             string message;
             UserPage userpage;
+            
             if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password, out message))
             {
-                userpage = new UserPage(new User(EmailTextBox.Text, PasswordTextBox.Password));
+                user = new User(client.GetSVC().GetUser().GetFirstName(), client.GetSVC().GetUser().GetLastName(), client.GetSVC().GetUser().GetEmail(), client.GetSVC().GetUser().GetPassword());
+                userpage = new UserPage(user);
                 this.NavigationService.Navigate(userpage);
             }
             else ErrorLabel.Text = message;
@@ -108,7 +110,6 @@ namespace RemoteCodeAnalyzer
             NewAccount NA = new NewAccount();
             this.NavigationService.Navigate(NA);
         }
-
         private void EmailTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
             ActivateBox(EmailTextBox, "Email");

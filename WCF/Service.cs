@@ -20,54 +20,60 @@ namespace Server
         {
         }*/
         private readonly string usersData;
-        string errorMessage;
+        //string errorMessage;
         User user;
 
         public BasicService()
         {
             usersData = @"../../Users.xml";
         }
+
+        public User GetUser() => user;
+
         public bool Login(string email, string password, out string infoMessage)
         {
             if (email.Length > 0 && password.Length > 0) 
             { 
-                User user = AuthenticateUser(email, password); 
+                AuthenticateUser(email, password); 
                 if(user == null)
                 {
                     infoMessage = "Incorrect Login.";
+                    Console.WriteLine(infoMessage);
                     return false;
                 }
                 else
                 {
-                    infoMessage = "Success! Returned page!";
+                    infoMessage = "Login successful! Returned page!";
+                    Console.WriteLine(infoMessage);
                     return true;
                 }
             }
             else
             {
                 infoMessage = "Email or Password fields cannot be empty.";
+                Console.WriteLine(infoMessage);
                 return false;
             }
         }
-        User AuthenticateUser(string email, string password)
+        public void AuthenticateUser(string email, string password)
         {
             string firstName = "";
             string lastName = "";
+            //user = new User(email, password);
 
-            user = new User(email, password);
-            UserPage userpage;
-
-            if (UserExists(ref firstName, ref lastName, user.GetEmail(), user.GetPassword()))
+            if (UserExists(out firstName, out lastName, email, password))
             {
-                user.SetFirstName(firstName);
-                user.SetLastName(lastName);
-                userpage = new UserPage(user);
+                user = new User(firstName, lastName, email, password);
                 //this.NavigationService.Navigate(userpage);
-                return userpage;
+                //return user;
             }
-            else return null;//MessageBox.Show("Incorrect Login.");
+            else 
+            {
+                user = null;
+                //return null;//MessageBox.Show("Incorrect Login.");
+            }
         }
-        private bool UserExists(ref string firstName, ref string lastName, string email, string password)
+        public bool UserExists(out string firstName, out string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
             UsersXML.Load(usersData);
@@ -82,6 +88,8 @@ namespace Server
                     return true;
                 }
             }
+            firstName = "";
+            lastName = "";
             return false;
         }
         public void SendMessage(string message)

@@ -23,17 +23,20 @@ namespace Server
         string GetMessage();
         
         [OperationContract] //exposed to client 
-        UserPage Login(string email, string password, out string infoMessage);
+        bool Login(string email, string password, out string infoMessage);
 
-        UserPage AuthenticateUser(string email, string password);
+        void AuthenticateUser(string email, string password);
 
-        bool UserExists(ref string firstName, ref string lastName, string email, string password);
+        bool UserExists(out string firstName, out string lastName, string email, string password);
         
         [OperationContract]
         void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
-        string GetErrorMessage();
+        User GetUser();
+
+        //[OperationContract]
+        //string GetErrorMessage();
     }
 
     [MessageContract]

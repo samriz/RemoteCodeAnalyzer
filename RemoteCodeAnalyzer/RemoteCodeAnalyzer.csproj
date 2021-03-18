@@ -123,9 +123,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Users.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WCF\Server.csproj">
       <Project>{D92C040F-D414-4041-8FBA-A2C37AC7BF6B}</Project>
       <Name>Server</Name>
