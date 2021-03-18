@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeAnalyzer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -29,6 +30,11 @@ namespace Server
         }
 
         public User GetUser() => user;
+
+        public void Analyze(string directoryPath)
+        {
+            DirectorySearcher DS = new DirectorySearcher(directoryPath);
+        }
 
         public bool Login(string email, string password, out string infoMessage)
         {

@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeAnalyzer">
+      <HintPath>..\..\..\Project 2\CodeAnalyzer\CodeAnalyzer\bin\Debug\CodeAnalyzer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />

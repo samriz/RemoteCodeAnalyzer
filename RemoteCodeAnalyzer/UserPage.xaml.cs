@@ -22,11 +22,13 @@ namespace RemoteCodeAnalyzer
     /// Interaction logic for Login.xaml
     /// </summary>
     public partial class UserPage : Page
-    {    
+    {
+        Client client;
         public UserPage(){InitializeComponent();}
         public UserPage(User user): this()
         {
             FullNameLabel.Content = user.GetFirstName() + " " + user.GetLastName();
+            client = new Client("http://localhost:8080/Service");
         }
         private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {}
@@ -35,6 +37,7 @@ namespace RemoteCodeAnalyzer
             FolderBrowserDialog DirectoryExplorer = new FolderBrowserDialog();
             //OpenFileDialog DirectoryExplorer = new OpenFileDialog();
             DirectoryExplorer.ShowDialog();
+            client.GetSVC().Analyze(DirectoryExplorer.SelectedPath);
 
             //Process.Start("explorer.exe");
         }

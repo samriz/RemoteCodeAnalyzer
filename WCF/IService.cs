@@ -37,6 +37,8 @@ namespace Server
 
         //[OperationContract]
         //string GetErrorMessage();
+
+        void Analyze(string directoryPath);
     }
 
     [MessageContract]
