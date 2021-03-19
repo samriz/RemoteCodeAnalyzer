@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Windows.Forms; //for FolderBrowserDialog
 using System.IO;
+using Server;
 
 namespace RemoteCodeAnalyzer
 {
@@ -52,11 +53,36 @@ namespace RemoteCodeAnalyzer
             FilesList.IsEnabled = true;
             FilesList.ItemsSource = files;
         }
+        private void FilesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PickItem();
+        }
         private void PickItem()
         {
-            System.Windows.MessageBox.Show(FilesList.SelectedItem.ToString());
+            //Server.RemoteFileInfo fileInfo = new Server.RemoteFileInfo();
+
+            //fileInfo.FileName = FilesList.SelectedItem.ToString();
+
+            //FileInfo fi = new FileInfo(FilesList.SelectedItem.ToString());
+
+            //fileInfo.Length = fi.Length;
+
+
+            FileInfo fileInfo = new System.IO.FileInfo(FilesList.SelectedItem.ToString());
+            RemoteFileInfo uploadRequestInfo = new RemoteFileInfo();
+
+            using (System.IO.FileStream stream =
+                   new System.IO.FileStream(FilesList.SelectedItem.ToString(),
+                   System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                uploadRequestInfo.FileName = FilesList.SelectedItem.ToString();
+                uploadRequestInfo.Length = fileInfo.Length;
+                uploadRequestInfo.FileByteStream = stream;
+                client.GetSVC().UploadFile(uploadRequestInfo);
+                //clientUpload.UploadFile(stream);
+            }
+
+            //System.Windows.MessageBox.Show(FilesList.SelectedItem.ToString());
         }
-
-
     }
 }

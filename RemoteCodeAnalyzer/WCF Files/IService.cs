@@ -49,8 +49,8 @@ namespace Server
         [MessageHeader(MustUnderstand = true)]
         public string FileName;
 
-        [MessageHeader(MustUnderstand = true)]
-        public List<string> FileLines;
+        /*[MessageHeader(MustUnderstand = true)]
+        public List<string> FileLines;*/
 
         [MessageHeader(MustUnderstand = true)]
         public long Length;

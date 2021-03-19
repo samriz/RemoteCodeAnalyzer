@@ -1,6 +1,7 @@
 ﻿using CodeAnalyzer;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -31,11 +32,8 @@ namespace Server
     //[ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class BasicService : IBasicService
     {
-        /*static void Main(string[] args)
-        {
-        }*/
         private readonly string usersData;
-        //string errorMessage;
+        FileStream targetStream;
         User user;
         private string serverMessage;
         private string clientMessage;
@@ -47,8 +45,6 @@ namespace Server
             clientMessage = "";
         }
 
-        public User GetUser() => user;
-
         public void Analyze(string file)
         {
             DirectorySearcher DS = new DirectorySearcher(file);
@@ -56,12 +52,31 @@ namespace Server
         public void UploadFile(RemoteFileInfo request)
         {
             //spawn thread or task for analysis
-            Task AnalysisTask = Task.Run(() =>
+            /*Task AnalysisTask = Task.Run(() =>
             {
 
-            });
+            });*/
+            //FileStream targetStream = null;
+            Stream sourceStream = request.FileByteStream;
+            string uploadFolder = @".";
+            string filePath = Path.Combine(uploadFolder, request.FileName);
+
+            using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                //read from the input stream in 65000 byte chunks
+
+                const int bufferLen = 65000;
+                byte[] buffer = new byte[bufferLen];
+                int count = 0;
+                while ((count = sourceStream.Read(buffer, 0, bufferLen)) > 0)
+                {
+                    // save to output stream
+                    targetStream.Write(buffer, 0, count);
+                }
+                targetStream.Close();
+                sourceStream.Close();
+            }
         }
-        //public bool Login(string email, string password, out string infoMessage)
         public bool Login(string email, string password)
         {
             if (email.Length > 0 && password.Length > 0) 
@@ -137,12 +152,8 @@ namespace Server
             //print message that client had sent
             //Console.WriteLine("Message received by service: {0}", message);
         }
-        //public void SendMessage(XmlDocument xmlMessage)
-        //{
-        //    //print message that client had sent
-        //    throw new NotImplementedException();
-        //}
         //public string GetMessage() => "New message from Service.";
         public string GetMessageFromServer() => serverMessage;
+        public User GetUser() => user;
     }
 }
