@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ServiceModel; //need this for WCF
 using System.Xml;
 using System.Windows;
+using System.Runtime.Serialization;
 
 namespace Server
 {
@@ -15,42 +16,41 @@ namespace Server
         //clients have to use this interface to communicate with server
         [OperationContract]
         void SendMessage(string message);
-        
-        //[OperationContract]
-        //void SendMessage(XmlDocument xmlMessage);
 
         [OperationContract]
         string GetMessageFromServer();
 
         [OperationContract] //exposed to client 
-        //bool Login(string email, string password, out string infoMessage);
         bool Login(string email, string password);
 
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
         
-        [OperationContract]
-        void UploadFile(RemoteFileInfo request);
+        //[OperationContract]
+        //void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
         User GetUser();
 
-        //[OperationContract]
-        //string GetErrorMessage();
-
-        void Analyze(string directoryPath);
+        [OperationContract]
+        XmlDocument Analyze(FileText FT);
+        //XmlDocument Analyze(string fileName, List<string> fileLines);
     }
 
+    [DataContract]
+    public struct FileText
+    {
+        public string fileName;
+        public List<string> fileLines;
+    }
+    
     [MessageContract]
     //send an object of this for messages
     public class RemoteFileInfo : IDisposable
     {
         [MessageHeader(MustUnderstand = true)]
         public string FileName;
-
-        /*[MessageHeader(MustUnderstand = true)]
-        public List<string> FileLines;*/
 
         [MessageHeader(MustUnderstand = true)]
         public long Length;

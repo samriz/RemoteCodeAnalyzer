@@ -20,6 +20,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <DataGrid Name="AnalysisResultsGrid" Height="287" Canvas.Left="445" Canvas.Top="176" Width="281"/>
         <!--<ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" VerticalAlignment="Bottom" Width="669" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373" Canvas.Left="62" Canvas.Top="365"/>-->
     </Canvas>
 </Page>

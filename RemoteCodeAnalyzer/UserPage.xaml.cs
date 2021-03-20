@@ -26,7 +26,7 @@ namespace RemoteCodeAnalyzer
     public partial class UserPage : Page
     {
         private readonly Client client;
-        FolderBrowserDialog DirectoryExplorer;
+        private readonly FolderBrowserDialog DirectoryExplorer;
         public UserPage()
         {
             InitializeComponent();
@@ -38,7 +38,6 @@ namespace RemoteCodeAnalyzer
             FullNameLabel.Content = user.GetFirstName() + " " + user.GetLastName();
             client = new Client("http://localhost:8080/Service");
         }
-        private void progress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e){}
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
             //OpenFileDialog DirectoryExplorer = new OpenFileDialog();
@@ -59,30 +58,27 @@ namespace RemoteCodeAnalyzer
         }
         private void PickItem()
         {
-            //Server.RemoteFileInfo fileInfo = new Server.RemoteFileInfo();
-
-            //fileInfo.FileName = FilesList.SelectedItem.ToString();
-
-            //FileInfo fi = new FileInfo(FilesList.SelectedItem.ToString());
-
-            //fileInfo.Length = fi.Length;
-
-
-            FileInfo fileInfo = new System.IO.FileInfo(FilesList.SelectedItem.ToString());
+            //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(FilesList.SelectedItem.ToString(),File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
+            FileText ft = new FileText
+            {
+                fileName = FilesList.SelectedItem.ToString(),
+                fileLines = File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList<string>()
+            };
+            AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(ft);
+        }
+        /*private void PickItem()
+        {
+            FileInfo fileInfo = new FileInfo(FilesList.SelectedItem.ToString());
             RemoteFileInfo uploadRequestInfo = new RemoteFileInfo();
 
-            using (System.IO.FileStream stream =
-                   new System.IO.FileStream(FilesList.SelectedItem.ToString(),
-                   System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            using(System.IO.FileStream stream = new System.IO.FileStream(FilesList.SelectedItem.ToString(), System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 uploadRequestInfo.FileName = FilesList.SelectedItem.ToString();
                 uploadRequestInfo.Length = fileInfo.Length;
-                uploadRequestInfo.FileByteStream = stream;
+                uploadRequestInfo.FileByteStream = stream;                
                 client.GetSVC().UploadFile(uploadRequestInfo);
-                //clientUpload.UploadFile(stream);
             }
-
-            //System.Windows.MessageBox.Show(FilesList.SelectedItem.ToString());
-        }
+            client.GetSVC().Analyze(File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
+        }*/
     }
 }

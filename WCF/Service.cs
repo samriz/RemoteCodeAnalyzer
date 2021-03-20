@@ -33,50 +33,57 @@ namespace Server
     public class BasicService : IBasicService
     {
         private readonly string usersData;
-        FileStream targetStream;
+        //FileStream targetStream;
         User user;
         private string serverMessage;
         private string clientMessage;
+        //byte[] fileBuffer;
 
         public BasicService()
         {
+            //targetStream = null;
             usersData = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
         }
-
-        public void Analyze(string file)
+        //public XmlDocument Analyze(string fileName, List<string> fileLines)
+        public XmlDocument Analyze(FileText FT)
         {
-            DirectorySearcher DS = new DirectorySearcher(file);
+            FileText ft = FT; 
+            //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
+            /*FunctionTracker FT = new FunctionTracker(fileLines);
+            ClassNameFinder CNF = new ClassNameFinder(FT.GetFunctionNodes());
+            AnalysisDisplayer AD = new AnalysisDisplayer(fileName, FT.GetFunctionNodes());*/
+            FunctionTracker FuncTrac = new FunctionTracker(ft.fileLines);
+            //ClassNameFinder CNF = new ClassNameFinder(FT.GetFunctionNodes());
+            AnalysisDisplayer AD = new AnalysisDisplayer(ft.fileName, FuncTrac.GetFunctionNodes());
+            return AD.GetAnalysisInXML();
         }
-        public void UploadFile(RemoteFileInfo request)
+
+        /*public void UploadFile(RemoteFileInfo request)
         {
-            //spawn thread or task for analysis
-            /*Task AnalysisTask = Task.Run(() =>
-            {
-
-            });*/
-            //FileStream targetStream = null;
+            FileStream targetStream = null;
             Stream sourceStream = request.FileByteStream;
-            string uploadFolder = @".";
-            string filePath = Path.Combine(uploadFolder, request.FileName);
-
+            //string uploadFolder = @".";
+            //string filePath = Path.Combine(uploadFolder, request.FileName);
+            string filePath = request.FileName;
+            
             using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 //read from the input stream in 65000 byte chunks
-
                 const int bufferLen = 65000;
-                byte[] buffer = new byte[bufferLen];
+                fileBuffer = new byte[bufferLen];
                 int count = 0;
-                while ((count = sourceStream.Read(buffer, 0, bufferLen)) > 0)
+                while ((count = sourceStream.Read(fileBuffer, 0, bufferLen)) > 0)
                 {
                     // save to output stream
-                    targetStream.Write(buffer, 0, count);
-                }
+                    targetStream.Write(fileBuffer, 0, count);
+                }              
                 targetStream.Close();
                 sourceStream.Close();
             }
-        }
+            Analyze();
+        }*/
         public bool Login(string email, string password)
         {
             if (email.Length > 0 && password.Length > 0) 
