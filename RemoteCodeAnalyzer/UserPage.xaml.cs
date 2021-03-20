@@ -48,7 +48,7 @@ namespace RemoteCodeAnalyzer
         }
         private void UploadFiles_Click(object sender, RoutedEventArgs e)
         {
-            List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + ".cs", SearchOption.AllDirectories).ToList();
+            List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + "*.cs", SearchOption.AllDirectories).ToList();
             FilesList.IsEnabled = true;
             FilesList.ItemsSource = files;
         }
@@ -59,12 +59,18 @@ namespace RemoteCodeAnalyzer
         private void PickItem()
         {
             //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(FilesList.SelectedItem.ToString(),File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
-            FileText ft = new FileText
+            string file = FilesList.SelectedItem.ToString();
+            List<string> filesLines = new List<string>(File.ReadAllLines(file).ToList<string>());
+            FileText ft = new FileText(file, filesLines);
+            //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(ft);
+
+            foreach(var xmlline in client.GetSVC().Analyze(ft))
             {
-                fileName = FilesList.SelectedItem.ToString(),
-                fileLines = File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList<string>()
-            };
-            AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(ft);
+                AnalysisResultsGrid.Items.Add(xmlline);
+            }
+
+            //client.GetSVC().Analyze(ft);
+            //AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysis();
         }
         /*private void PickItem()
         {

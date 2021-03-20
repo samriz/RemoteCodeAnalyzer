@@ -93,6 +93,10 @@ namespace RemoteCodeAnalyzer
         }*/
         private void Login_Click(object sender, RoutedEventArgs e)//event handler
         {
+            Login();
+        }
+        private void Login()
+        {
             //string message;
             UserPage userpage;
             if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
@@ -147,5 +151,13 @@ namespace RemoteCodeAnalyzer
         }
         private void InactivateBox(TextBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
         private void InactivateBox(PasswordBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
+
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Enter))
+            {
+                Login();
+            }
+        }
     }
 }

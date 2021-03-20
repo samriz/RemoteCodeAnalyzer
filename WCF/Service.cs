@@ -37,7 +37,9 @@ namespace Server
         User user;
         private string serverMessage;
         private string clientMessage;
-        //byte[] fileBuffer;
+        byte[] fileBuffer;
+        FunctionTracker FuncTrac;
+        AnalysisDisplayer AD;
 
         public BasicService()
         {
@@ -45,22 +47,27 @@ namespace Server
             usersData = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
+
         }
         //public XmlDocument Analyze(string fileName, List<string> fileLines)
         public XmlDocument Analyze(FileText FT)
         {
-            FileText ft = FT; 
+            //FileText ft = FT; 
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             /*FunctionTracker FT = new FunctionTracker(fileLines);
-            ClassNameFinder CNF = new ClassNameFinder(FT.GetFunctionNodes());
             AnalysisDisplayer AD = new AnalysisDisplayer(fileName, FT.GetFunctionNodes());*/
-            FunctionTracker FuncTrac = new FunctionTracker(ft.fileLines);
-            //ClassNameFinder CNF = new ClassNameFinder(FT.GetFunctionNodes());
-            AnalysisDisplayer AD = new AnalysisDisplayer(ft.fileName, FuncTrac.GetFunctionNodes());
+
+            FuncTrac = new FunctionTracker(FT.fileLines);
+            AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());
             return AD.GetAnalysisInXML();
         }
 
-        /*public void UploadFile(RemoteFileInfo request)
+        /*public XmlDocument GetAnalysis() 
+        { 
+            return AD.GetAnalysisInXML(); 
+        }*/
+
+        public void UploadFile(RemoteFileInfo request)
         {
             FileStream targetStream = null;
             Stream sourceStream = request.FileByteStream;
@@ -82,8 +89,8 @@ namespace Server
                 targetStream.Close();
                 sourceStream.Close();
             }
-            Analyze();
-        }*/
+            //Analyze();
+        }
         public bool Login(string email, string password)
         {
             if (email.Length > 0 && password.Length > 0) 

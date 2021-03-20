@@ -21,7 +21,7 @@
         <TextBox Name="EmailTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="93" KeyDown="EmailTextBox_KeyDown" RenderTransformOrigin="0.504,2.171">
             Email
         </TextBox>
-        <PasswordBox Name="PasswordTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="118" RenderTransformOrigin="0.076,0.841"></PasswordBox>
+        <PasswordBox Name="PasswordTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="118" RenderTransformOrigin="0.076,0.841" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
         <Button Name="LoginButton" Content="Login" Width="150" Height="25" HorizontalAlignment="Left" Click="Login_Click" Canvas.Left="357" Canvas.Top="143"/>
         <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="110" Canvas.Top="101" RenderTransformOrigin="0.43,1.375"/>
         <Button Name="NewAccountButton" Content="New Account" Width="150" Height="25" HorizontalAlignment="Center" Click="NewAccount_Click" Canvas.Left="104" Canvas.Top="143"/>

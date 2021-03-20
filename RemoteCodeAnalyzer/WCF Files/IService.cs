@@ -14,35 +14,52 @@ namespace Server
     public interface IBasicService
     {
         //clients have to use this interface to communicate with server
+        //OperationContract = exposed to client 
         [OperationContract]
         void SendMessage(string message);
 
         [OperationContract]
         string GetMessageFromServer();
 
-        [OperationContract] //exposed to client 
+        [OperationContract]
         bool Login(string email, string password);
 
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
         
-        //[OperationContract]
-        //void UploadFile(RemoteFileInfo request);
+        [OperationContract]
+        void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
         User GetUser();
 
-        [OperationContract]
+        [OperationContract, XmlSerializerFormat]
         XmlDocument Analyze(FileText FT);
         //XmlDocument Analyze(string fileName, List<string> fileLines);
+
+        //[OperationContract, XmlSerializerFormat]
+        //XmlDocument GetAnalysis();
     }
 
     [DataContract]
-    public struct FileText
+    //[MessageContract]
+    public class FileText
     {
+        //[MessageHeader(MustUnderstand = true)]
+        [DataMember]
         public string fileName;
+
+        //[MessageBodyMember(Order = 1)]
+        [DataMember]
         public List<string> fileLines;
+
+        public FileText() { }
+        public FileText(string fileName, List<string> fileLines)
+        {
+            this.fileName = fileName;
+            this.fileLines = fileLines;
+        }
     }
     
     [MessageContract]
