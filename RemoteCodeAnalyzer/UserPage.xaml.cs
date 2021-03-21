@@ -56,21 +56,21 @@ namespace RemoteCodeAnalyzer
         {
             PickItem();
         }
-        private void PickItem()
+        private async void PickItem()
         {
             //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(FilesList.SelectedItem.ToString(),File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
             string file = FilesList.SelectedItem.ToString();
             List<string> filesLines = new List<string>(File.ReadAllLines(file).ToList<string>());
             FileText ft = new FileText(file, filesLines);
             //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(ft);
+            await client.GetSVC().AAsync(ft);
+            client.GetSVC().SendMessage("I received the analysis results. Thank you.");
+            AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysisXML();
 
-            foreach(var xmlline in client.GetSVC().Analyze(ft))
+            /*foreach(var xmlline in client.GetSVC().Analyze(ft))
             {
                 AnalysisResultsGrid.Items.Add(xmlline);
-            }
-
-            //client.GetSVC().Analyze(ft);
-            //AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysis();
+            }*/
         }
         /*private void PickItem()
         {

@@ -24,7 +24,7 @@ namespace Server
   *              - runs on one thread so all clients see same instance
   *              - access must be synchronized
   */
-    //implement functions defined in Server.cs
+    //implement functions defined in IService.cs
     //what server will do when request comes from client
 
     [ServiceBehavior(InstanceContextMode =InstanceContextMode.PerSession)]
@@ -40,6 +40,7 @@ namespace Server
         byte[] fileBuffer;
         FunctionTracker FuncTrac;
         AnalysisDisplayer AD;
+        XmlDocument analysisXML;
 
         public BasicService()
         {
@@ -47,26 +48,30 @@ namespace Server
             usersData = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
-
         }
-        //public XmlDocument Analyze(string fileName, List<string> fileLines)
         public XmlDocument Analyze(FileText FT)
         {
-            //FileText ft = FT; 
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
-            /*FunctionTracker FT = new FunctionTracker(fileLines);
-            AnalysisDisplayer AD = new AnalysisDisplayer(fileName, FT.GetFunctionNodes());*/
-
             FuncTrac = new FunctionTracker(FT.fileLines);
-            AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());
-            return AD.GetAnalysisInXML();
+            AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());    
+            serverMessage = "Analysis done. Results returned.";
+            Console.WriteLine(serverMessage);
+            analysisXML = AD.GetAnalysisInXML();
+            return analysisXML;
         }
-
-        /*public XmlDocument GetAnalysis() 
-        { 
-            return AD.GetAnalysisInXML(); 
-        }*/
-
+        public async Task AAsync(FileText FT)
+        {
+            //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
+            Task<XmlDocument> analysisTask = Task.Run(() =>
+            {
+                FuncTrac = new FunctionTracker(FT.fileLines);
+                AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());
+                return AD.GetAnalysisInXML();
+            });
+            analysisXML = await analysisTask;
+            serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
+            Console.WriteLine(serverMessage);           
+        }
         public void UploadFile(RemoteFileInfo request)
         {
             FileStream targetStream = null;
@@ -169,5 +174,6 @@ namespace Server
         //public string GetMessage() => "New message from Service.";
         public string GetMessageFromServer() => serverMessage;
         public User GetUser() => user;
+        public XmlDocument GetAnalysisXML() => analysisXML;
     }
 }

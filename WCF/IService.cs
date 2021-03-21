@@ -36,15 +36,17 @@ namespace Server
 
         [OperationContract, XmlSerializerFormat]
         XmlDocument Analyze(FileText FT);
-        //XmlDocument Analyze(string fileName, List<string> fileLines);
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument GetAnalysis();
+        [OperationContract]
+        Task AAsync(FileText FT);
+
+        [OperationContract, XmlSerializerFormat]
+        XmlDocument GetAnalysisXML();
     }
 
     [DataContract]
     //[MessageContract]
-    public class FileText
+    public class FileText //contains name of the file and it's extracted text
     {
         //[MessageHeader(MustUnderstand = true)]
         [DataMember]

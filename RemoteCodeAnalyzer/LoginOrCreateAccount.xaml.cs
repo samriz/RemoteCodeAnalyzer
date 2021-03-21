@@ -159,5 +159,21 @@ namespace RemoteCodeAnalyzer
                 Login();
             }
         }
+
+        private void Canvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                ActivateBox(EmailTextBox, "Email");
+            }
+        }
+
+        private void Canvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                ActivateBox(EmailTextBox, "Email");
+            }
+        }
     }
 }
