@@ -49,7 +49,7 @@ namespace Server
             serverMessage = "Default message";
             clientMessage = "";
         }
-        public XmlDocument Analyze(FileText FT)
+        public XmlDocument AnalyzeFile(FileText FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             FuncTrac = new FunctionTracker(FT.fileLines);
@@ -59,7 +59,7 @@ namespace Server
             analysisXML = AD.GetAnalysisInXML();
             return analysisXML;
         }
-        public async Task AAsync(FileText FT)
+        public async Task AnalyzeAsync(FileText FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             Task<XmlDocument> analysisTask = Task.Run(() =>

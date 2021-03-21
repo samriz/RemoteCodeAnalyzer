@@ -63,7 +63,7 @@ namespace RemoteCodeAnalyzer
             List<string> filesLines = new List<string>(File.ReadAllLines(file).ToList<string>());
             FileText ft = new FileText(file, filesLines);
             //AnalysisResultsGrid.ItemsSource = client.GetSVC().Analyze(ft);
-            await client.GetSVC().AAsync(ft);
+            await client.GetSVC().AnalyzeAsync(ft);
             client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysisXML();
 

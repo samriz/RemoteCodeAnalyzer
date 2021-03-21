@@ -35,10 +35,10 @@ namespace Server
         User GetUser();
 
         [OperationContract, XmlSerializerFormat]
-        XmlDocument Analyze(FileText FT);
+        XmlDocument AnalyzeFile(FileText FT);
 
         [OperationContract]
-        Task AAsync(FileText FT);
+        Task AnalyzeAsync(FileText FT);
 
         [OperationContract, XmlSerializerFormat]
         XmlDocument GetAnalysisXML();
