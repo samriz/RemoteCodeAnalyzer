@@ -66,7 +66,6 @@ namespace RemoteCodeAnalyzer
             await client.GetSVC().AnalyzeAsync(ft);
             client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysisXML();
-
             /*foreach(var xmlline in client.GetSVC().Analyze(ft))
             {
                 AnalysisResultsGrid.Items.Add(xmlline);

@@ -19,14 +19,14 @@ namespace RemoteCodeAnalyzer
     /// <summary>
     /// Interaction logic for LoginOrCreateAccount.xaml
     /// </summary>
-    public partial class LoginOrCreateAccount : Page
+    public partial class LoginSignupPage : Page
     {
         private User user;
         //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
         //private readonly string usersData;
         readonly Client client;
 
-        public LoginOrCreateAccount()
+        public LoginSignupPage()
         {
             InitializeComponent();
             InitializeTextBoxes();
@@ -110,7 +110,7 @@ namespace RemoteCodeAnalyzer
         }
         private void NewAccount_Click(object sender, RoutedEventArgs e)
         {
-            NewAccount NA = new NewAccount();
+            NewAccountPage NA = new NewAccountPage();
             this.NavigationService.Navigate(NA);
         }
         private void EmailTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)

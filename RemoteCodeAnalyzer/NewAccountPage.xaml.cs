@@ -19,10 +19,10 @@ namespace RemoteCodeAnalyzer
     /// <summary>
     /// Interaction logic for NewAccount.xaml
     /// </summary>
-    public partial class NewAccount : Page
+    public partial class NewAccountPage : Page
     {
         private readonly string xmlFileName;
-        public NewAccount()
+        public NewAccountPage()
         {
             InitializeComponent();
             InitializeTextBoxes();
@@ -31,7 +31,8 @@ namespace RemoteCodeAnalyzer
         private void SignUp_Click(object sender, RoutedEventArgs e)
         {
             AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
-            LoginOrCreateAccount login = new LoginOrCreateAccount();
+            LoginSignupPage login = new LoginSignupPage();
+            MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
             this.NavigationService.Navigate(login);
         }
         public void AddNewUser(string FirstName, string LastName, string email, string password)

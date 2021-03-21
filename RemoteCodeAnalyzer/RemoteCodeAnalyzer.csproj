@@ -60,11 +60,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="WCF Files\IService.cs" />
+    <Compile Include="Window.xaml.cs">
+      <DependentUpon>Window.xaml</DependentUpon>
+    </Compile>
     <Page Include="UserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginOrCreateAccount.xaml">
+    <Page Include="LoginSignupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -81,21 +84,25 @@
     <Compile Include="UserPage.xaml.cs">
       <DependentUpon>UserPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginOrCreateAccount.xaml.cs">
-      <DependentUpon>LoginOrCreateAccount.xaml</DependentUpon>
+    <Compile Include="LoginSignupPage.xaml.cs">
+      <DependentUpon>LoginSignupPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NewAccount.xaml">
+    <Page Include="NewAccountPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NewAccount.xaml.cs">
-      <DependentUpon>NewAccount.xaml</DependentUpon>
+    <Compile Include="NewAccountPage.xaml.cs">
+      <DependentUpon>NewAccountPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

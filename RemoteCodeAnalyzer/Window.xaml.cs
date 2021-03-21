@@ -10,21 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace RemoteCodeAnalyzer
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Window.xaml
     /// </summary>
-    public partial class MainWindow : NavigationWindow
+    public partial class Window
     {
-        public MainWindow()
+        public Window()
         {
             InitializeComponent();
-            // Automatically resize height and width relative to content
-            this.SizeToContent = SizeToContent.WidthAndHeight;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Server
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
         
-        [OperationContract]
+        //[OperationContract]
         void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
