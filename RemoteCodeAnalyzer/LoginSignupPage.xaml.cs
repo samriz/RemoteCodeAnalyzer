@@ -95,11 +95,13 @@ namespace RemoteCodeAnalyzer
         {
             Login();
         }
-        private void Login()
+        private async void Login()
         {
             //string message;
             UserPage userpage;
-            if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
+            await client.GetSVC().SignInAsync(EmailTextBox.Text, PasswordTextBox.Password);
+            //if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
+            if(client.GetSVC().IsLoginSuccessful())
             {
                 user = new User(client.GetSVC().GetUser().GetFirstName(), client.GetSVC().GetUser().GetLastName(), client.GetSVC().GetUser().GetEmail(), client.GetSVC().GetUser().GetPassword());
                 userpage = new UserPage(user);

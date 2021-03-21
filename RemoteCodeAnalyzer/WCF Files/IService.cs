@@ -24,6 +24,12 @@ namespace Server
         [OperationContract]
         bool Login(string email, string password);
 
+        [OperationContract]
+        Task SignInAsync(string email, string password);
+
+        [OperationContract]
+        bool IsLoginSuccessful();
+
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
@@ -35,18 +41,38 @@ namespace Server
         User GetUser();
 
         [OperationContract, XmlSerializerFormat]
-        XmlDocument AnalyzeFile(FileText FT);
+        XmlDocument AnalyzeFile(FileData FT);
 
         [OperationContract]
-        Task AnalyzeAsync(FileText FT);
+        Task AnalyzeAsync(FileData FT);
 
         [OperationContract, XmlSerializerFormat]
         XmlDocument GetAnalysisXML();
+
+        [OperationContract]
+        void AddNewUser(NewAccountInfo newAccountInfo);
+
+        [OperationContract]
+        Task AddUserAsync(NewAccountInfo newAccountInfo);
+    }
+
+    [DataContract]
+    public struct NewAccountInfo
+    {
+        [DataMember]
+        public string firstName, lastName, email, password;
+        public NewAccountInfo(string FirstName, string LastName, string email, string password)
+        {
+            this.firstName = FirstName;
+            this.lastName = LastName;
+            this.email = email;
+            this.password = password;
+        }
     }
 
     [DataContract]
     //[MessageContract]
-    public class FileText //contains name of the file and it's extracted text
+    public class FileData //contains name of the file and it's extracted text
     {
         //[MessageHeader(MustUnderstand = true)]
         [DataMember]
@@ -56,8 +82,8 @@ namespace Server
         [DataMember]
         public List<string> fileLines;
 
-        public FileText() { }
-        public FileText(string fileName, List<string> fileLines)
+        public FileData() { }
+        public FileData(string fileName, List<string> fileLines)
         {
             this.fileName = fileName;
             this.fileLines = fileLines;

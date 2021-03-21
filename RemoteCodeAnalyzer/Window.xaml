@@ -7,4 +7,7 @@
         mc:Ignorable="d"
         Title="Remote Code Analyzer" Height="450" Width="800">
     <Frame Name="CodeAnalyzerFrame" Source="LoginSignupPage.xaml"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        
+    </ScrollViewer>
 </Window>

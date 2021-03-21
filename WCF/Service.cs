@@ -32,24 +32,25 @@ namespace Server
     //[ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class BasicService : IBasicService
     {
-        private readonly string usersData;
+        private readonly string usersXML;
         //FileStream targetStream;
         User user;
         private string serverMessage;
         private string clientMessage;
-        byte[] fileBuffer;
-        FunctionTracker FuncTrac;
-        AnalysisDisplayer AD;
-        XmlDocument analysisXML;
+        private byte[] fileBuffer;
+        private FunctionTracker FuncTrac;
+        private AnalysisDisplayer AD;
+        private XmlDocument analysisXML;
+        private bool loginSuccessful;
 
         public BasicService()
         {
             //targetStream = null;
-            usersData = @"../../Users.xml";
+            usersXML = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
         }
-        public XmlDocument AnalyzeFile(FileText FT)
+        public XmlDocument AnalyzeFile(FileData FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             FuncTrac = new FunctionTracker(FT.fileLines);
@@ -59,7 +60,7 @@ namespace Server
             analysisXML = AD.GetAnalysisInXML();
             return analysisXML;
         }
-        public async Task AnalyzeAsync(FileText FT)
+        public async Task AnalyzeAsync(FileData FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             Task<XmlDocument> analysisTask = Task.Run(() =>
@@ -71,30 +72,6 @@ namespace Server
             analysisXML = await analysisTask;
             serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
             Console.WriteLine(serverMessage);           
-        }
-        public void UploadFile(RemoteFileInfo request)
-        {
-            FileStream targetStream = null;
-            Stream sourceStream = request.FileByteStream;
-            //string uploadFolder = @".";
-            //string filePath = Path.Combine(uploadFolder, request.FileName);
-            string filePath = request.FileName;
-            
-            using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                //read from the input stream in 65000 byte chunks
-                const int bufferLen = 65000;
-                fileBuffer = new byte[bufferLen];
-                int count = 0;
-                while ((count = sourceStream.Read(fileBuffer, 0, bufferLen)) > 0)
-                {
-                    // save to output stream
-                    targetStream.Write(fileBuffer, 0, count);
-                }              
-                targetStream.Close();
-                sourceStream.Close();
-            }
-            //Analyze();
         }
         public bool Login(string email, string password)
         {
@@ -127,6 +104,39 @@ namespace Server
                 return false;
             }
         }
+        public async Task SignInAsync(string email, string password)
+        {
+            Task<bool> loginTask = Task.Run(() =>
+            {
+                if (email.Length > 0 && password.Length > 0)
+                {
+                    AuthenticateUser(email, password);
+                    if (user == null)
+                    {                        
+                        serverMessage = "Incorrect Login.";
+                        Console.WriteLine(serverMessage);
+                        return false;
+                    }
+                    else
+                    {                       
+                        serverMessage = "Login successful! Returned page!";
+                        Console.WriteLine(serverMessage);
+                        return true;
+                    }
+                }
+                else
+                {
+                    serverMessage = "Email or Password fields cannot be empty.";
+                    Console.WriteLine(serverMessage);
+                    return false;
+                }
+            });
+            loginSuccessful = await loginTask;
+            if (loginSuccessful == true)
+            {
+                Console.WriteLine(serverMessage);
+            }
+        }
         public void AuthenticateUser(string email, string password)
         {
             //string firstName = "";
@@ -148,7 +158,7 @@ namespace Server
         public bool UserExists(out string firstName, out string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(usersData);
+            UsersXML.Load(usersXML);
 
             XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
             for (int i = 0; i < elemList.Count; i++)
@@ -164,6 +174,58 @@ namespace Server
             lastName = "";
             return false;
         }
+        public void AddNewUser(NewAccountInfo newAccountInfo)
+        {
+            XmlDocument UsersXML = new XmlDocument();
+            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
+            UsersXML.Load(usersXML);
+
+            XmlElement userElem = UsersXML.CreateElement("User");
+            userElem.SetAttribute("FirstName", newAccountInfo.firstName);
+            userElem.SetAttribute("LastName", newAccountInfo.lastName);
+
+            XmlElement loginElem = UsersXML.CreateElement("Login");
+
+            //need to validate that this email doesn't already have an account associated with it
+
+            loginElem.SetAttribute("Email", newAccountInfo.email);
+            loginElem.SetAttribute("Password", newAccountInfo.password);
+
+            userElem.AppendChild(loginElem);
+            UsersXML.DocumentElement.AppendChild(userElem);
+            //UsersXML.Save(Console.Out);
+            UsersXML.Save(usersXML);
+            serverMessage = "New account " + newAccountInfo.email + " created.";
+            Console.WriteLine(serverMessage);
+        }
+        public async Task AddUserAsync(NewAccountInfo newAccountInfo)
+        {
+            Task addUserTask = Task.Run(() =>
+            {
+                XmlDocument UsersXML = new XmlDocument();
+                //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
+                UsersXML.Load(usersXML);
+
+                XmlElement userElem = UsersXML.CreateElement("User");
+                userElem.SetAttribute("FirstName", newAccountInfo.firstName);
+                userElem.SetAttribute("LastName", newAccountInfo.lastName);
+
+                XmlElement loginElem = UsersXML.CreateElement("Login");
+
+                //need to validate that this email doesn't already have an account associated with it
+
+                loginElem.SetAttribute("Email", newAccountInfo.email);
+                loginElem.SetAttribute("Password", newAccountInfo.password);
+
+                userElem.AppendChild(loginElem);
+                UsersXML.DocumentElement.AppendChild(userElem);
+                //UsersXML.Save(Console.Out);
+                UsersXML.Save(usersXML);
+            });
+            await addUserTask;
+            serverMessage = "New account " + newAccountInfo.email + " successfully created.";
+            Console.WriteLine(serverMessage);
+        }
         public void SendMessage(string message)
         {
             clientMessage = message;
@@ -175,5 +237,30 @@ namespace Server
         public string GetMessageFromServer() => serverMessage;
         public User GetUser() => user;
         public XmlDocument GetAnalysisXML() => analysisXML;
+        public bool IsLoginSuccessful() => loginSuccessful;
+        public void UploadFile(RemoteFileInfo request)
+        {
+            FileStream targetStream = null;
+            Stream sourceStream = request.FileByteStream;
+            //string uploadFolder = @".";
+            //string filePath = Path.Combine(uploadFolder, request.FileName);
+            string filePath = request.FileName;
+
+            using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                //read from the input stream in 65000 byte chunks
+                const int bufferLen = 65000;
+                fileBuffer = new byte[bufferLen];
+                int count = 0;
+                while ((count = sourceStream.Read(fileBuffer, 0, bufferLen)) > 0)
+                {
+                    // save to output stream
+                    targetStream.Write(fileBuffer, 0, count);
+                }
+                targetStream.Close();
+                sourceStream.Close();
+            }
+            //Analyze();
+        }
     }
 }

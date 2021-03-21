@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,21 +22,36 @@ namespace RemoteCodeAnalyzer
     /// </summary>
     public partial class NewAccountPage : Page
     {
-        private readonly string xmlFileName;
+        //private readonly string xmlFileName;
+        Client client;
         public NewAccountPage()
         {
             InitializeComponent();
             InitializeTextBoxes();
-            xmlFileName = @"../../Users.xml";
+            //xmlFileName = @"../../Users.xml";
+            client = new Client("http://localhost:8080/Service");
         }
-        private void SignUp_Click(object sender, RoutedEventArgs e)
+        private async void SignUp_Click(object sender, RoutedEventArgs e)
+        {
+            //client.GetSVC().AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
+            NewAccountInfo newAccountInfo = new NewAccountInfo(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
+            await client.GetSVC().AddUserAsync(newAccountInfo);
+            GoToLoginSignupPage();
+        }
+        private void GoToLoginSignupPage()
+        {
+            LoginSignupPage login = new LoginSignupPage();
+            MessageBox.Show("Your new account was successfully created. You may now login with your new account. Click Ok to continue to Login page.");
+            this.NavigationService.Navigate(login);
+        }
+        /*private void SignUp_Click(object sender, RoutedEventArgs e)
         {
             AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
             LoginSignupPage login = new LoginSignupPage();
             MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
             this.NavigationService.Navigate(login);
-        }
-        public void AddNewUser(string FirstName, string LastName, string email, string password)
+        }*/
+        /*public void AddNewUser(string FirstName, string LastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
             //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
@@ -52,8 +68,8 @@ namespace RemoteCodeAnalyzer
             userElem.AppendChild(loginElem);
             UsersXML.DocumentElement.AppendChild(userElem);
             //UsersXML.Save(Console.Out);
-            UsersXML.Save(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
-        }
+            UsersXML.Save(@"../../Users.xml");
+        }*/
         private void InitializeTextBoxes()
         {
             FirstNameTextBox.Foreground = Brushes.Gray;
