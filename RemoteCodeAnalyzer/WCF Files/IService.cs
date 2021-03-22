@@ -53,12 +53,15 @@ namespace Server
         void AddNewUser(NewAccountInfo newAccountInfo);
 
         [OperationContract]
-        Task AddUserAsync(NewAccountInfo newAccountInfo);
+        Task AddNewAccountAsync(NewAccountInfo newAccountInfo);
 
         bool AnAccountWithThisEmailAlreadyExists(string email);
 
         [OperationContract]
         bool WasUserAdded();
+
+        [OperationContract]
+        void CreateNewAccountFolder(string directoryName);
     }
 
     [DataContract]

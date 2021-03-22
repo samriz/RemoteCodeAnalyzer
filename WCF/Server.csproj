@@ -61,5 +61,8 @@
   <ItemGroup>
     <Resource Include="Users.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Users\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

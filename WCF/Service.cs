@@ -43,6 +43,7 @@ namespace Server
         private XmlDocument analysisXML;
         private bool loginSuccessful;
         private bool wasUserAdded;
+        private string usersDirectory;
 
         public BasicService()
         {
@@ -50,6 +51,7 @@ namespace Server
             usersXML = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
+            usersDirectory = @"../../Users";
         }
         public XmlDocument AnalyzeFile(FileData FT)
         {
@@ -213,7 +215,7 @@ namespace Server
             }
             return false;
         }
-        public async Task AddUserAsync(NewAccountInfo newAccountInfo)
+        public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
         {
             Task<bool> addUserTask = Task.Run(() =>
             {
@@ -234,10 +236,10 @@ namespace Server
                     userElem.AppendChild(loginElem);
                     UsersXML.DocumentElement.AppendChild(userElem);
                     UsersXML.Save(usersXML);
+                    CreateNewAccountFolder(newAccountInfo.email);
                     return true;
                 }
                 else return false;
-                              
             });
             wasUserAdded = await addUserTask;
             if (wasUserAdded)
@@ -251,6 +253,17 @@ namespace Server
                 Console.WriteLine(serverMessage);
             }
         }
+
+        public void CreateNewAccountFolder(string folderName)
+        {
+            Directory.CreateDirectory(usersDirectory + "/" + folderName);
+        }
+
+        public void CreateNewProjectFolder(string userEmail, string projectName)
+        {
+            Directory.CreateDirectory(usersDirectory + "/" + userEmail + "/" + projectName);
+        }
+
         public void SendMessage(string message)
         {
             clientMessage = message;

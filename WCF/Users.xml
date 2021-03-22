@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Users xmlns="">
   <User FirstName="Sameer" LastName="Rizvi">
-    <Login Email="srizvi@syr.edu" Password="something" />
-  </User>
-  <User FirstName="Sameer" LastName="Rizvi">
-    <Login Email="srizv82@gmail.com" Password="sdd" />
-  </User>
-  <User FirstName="jon" LastName="snow">
-    <Login Email="jonsnow@yahoo.com" Password="password" />
-  </User>
-  <User FirstName="john" LastName="doe">
-    <Login Email="johndoe@hotmail.com" Password="325" />
+    <Login Email="srizvi@syr.edu" Password="hello" />
   </User>
 </Users>
