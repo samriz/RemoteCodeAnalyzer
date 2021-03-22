@@ -36,12 +36,16 @@ namespace RemoteCodeAnalyzer
             //client.GetSVC().AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
             NewAccountInfo newAccountInfo = new NewAccountInfo(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
             await client.GetSVC().AddUserAsync(newAccountInfo);
-            GoToLoginSignupPage();
+            if (client.GetSVC().WasUserAdded()) 
+            {
+                MessageBox.Show(client.GetSVC().GetMessageFromServer() + " You may now login with your new account. Redirecting to Login page.");
+                GoToLoginSignupPage();
+            }
+            else MessageForUser.Text = client.GetSVC().GetMessageFromServer();
         }
         private void GoToLoginSignupPage()
         {
             LoginSignupPage login = new LoginSignupPage();
-            MessageBox.Show("Your new account was successfully created. You may now login with your new account. Click Ok to continue to Login page.");
             this.NavigationService.Navigate(login);
         }
         /*private void SignUp_Click(object sender, RoutedEventArgs e)

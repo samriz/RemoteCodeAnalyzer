@@ -54,6 +54,11 @@ namespace Server
 
         [OperationContract]
         Task AddUserAsync(NewAccountInfo newAccountInfo);
+
+        bool AnAccountWithThisEmailAlreadyExists(string email);
+
+        [OperationContract]
+        bool WasUserAdded();
     }
 
     [DataContract]

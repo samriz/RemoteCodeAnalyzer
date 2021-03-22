@@ -42,6 +42,7 @@ namespace Server
         private AnalysisDisplayer AD;
         private XmlDocument analysisXML;
         private bool loginSuccessful;
+        private bool wasUserAdded;
 
         public BasicService()
         {
@@ -187,20 +188,42 @@ namespace Server
             XmlElement loginElem = UsersXML.CreateElement("Login");
 
             //need to validate that this email doesn't already have an account associated with it
+            if (!AnAccountWithThisEmailAlreadyExists(newAccountInfo.email))
+            {
+                loginElem.SetAttribute("Email", newAccountInfo.email);
+                loginElem.SetAttribute("Password", newAccountInfo.password);
 
-            loginElem.SetAttribute("Email", newAccountInfo.email);
-            loginElem.SetAttribute("Password", newAccountInfo.password);
+                userElem.AppendChild(loginElem);
+                UsersXML.DocumentElement.AppendChild(userElem);
+                //UsersXML.Save(Console.Out);
+                UsersXML.Save(usersXML);
+                serverMessage = "New account " + newAccountInfo.email + " created.";
+                Console.WriteLine(serverMessage);
+            }
+            else
+            {
+                serverMessage = "An account associated with this email address already exists.";
+                return;
+            }        
+        }
+        public bool AnAccountWithThisEmailAlreadyExists(string email)
+        {
+            XmlDocument UsersXML = new XmlDocument();
+            UsersXML.Load(usersXML);
 
-            userElem.AppendChild(loginElem);
-            UsersXML.DocumentElement.AppendChild(userElem);
-            //UsersXML.Save(Console.Out);
-            UsersXML.Save(usersXML);
-            serverMessage = "New account " + newAccountInfo.email + " created.";
-            Console.WriteLine(serverMessage);
+            XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
+            for (int i = 0; i < elemList.Count; i++)
+            {
+                if (elemList[i].Attributes.GetNamedItem("Email").Value == email)
+                {                    
+                    return true;
+                }
+            }
+            return false;
         }
         public async Task AddUserAsync(NewAccountInfo newAccountInfo)
         {
-            Task addUserTask = Task.Run(() =>
+            Task<bool> addUserTask = Task.Run(() =>
             {
                 XmlDocument UsersXML = new XmlDocument();
                 //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
@@ -213,18 +236,33 @@ namespace Server
                 XmlElement loginElem = UsersXML.CreateElement("Login");
 
                 //need to validate that this email doesn't already have an account associated with it
-
-                loginElem.SetAttribute("Email", newAccountInfo.email);
-                loginElem.SetAttribute("Password", newAccountInfo.password);
-
-                userElem.AppendChild(loginElem);
-                UsersXML.DocumentElement.AppendChild(userElem);
-                //UsersXML.Save(Console.Out);
-                UsersXML.Save(usersXML);
+                if (!AnAccountWithThisEmailAlreadyExists(newAccountInfo.email))
+                {
+                    loginElem.SetAttribute("Email", newAccountInfo.email);
+                    loginElem.SetAttribute("Password", newAccountInfo.password);
+                    userElem.AppendChild(loginElem);
+                    UsersXML.DocumentElement.AppendChild(userElem);
+                    //UsersXML.Save(Console.Out);
+                    UsersXML.Save(usersXML);
+                    return true;
+                }
+                else
+                {
+                    //serverMessage = "An account associated with this email address already exists.";
+                    return false;
+                }               
             });
-            await addUserTask;
-            serverMessage = "New account " + newAccountInfo.email + " successfully created.";
-            Console.WriteLine(serverMessage);
+            wasUserAdded = await addUserTask;
+            if (wasUserAdded)
+            {
+                serverMessage = "New account " + newAccountInfo.email + " successfully created.";
+                Console.WriteLine(serverMessage);
+            }
+            else
+            {
+                serverMessage = "An account associated with this email address already exists.";
+                Console.WriteLine(serverMessage);
+            }
         }
         public void SendMessage(string message)
         {
@@ -238,6 +276,7 @@ namespace Server
         public User GetUser() => user;
         public XmlDocument GetAnalysisXML() => analysisXML;
         public bool IsLoginSuccessful() => loginSuccessful;
+        public bool WasUserAdded() => wasUserAdded;
         public void UploadFile(RemoteFileInfo request)
         {
             FileStream targetStream = null;

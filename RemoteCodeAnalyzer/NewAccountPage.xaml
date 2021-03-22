@@ -8,7 +8,7 @@
       d:DesignHeight="400" d:DesignWidth="600"
       Title="NewAccount">
 
-    <Canvas Height="400" Width="600" Background="AliceBlue">
+    <Canvas Background="AliceBlue">
         <!--<GroupBox x:Name="loginBox" Height="120" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
             <StackPanel Orientation="Vertical">
             </StackPanel>
@@ -28,5 +28,6 @@
             Password
         </TextBox>
         <Button Content="Sign Up" Width="100" HorizontalAlignment="Left" Click="SignUp_Click" Canvas.Left="235" Canvas.Top="209" />
+        <TextBlock Name="MessageForUser" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" Foreground="Red"/>
     </Canvas>
 </Page>
