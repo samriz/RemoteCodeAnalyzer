@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -103,7 +104,8 @@ namespace RemoteCodeAnalyzer
             //if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
             if(client.GetSVC().IsLoginSuccessful())
             {
-                user = new User(client.GetSVC().GetUser().GetFirstName(), client.GetSVC().GetUser().GetLastName(), client.GetSVC().GetUser().GetEmail(), client.GetSVC().GetUser().GetPassword());
+                //user = new User(client.GetSVC().GetUser().GetFirstName(), client.GetSVC().GetUser().GetLastName(), client.GetSVC().GetUser().GetEmail(), client.GetSVC().GetUser().GetPassword());
+                user = client.GetSVC().GetUser();
                 userpage = new UserPage(user);
                 this.NavigationService.Navigate(userpage);
             }

@@ -95,7 +95,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WCF Files\Client.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="UserPage.xaml.cs">
       <DependentUpon>UserPage.xaml</DependentUpon>
     </Compile>

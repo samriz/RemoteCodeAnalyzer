@@ -80,17 +80,13 @@ namespace Server
             { 
                 AuthenticateUser(email, password); 
                 if(user == null)
-                {
-                    //infoMessage = "Incorrect Login.";
-                    //Console.WriteLine(infoMessage);
+                {                   
                     serverMessage = "Incorrect Login.";
                     Console.WriteLine(serverMessage);
                     return false;
                 }
                 else
-                {
-                    //infoMessage = "Login successful! Returned page!";
-                    //Console.WriteLine(infoMessage);
+                {                    
                     serverMessage = "Login successful! Returned page!";
                     Console.WriteLine(serverMessage);
                     return true;
@@ -98,8 +94,6 @@ namespace Server
             }
             else
             {
-                //infoMessage = "Email or Password fields cannot be empty.";
-                //Console.WriteLine(infoMessage);
                 serverMessage = "Email or Password fields cannot be empty.";
                 Console.WriteLine(serverMessage);
                 return false;
@@ -214,10 +208,8 @@ namespace Server
             XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
             for (int i = 0; i < elemList.Count; i++)
             {
-                if (elemList[i].Attributes.GetNamedItem("Email").Value == email)
-                {                    
-                    return true;
-                }
+                if (elemList[i].Attributes.GetNamedItem("Email").Value == email) return true;
+                
             }
             return false;
         }
@@ -226,7 +218,6 @@ namespace Server
             Task<bool> addUserTask = Task.Run(() =>
             {
                 XmlDocument UsersXML = new XmlDocument();
-                //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
                 UsersXML.Load(usersXML);
 
                 XmlElement userElem = UsersXML.CreateElement("User");
@@ -242,15 +233,11 @@ namespace Server
                     loginElem.SetAttribute("Password", newAccountInfo.password);
                     userElem.AppendChild(loginElem);
                     UsersXML.DocumentElement.AppendChild(userElem);
-                    //UsersXML.Save(Console.Out);
                     UsersXML.Save(usersXML);
                     return true;
                 }
-                else
-                {
-                    //serverMessage = "An account associated with this email address already exists.";
-                    return false;
-                }               
+                else return false;
+                              
             });
             wasUserAdded = await addUserTask;
             if (wasUserAdded)
@@ -277,7 +264,7 @@ namespace Server
         public XmlDocument GetAnalysisXML() => analysisXML;
         public bool IsLoginSuccessful() => loginSuccessful;
         public bool WasUserAdded() => wasUserAdded;
-        public void UploadFile(RemoteFileInfo request)
+        /*public void UploadFile(RemoteFileInfo request)
         {
             FileStream targetStream = null;
             Stream sourceStream = request.FileByteStream;
@@ -299,7 +286,6 @@ namespace Server
                 targetStream.Close();
                 sourceStream.Close();
             }
-            //Analyze();
-        }
+        }*/
     }
 }
