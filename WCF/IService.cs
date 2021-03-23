@@ -60,7 +60,13 @@ namespace Server
         [OperationContract]
         bool WasUserAdded();
 
-        void CreateNewAccountFolder(string directoryName);
+        string CreateNewAccountFolder(string folderName);
+
+        [OperationContract]
+        string CreateNewProjectFolder(string userEmail, string projectName);
+
+        [OperationContract]
+        void UploadFile(string fileName, List<string> fileText, string userEmail, string projectName);
     }
 
     [DataContract]

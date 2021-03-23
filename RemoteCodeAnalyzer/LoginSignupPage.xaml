@@ -17,15 +17,12 @@
         </Menu>-->
         <Label Content="Sign in:" />
         <Label Content="Already have an account?" Canvas.Left="357" Canvas.Top="66" RenderTransformOrigin="0.327,0.484"/>
-
-        <TextBox Name="EmailTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="93" KeyDown="EmailTextBox_KeyDown" RenderTransformOrigin="0.504,2.171">
-            Email
-        </TextBox>
+        <TextBox Name="EmailTextBox" Text="Email" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="93" KeyDown="EmailTextBox_KeyDown" RenderTransformOrigin="0.504,2.171"/>
         <PasswordBox Name="PasswordTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="118" RenderTransformOrigin="0.076,0.841" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
         <Button Name="LoginButton" Content="Login" Width="150" Height="25" HorizontalAlignment="Left" Click="Login_Click" Canvas.Left="357" Canvas.Top="143"/>
         <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="110" Canvas.Top="101" RenderTransformOrigin="0.43,1.375"/>
         <Button Name="NewAccountButton" Content="New Account" Width="150" Height="25" HorizontalAlignment="Center" Click="NewAccount_Click" Canvas.Left="104" Canvas.Top="143"/>
-        <TextBlock Name="ErrorLabel" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" Foreground="Red"/>
+        <TextBlock Name="ErrorMessage" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" FontStyle="Italic" Foreground="Red"/>
     </Canvas>
 
     <!--<Canvas Height="350" Width="700" Background="AliceBlue">

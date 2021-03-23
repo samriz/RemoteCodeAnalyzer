@@ -80,14 +80,12 @@ namespace RemoteCodeAnalyzer
             LastNameTextBox.Foreground = Brushes.Gray;
             EmailTextBox.Foreground = Brushes.Gray;
             PasswordTextBox.Foreground = Brushes.Gray;
+
             EmailTextBox.FontStyle = FontStyles.Italic;
             PasswordTextBox.FontStyle = FontStyles.Italic;
             FirstNameTextBox.FontStyle = FontStyles.Italic;
             LastNameTextBox.FontStyle = FontStyles.Italic;
-            //EmailTextBox.IsEnabled = false;
-            //PasswordTextBox.IsEnabled = false;
         }
-
         private void FirstNameTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             LastNameTextBox.Background = Brushes.White;
@@ -96,7 +94,6 @@ namespace RemoteCodeAnalyzer
             FirstNameTextBox.Background = Brushes.AliceBlue;
             FirstNameTextBox.Text = "";
         }
-
         private void LastNameTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             FirstNameTextBox.Background = Brushes.White;
@@ -105,7 +102,6 @@ namespace RemoteCodeAnalyzer
             LastNameTextBox.Background = Brushes.AliceBlue;
             LastNameTextBox.Text = "";
         }
-
         private void EmailTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             FirstNameTextBox.Background = Brushes.White;
@@ -114,7 +110,6 @@ namespace RemoteCodeAnalyzer
             EmailTextBox.Background = Brushes.AliceBlue;
             EmailTextBox.Text = "";
         }
-
         private void PasswordTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             FirstNameTextBox.Background = Brushes.White;

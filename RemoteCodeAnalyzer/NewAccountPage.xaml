@@ -28,6 +28,6 @@
             Password
         </TextBox>
         <Button Content="Sign Up" Width="100" HorizontalAlignment="Left" Click="SignUp_Click" Canvas.Left="235" Canvas.Top="209" />
-        <TextBlock Name="MessageForUser" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" Foreground="Red"/>
+        <TextBlock Name="MessageForUser" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" FontStyle="Italic" Foreground="Red"/>
     </Canvas>
 </Page>

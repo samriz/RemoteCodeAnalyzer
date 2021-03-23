@@ -10,17 +10,21 @@
 
     <Canvas Height="Auto" Width="Auto" Background="AliceBlue">
         <Label Name="FullNameLabel" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto" Width="Auto" FontSize="20"/>
-        <Button Name="SearchFiles" Content="Search" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="72" Click="SearchFiles_Click"/>
+        <Button Name="SearchFiles" Content="Search" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="100" Click="SearchFiles_Click"/>
         <Label Name="FolderPathLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Canvas.Left="126" Canvas.Top="75"/>
-        <Button x:Name="UploadFiles" Content="Upload" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="102" Click="UploadFiles_Click"/>
-        <ListView Name="FilesList" Height="Auto" Canvas.Left="10" Canvas.Top="176" Width="Auto" MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged">
+        <Button x:Name="UploadFiles" Content="Upload" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="130" Click="UploadFiles_Click"/>
+        <TextBox Name="ProjectNameTextBox" Text="Project Name" Height="23" TextWrapping="Wrap" Canvas.Top="72" Width="120" RenderTransformOrigin="-0.24,0.017" Canvas.Left="1" IsMouseDirectlyOverChanged="ProjectNameTextBox_ActivateOnClick"/>
+        <ListBox Name ="FilesList" Height="Auto" Canvas.Left="10" Canvas.Top="186" Width="Auto" MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged"/>
+        <!--<ListView Name="FilesList" Height="Auto" Canvas.Left="10" Canvas.Top="176" Width="Auto" MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
-        </ListView>
-        <DataGrid Name="AnalysisResultsGrid" Height="287" Canvas.Left="445" Canvas.Top="176" Width="281"/>
+        </ListView>-->
+        <ListView Name="AnalysisResultsGrid" Height="287" Canvas.Left="445" Canvas.Top="186" Width="281"/>
+        <TextBlock Name="ErrorMessage" Canvas.Left="10" Canvas.Top="160" RenderTransformOrigin="-0.052,0.047" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+
         <!--<ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" VerticalAlignment="Bottom" Width="669" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373" Canvas.Left="62" Canvas.Top="365"/>-->
     </Canvas>
 </Page>

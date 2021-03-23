@@ -92,10 +92,8 @@ namespace RemoteCodeAnalyzer
             }
             return false;
         }*/
-        private void Login_Click(object sender, RoutedEventArgs e)//event handler
-        {
-            Login();
-        }
+        //event handler below
+        private void Login_Click(object sender, RoutedEventArgs e){Login();}
         private async void Login()
         {
             //string message;
@@ -110,7 +108,7 @@ namespace RemoteCodeAnalyzer
                 this.NavigationService.Navigate(userpage);
             }
             //else ErrorLabel.Text = message;
-            else ErrorLabel.Text = client.GetSVC().GetMessageFromServer();
+            else ErrorMessage.Text = client.GetSVC().GetMessageFromServer();
         }
         private void NewAccount_Click(object sender, RoutedEventArgs e)
         {
@@ -155,29 +153,17 @@ namespace RemoteCodeAnalyzer
         }
         private void InactivateBox(TextBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
         private void InactivateBox(PasswordBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
-
         private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Enter))
-            {
-                Login();
-            }
+            if (Keyboard.IsKeyDown(Key.Enter)) Login();
         }
-
         private void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Tab))
-            {
-                ActivateBox(EmailTextBox, "Email");
-            }
+            if (Keyboard.IsKeyDown(Key.Tab)) ActivateBox(EmailTextBox, "Email");
         }
-
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Keyboard.IsKeyDown(Key.Tab))
-            {
-                ActivateBox(EmailTextBox, "Email");
-            }
+            if (Keyboard.IsKeyDown(Key.Tab)) ActivateBox(EmailTextBox, "Email");          
         }
     }
 }

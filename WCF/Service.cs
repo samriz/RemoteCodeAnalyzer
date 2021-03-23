@@ -253,17 +253,25 @@ namespace Server
                 Console.WriteLine(serverMessage);
             }
         }
-
-        public void CreateNewAccountFolder(string folderName)
+        public string CreateNewAccountFolder(string folderName)
         {
-            Directory.CreateDirectory(usersDirectory + "/" + folderName);
+            string path = usersDirectory + "/" + folderName;
+            Directory.CreateDirectory(path);
+            return usersDirectory + "/" + folderName;
         }
-
-        public void CreateNewProjectFolder(string userEmail, string projectName)
+        public string CreateNewProjectFolder(string userEmail, string projectName)
         {
-            Directory.CreateDirectory(usersDirectory + "/" + userEmail + "/" + projectName);
+            string path = usersDirectory + "/" + userEmail + "/" + projectName;
+            Directory.CreateDirectory(path);
+            return usersDirectory + "/" + userEmail + "/" + projectName;
         }
-
+        public void UploadFile(string fileName, List<string> fileText, string userEmail, string projectName)
+        {   
+            string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
+            string filePath = directoryPath + fileName;
+            //File.Create(filePath);
+            File.WriteAllLines(filePath, fileText);
+        }
         public void SendMessage(string message)
         {
             clientMessage = message;
