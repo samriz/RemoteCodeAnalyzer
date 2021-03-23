@@ -8,41 +8,25 @@
       d:DesignHeight="300" d:DesignWidth="600"
       Title="LoginOrCreateAccount">
 
-    <Canvas Height="300" Width="600" Background="AliceBlue" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" KeyDown="Canvas_KeyDown" Loaded="Canvas_Loaded">
-        <Canvas.Resources>
-            <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
-        </Canvas.Resources>
-        <!--<Menu DockPanel.Dock="Top">
+    <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Canvas Height="300" Width="600" Background="AliceBlue" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" KeyDown="Canvas_KeyDown" Loaded="Canvas_Loaded">
+            <Canvas.Resources>
+                <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
+            </Canvas.Resources>
+            <!--<Menu DockPanel.Dock="Top">
             <MenuItem Header="File"/>
         </Menu>-->
-        <Label Content="Sign in:" />
-        <Label Content="Already have an account?" Canvas.Left="357" Canvas.Top="66" RenderTransformOrigin="0.327,0.484"/>
-        <TextBox Name="EmailTextBox" Text="Email" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="93" KeyDown="EmailTextBox_KeyDown" RenderTransformOrigin="0.504,2.171"/>
-        <PasswordBox Name="PasswordTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="118" RenderTransformOrigin="0.076,0.841" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
-        <Button Name="LoginButton" Content="Login" Width="150" Height="25" HorizontalAlignment="Left" Click="Login_Click" Canvas.Left="357" Canvas.Top="143"/>
-        <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="110" Canvas.Top="101" RenderTransformOrigin="0.43,1.375"/>
-        <Button Name="NewAccountButton" Content="New Account" Width="150" Height="25" HorizontalAlignment="Center" Click="NewAccount_Click" Canvas.Left="104" Canvas.Top="143"/>
-        <TextBlock Name="ErrorMessage" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" FontStyle="Italic" Foreground="Red"/>
-    </Canvas>
-
-    <!--<Canvas Height="350" Width="700" Background="AliceBlue">
-        <Canvas.Resources>
-            <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
-        </Canvas.Resources>
-        <Menu>
-            <MenuItem Header="File"/>
-        </Menu>
-        <Label Content="Create New Account?" Canvas.Left="155" Canvas.Top="150" RenderTransformOrigin="1.629,0.686"/>
-        <Button Content="Create" Canvas.Left="167" Canvas.Top="181" Width="100" Height="30" RenderTransformOrigin="1.581,0.472"/>
-
-        <Label Content="Already have an account?" Canvas.Right="100" Canvas.Top="109" Canvas.Left="408"/>
-        <Label Content="Sign in:" Canvas.Right="150" Canvas.Top="133" Canvas.Left="408" RenderTransformOrigin="-0.53,-0.813"/>
-        <TextBox Name="EmailText" Canvas.Right="150" Canvas.Top="158" Width="100" Height="Auto" RenderTransformOrigin="1.203,-0.038" Canvas.Left="408">
-            Email
-        </TextBox>
-        <TextBox Name="PasswordText" Canvas.Right="150" Canvas.Top="181" Width="100" Height="Auto" Canvas.Left="408" RenderTransformOrigin="-0.425,-1.774">
-            Password
-        </TextBox>
-        <Button Content="Login" Canvas.Left="408" Canvas.Top="204" Width="100" Height="30"/>
-    </Canvas>-->
+            <Label Content="Sign in:" />
+            <Label Content="Already have an account?" Canvas.Left="357" Canvas.Top="66" RenderTransformOrigin="0.327,0.484"/>
+            <TextBox Name="EmailTextBox" Text="Email" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="93" KeyDown="EmailTextBox_KeyDown" RenderTransformOrigin="0.504,2.171"/>
+            <!--<Label Content="Password" Canvas.Left="335" Canvas.Top="89"/>-->
+            <PasswordBox Name="PasswordTextBox" Width="150" Height="25" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" Canvas.Left="357" Canvas.Top="118" RenderTransformOrigin="0.076,0.841" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
+            <Button Name="LoginButton" Content="Login" Width="150" Height="25" HorizontalAlignment="Left" Click="Login_Click" Canvas.Left="357" Canvas.Top="143"/>
+            <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="110" Canvas.Top="101" RenderTransformOrigin="0.43,1.375"/>
+            <Button Name="NewAccountButton" Content="New Account" Width="150" Height="25" HorizontalAlignment="Center" Click="NewAccount_Click" Canvas.Left="104" Canvas.Top="143"/>
+            <TextBlock Name="ErrorMessage" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+            <Border  Height="164" Canvas.Left="52" Canvas.Top="70" Width="253"/>
+            <Border Height="164" Canvas.Left="321" Canvas.Top="70" Width="253" BorderThickness="20"/>
+        </Canvas>
+    </ScrollViewer>
 </Page>

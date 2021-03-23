@@ -111,28 +111,25 @@ namespace Server
                     if (user == null)
                     {                        
                         serverMessage = "Incorrect Login.";
-                        Console.WriteLine(serverMessage);
+                        //Console.WriteLine(serverMessage);
                         return false;
                     }
                     else
                     {                       
                         serverMessage = "Login successful! Returned page!";
-                        Console.WriteLine(serverMessage);
+                        //Console.WriteLine(serverMessage);
                         return true;
                     }
                 }
                 else
                 {
                     serverMessage = "Email or Password fields cannot be empty.";
-                    Console.WriteLine(serverMessage);
+                    //Console.WriteLine(serverMessage);
                     return false;
                 }
             });
             loginSuccessful = await loginTask;
-            if (loginSuccessful == true)
-            {
-                Console.WriteLine(serverMessage);
-            }
+            Console.WriteLine(serverMessage);
         }
         public void AuthenticateUser(string email, string password)
         {

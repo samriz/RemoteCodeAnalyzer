@@ -8,26 +8,15 @@
       d:DesignHeight="400" d:DesignWidth="600"
       Title="NewAccount">
 
-    <Canvas Background="AliceBlue">
-        <!--<GroupBox x:Name="loginBox" Height="120" VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-            <StackPanel Orientation="Vertical">
-            </StackPanel>
-        </GroupBox>-->
-        <Label Content="Create account:" Canvas.Left="215" Canvas.Top="70" FontSize="20"/>
-        
-        <TextBox Name="FirstNameTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="FirstNameTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="117">
-            First Name
-        </TextBox>
-        <TextBox Name="LastNameTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="LastNameTextBox_IsMouseDirectlyOverChanged" RenderTransformOrigin="2.054,5.75" Canvas.Left="235" Canvas.Top="140">
-            Last Name
-        </TextBox>
-        <TextBox Name="EmailTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="163">
-            Email
-        </TextBox>
-        <TextBox Name="PasswordTextBox" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="186">
-            Password
-        </TextBox>
-        <Button Content="Sign Up" Width="100" HorizontalAlignment="Left" Click="SignUp_Click" Canvas.Left="235" Canvas.Top="209" />
-        <TextBlock Name="MessageForUser" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" FontStyle="Italic" Foreground="Red"/>
-    </Canvas>
+    <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Canvas Height="400" Width="600" Background="AliceBlue">
+            <Label Content="Create account:" Canvas.Left="215" Canvas.Top="70" FontSize="20"/>
+            <TextBox Name="FirstNameTextBox" Text="First Name" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="FirstNameTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="117"/>
+            <TextBox Name="LastNameTextBox" Text="Last Name" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="LastNameTextBox_IsMouseDirectlyOverChanged" RenderTransformOrigin="2.054,5.75" Canvas.Left="235" Canvas.Top="140"/>
+            <TextBox Name="EmailTextBox" Text="Email" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="163"/>
+            <TextBox Name="PasswordTextBox" Text="Password" Width="100" HorizontalAlignment="Left" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="186"/>
+            <Button Content="Sign Up" Width="100" HorizontalAlignment="Left" Click="SignUp_Click" Canvas.Left="235" Canvas.Top="209" />
+            <TextBlock Name="MessageForUser" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+        </Canvas>
+    </ScrollViewer>
 </Page>
