@@ -1,4 +1,30 @@
-﻿using Microsoft.Win32;
+﻿//////////////////////////////////////////////////////////////////////////
+// UserPage.xaml.cs - Functionality to allow user to upload a project   //
+// to their directory on the server and view all other users' projects  //
+// and analyze their files.                                             //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  View users' directories, choose file to analyze, upload a project
+ *  to your own directory, etc.
+ */
+/* Required Files:
+ *   IService.cs, Client.cs
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,10 +147,7 @@ namespace RemoteCodeAnalyzer
         {
             //string file = UsersProjectsTreeView.SelectedValue.ToString();
             string file = GetFileName(RelativePathTextBox.Text);
-            if(file == null)
-            {
-                ErrorMessage.Text = "Invalid path.";
-            }
+            if(file == null) ErrorMessage.Text = "Invalid path.";
             else
             {
                 FileData data = new FileData(file, client.GetSVC().GetFileLines(RelativePathTextBox.Text));
@@ -184,7 +207,7 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Foreground = Brushes.Black;
             newlyActiveBox.FontStyle = FontStyles.Normal;
             newlyActiveBox.Background = Brushes.AliceBlue;
-            if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
+            if(newlyActiveBox.Text == text) newlyActiveBox.Text = "";
         }
         /*private void PickItem()
 {

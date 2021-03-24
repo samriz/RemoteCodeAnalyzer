@@ -1,4 +1,28 @@
-﻿using Server;
+﻿//////////////////////////////////////////////////////////////////////////
+// LoginSignupPage.xaml.cs - Login page for existing accounts.          //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Log into user account. If one wishes to create a new account, this page
+ *  can take them to the New Account Page.
+ */
+/* Required Files:
+ *   IService.cs, Client.cs
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
+using Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,27 @@
-﻿using System;
+﻿//////////////////////////////////////////////////////////////////////////
+// IService.cs - Service interface                                      //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Interface with server.
+ */
+/* Required Files:
+ *   
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -87,7 +110,7 @@ namespace Server
     }
 
     [DataContract]
-    public struct NewAccountInfo
+    public struct NewAccountInfo //encapsulates information needed for creating a new account
     {
         [DataMember]
         public string firstName, lastName, email, password;
@@ -122,7 +145,7 @@ namespace Server
     }
 
     [DataContract]
-    public class User
+    public class User //for UserPage purposes. creates instance of a user
     {
         [DataMember]
         private string firstName, lastName, email, password;

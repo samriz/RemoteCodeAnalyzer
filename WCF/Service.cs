@@ -1,4 +1,27 @@
-﻿using CodeAnalyzer;
+﻿//////////////////////////////////////////////////////////////////////////
+// Service.cs - Implement service interface                             //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Implements functions declared in service interface.
+ */
+/* Required Files:
+ *   
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
+using CodeAnalyzer;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -42,7 +65,7 @@ namespace Server
         //private byte[] fileBuffer;
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
-        private XmlDocument analysisXML;
+        //private XmlDocument analysisXML;
         private bool loginSuccessful;
         private bool wasUserAdded;
         private string usersDirectory;
@@ -56,6 +79,8 @@ namespace Server
             clientMessage = "";
             usersDirectory = @"../../Users";
         }
+
+        //analyze a file
         public List<string> AnalyzeFile(FileData FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
@@ -66,6 +91,8 @@ namespace Server
             analysisLines = AD.GetAnalysis();
             return analysisLines;
         }
+
+        //analyze a file asynchronously
         public async Task AnalyzeAsync(FileData FT)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
@@ -79,6 +106,8 @@ namespace Server
             serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
             Console.WriteLine(serverMessage);
         }
+
+        //login functionality
         public bool Login(string email, string password)
         {
             if (email.Length > 0 && password.Length > 0) 
@@ -104,6 +133,8 @@ namespace Server
                 return false;
             }
         }
+
+        //login asynchronously
         public async Task SignInAsync(string email, string password)
         {
             Task<bool> loginTask = Task.Run(() =>
@@ -134,6 +165,8 @@ namespace Server
             loginSuccessful = await loginTask;
             Console.WriteLine(serverMessage);
         }
+
+        //instantiate user for UserPage
         public void AuthenticateUser(string email, string password)
         {
             //string firstName = "";
@@ -152,6 +185,8 @@ namespace Server
                 //return null;//MessageBox.Show("Incorrect Login.");
             }
         }
+
+        //tells us whether the user exists in the server or not. if it does, then retrieve their first and last names
         public bool UserExists(out string firstName, out string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
@@ -171,6 +206,8 @@ namespace Server
             lastName = "";
             return false;
         }
+
+        //create a new entry in Users.xml
         public void AddNewUser(NewAccountInfo newAccountInfo)
         {
             XmlDocument UsersXML = new XmlDocument();
@@ -202,6 +239,8 @@ namespace Server
                 return;
             }        
         }
+
+        //makes sure we don't have duplicate email addresses in the system
         public bool AnAccountWithThisEmailAlreadyExists(string email)
         {
             XmlDocument UsersXML = new XmlDocument();
@@ -214,6 +253,8 @@ namespace Server
             }
             return false;
         }
+
+        //create a new entry in Users.xml asynchronously
         public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
         {
             Task<bool> addUserTask = Task.Run(() =>
@@ -252,24 +293,32 @@ namespace Server
                 Console.WriteLine(serverMessage);
             }
         }
+
+        //create a new account folder when a new account is created
         public string CreateNewAccountFolder(string folderName)
         {
             string path = usersDirectory + "/" + folderName;
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + folderName;
         }
+
+        //allows the user to upload a new project to their directory
         public string CreateNewProjectFolder(string userEmail, string projectName)
         {
             string path = usersDirectory + "/" + userEmail + "/" + projectName;
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + userEmail + "/" + projectName;
         }
+
+        //upload a file into a project folder
         public void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
         {   
             string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
             string filePath = directoryPath + fileName;
             File.WriteAllLines(filePath, fileText);
         }
+
+        //get all the users in Users.xml
         public ConcurrentBag<string> GetUsers()
         {
             ConcurrentBag<string> users = new ConcurrentBag<string>();
@@ -279,6 +328,8 @@ namespace Server
             for (int i = 0; i < elemList.Count; i++){users.Add(elemList[i].Attributes.GetNamedItem("Email").Value);}
             return users;
         }
+
+        //get all file text in a given file on the server
         public List<string> GetFileLines(string relativePath)
         {
             //ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList<string>());

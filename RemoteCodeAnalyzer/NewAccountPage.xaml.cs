@@ -1,4 +1,29 @@
-﻿using Server;
+﻿//////////////////////////////////////////////////////////////////////////
+// NewAccountPage.xaml.cs - Functionality to allow a user to create a   //
+// new account.                                                         //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Enter is a first name, last name, email, and password. Email addresses
+ *  linked to existing account will be denied.
+ */
+/* Required Files:
+ *   IService.cs, Client.cs
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
+using Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
