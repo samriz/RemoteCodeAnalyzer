@@ -25,8 +25,8 @@
             <Label Content="Don't have an account?" HorizontalAlignment="Center" Canvas.Left="110" Canvas.Top="101" RenderTransformOrigin="0.43,1.375"/>
             <Button Name="NewAccountButton" Content="New Account" Width="150" Height="25" HorizontalAlignment="Center" Click="NewAccount_Click" Canvas.Left="104" Canvas.Top="143"/>
             <TextBlock Name="ErrorMessage" Canvas.Left="335" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="164" FontSize="10" FontStyle="Italic" Foreground="Red"/>
-            <Border  Height="164" Canvas.Left="52" Canvas.Top="70" Width="253"/>
-            <Border Height="164" Canvas.Left="321" Canvas.Top="70" Width="253" BorderThickness="20"/>
+            <!--<Border  Height="164" Canvas.Left="52" Canvas.Top="70" Width="253"/>
+            <Border Height="164" Canvas.Left="321" Canvas.Top="70" Width="253" BorderThickness="20"/>-->
         </Canvas>
     </ScrollViewer>
 </Page>

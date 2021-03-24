@@ -43,56 +43,6 @@ namespace RemoteCodeAnalyzer
             EmailTextBox.FontStyle = FontStyles.Italic;
             PasswordTextBox.FontStyle = FontStyles.Italic;
         }
-            /*
-            public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
-            public event RoutedEventHandler Click;
-             
-            Click += Login_Click //we are registering Login_Click method to the Click event
-            Click?.Invoke(sender,e); //invoke handler(s)
-            */
-        //sender is button
-        /*private void Login_Click(object sender, RoutedEventArgs e) //event handler
-        {
-            if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
-            else
-            {
-                ErrorLabel.Text = "Email or Password fields cannot be empty.";
-            }
-        }*/
-        /*private void AuthenticateUser()
-        {
-            string firstName = "";
-            string lastName = "";
-
-            user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Password);
-            UserPage userpage;
-
-            if (UserExists(ref firstName, ref lastName, user.GetEmail(), user.GetPassword()))
-            {
-                user.SetFirstName(firstName);
-                user.SetLastName(lastName);
-                userpage = new UserPage(user);
-                this.NavigationService.Navigate(userpage);
-            }
-            else MessageBox.Show("Incorrect Login.");
-        }*/
-        /*private bool UserExists(ref string firstName, ref string lastName, string email, string password)
-        {
-            XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(usersData);
-
-            XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
-            for (int i = 0; i < elemList.Count; i++)
-            {               
-                if (elemList[i].Attributes.GetNamedItem("Email").Value == email && elemList[i].Attributes.GetNamedItem("Password").Value == password)
-                {
-                    firstName = elemList[i].ParentNode.Attributes.GetNamedItem("FirstName").Value;
-                    lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
-                    return true;
-                }
-            }
-            return false;
-        }*/
         //event handler below
         private void Login_Click(object sender, RoutedEventArgs e){Login();}
         private async void Login()
@@ -166,5 +116,55 @@ namespace RemoteCodeAnalyzer
         {
             if (Keyboard.IsKeyDown(Key.Tab)) ActivateBox(EmailTextBox, "Email");          
         }
+        /*
+            public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
+            public event RoutedEventHandler Click;
+             
+            Click += Login_Click //we are registering Login_Click method to the Click event
+            Click?.Invoke(sender,e); //invoke handler(s)
+            */
+        //sender is button
+        /*private void Login_Click(object sender, RoutedEventArgs e) //event handler
+        {
+            if(EmailTextBox.Text.Length > 0 && PasswordTextBox.Password.Length > 0) AuthenticateUser();
+            else
+            {
+                ErrorLabel.Text = "Email or Password fields cannot be empty.";
+            }
+        }*/
+        /*private void AuthenticateUser()
+        {
+            string firstName = "";
+            string lastName = "";
+
+            user = new User(this.EmailTextBox.Text, this.PasswordTextBox.Password);
+            UserPage userpage;
+
+            if (UserExists(ref firstName, ref lastName, user.GetEmail(), user.GetPassword()))
+            {
+                user.SetFirstName(firstName);
+                user.SetLastName(lastName);
+                userpage = new UserPage(user);
+                this.NavigationService.Navigate(userpage);
+            }
+            else MessageBox.Show("Incorrect Login.");
+        }*/
+        /*private bool UserExists(ref string firstName, ref string lastName, string email, string password)
+        {
+            XmlDocument UsersXML = new XmlDocument();
+            UsersXML.Load(usersData);
+
+            XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
+            for (int i = 0; i < elemList.Count; i++)
+            {               
+                if (elemList[i].Attributes.GetNamedItem("Email").Value == email && elemList[i].Attributes.GetNamedItem("Password").Value == password)
+                {
+                    firstName = elemList[i].ParentNode.Attributes.GetNamedItem("FirstName").Value;
+                    lastName = elemList[i].ParentNode.Attributes.GetNamedItem("LastName").Value;
+                    return true;
+                }
+            }
+            return false;
+        }*/
     }
 }

@@ -43,14 +43,19 @@ namespace Server
         [OperationContract]
         User GetUser();
 
-        [OperationContract, XmlSerializerFormat]
-        XmlDocument AnalyzeFile(FileData FD);
+        //[OperationContract, XmlSerializerFormat]
+        //XmlDocument AnalyzeFile(FileData FD);
+
+        [OperationContract]
+        List<string> AnalyzeFile(FileData FD);
 
         [OperationContract]
         Task AnalyzeAsync(FileData FD);
 
-        [OperationContract, XmlSerializerFormat]
-        XmlDocument GetAnalysisXML();
+        //[OperationContract, XmlSerializerFormat]
+        //XmlDocument GetAnalysisXML();
+        [OperationContract]
+        List<string> GetAnalysis();
 
         [OperationContract]
         void AddNewUser(NewAccountInfo newAccountInfo);
@@ -78,7 +83,7 @@ namespace Server
         DirectoryInfo GetUserDirectoryInfo(string userEmail);
 
         [OperationContract]
-        List<string> GetFileLines(string file, string relativePath);
+        List<string> GetFileLines(string relativePath);
     }
 
     [DataContract]

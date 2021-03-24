@@ -1,4 +1,4 @@
-﻿using CodeAnalyzer;
+using CodeAnalyzer;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

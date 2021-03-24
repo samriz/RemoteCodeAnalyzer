@@ -18,6 +18,7 @@ using System.Windows.Forms;//for FolderBrowserDialog
 using System.IO;
 using Server;
 using System.Collections.Concurrent;
+using System.Xml;
 
 namespace RemoteCodeAnalyzer
 {
@@ -29,10 +30,14 @@ namespace RemoteCodeAnalyzer
         private readonly Client client;
         private readonly FolderBrowserDialog DirectoryExplorer;
         User user;
+        //bool aFileIsSelected;
+        bool anItemInComboBoxIsSelected;
         public UserPage()
         {
             InitializeComponent();
             InitializeTextBoxes();
+            //aFileIsSelected = false;
+            anItemInComboBoxIsSelected = false;
             DirectoryExplorer = new FolderBrowserDialog();
         }
         public UserPage(User user): this()
@@ -63,67 +68,123 @@ namespace RemoteCodeAnalyzer
                     client.GetSVC().UploadFile(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox.Text);
                 }
                 //FilesList.ItemsSource = files;
-                if (UsersProjectsTreeView.HasItems)
-                {
-                    ListDirectory();
-                }
+                if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();           
             }      
         }
         private string GetFileName(string file)//get just the file name minus the directory
         {
-            List<string> pathSubstrings = file.Split('\\').ToList();
-            return pathSubstrings[pathSubstrings.Count - 1];
+            List<string> pathSubstrings = new List<string>();
+            if (file.Contains("\\"))
+            {
+                pathSubstrings = file.Split('\\').ToList();
+                return pathSubstrings[pathSubstrings.Count - 1];
+            }
+            else if (file.Contains("/"))
+            {
+                pathSubstrings = file.Split('/').ToList();
+                return pathSubstrings[pathSubstrings.Count - 1];
+            }
+            else return null;
         }     
         private void AnalyzeButton_Click(object sender, RoutedEventArgs e) 
-        { 
-            PickItem(); 
+        {
+            ErrorMessage.Text = "";
+            //string extension = System.IO.Path.GetExtension(UsersProjectsTreeView.SelectedItem.ToString());
+            /*if (UsersProjectsTreeView.SelectedItem.ToString().Contains(".cs"))
+            {
+                aFileIsSelected = true;
+            }*/           
+            if (RelativePathTextBox.Text.Length < 1)
+            {
+                ErrorMessage.Text = "Invalid selection(s).";
+            }
+            else if(RelativePathTextBox.Text == "Enter Relative Path")
+            {
+                ErrorMessage.Text = "Invalid selection(s).";
+            }
+            /*else if(aFileIsSelected == false)
+            {
+                ErrorMessage.Text = "Invalid selection(s).";
+            }*/
+            else if(anItemInComboBoxIsSelected == false)
+            {
+                ErrorMessage.Text = "Invalid selection(s).";
+            }
+            else PickItem();
+        }
+        private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            anItemInComboBoxIsSelected = true;
+            PopulateTreeViewWithDirectory();
         }
         private async void PickItem()
         {
-            string file = UsersProjectsTreeView.SelectedItem.ToString();
-            FileData data = new FileData(file, client.GetSVC().GetFileLines(file, RelativePathBox.Text));
-            await client.GetSVC().AnalyzeAsync(data);
-            client.GetSVC().SendMessage("I received the analysis results. Thank you.");
-            AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysisXML();
+            //string file = UsersProjectsTreeView.SelectedValue.ToString();
+            string file = GetFileName(RelativePathTextBox.Text);
+            if(file == null)
+            {
+                ErrorMessage.Text = "Invalid path.";
+            }
+            else
+            {
+                FileData data = new FileData(file, client.GetSVC().GetFileLines(RelativePathTextBox.Text));
+                await client.GetSVC().AnalyzeAsync(data);
+                client.GetSVC().SendMessage("I received the analysis results. Thank you.");
+                List<string> analysisList = client.GetSVC().GetAnalysis();
+                AnalysisResults.Items.Clear();
+                foreach (string line in analysisList)
+                {
+                    AnalysisResults.Items.Add(line.ToString());
+                }
+            }
+        }     
+        public void PopulateTreeViewWithDirectory()
+        {
+            UsersProjectsTreeView.Items.Clear();
+            //DirectoryInfo root = new DirectoryInfo(usersDirectory + "\\" + userEmail);
+            UsersProjectsTreeView.Items.Add(CreateDirectoryTreeViewItem(client.GetSVC().GetUserDirectoryInfo(UsersComboBox.SelectedItem.ToString())));
+        }
+        public TreeViewItem CreateDirectoryTreeViewItem(DirectoryInfo directoryInfo)
+        {
+            TreeViewItem directoryTreeViewItem = new TreeViewItem();
+            directoryTreeViewItem.Header = directoryInfo.Name;
+            foreach (var directory in directoryInfo.GetDirectories())
+            {
+                directoryTreeViewItem.Items.Add(CreateDirectoryTreeViewItem(directory));
+            }
+            foreach (var file in directoryInfo.GetFiles())
+            {
+                TreeViewItem newItem = new TreeViewItem();
+                newItem.Header = file.Name;
+                directoryTreeViewItem.Items.Add(newItem);
+            }
+            return directoryTreeViewItem;
+        }
+        private void ProjectNameTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ActivateBox(ProjectNameTextBox, "Project Name");
+        }
+        private void RelativePathTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ActivateBox(RelativePathTextBox, "Enter Relative Path");
+        }
+        private void RelativePathTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Enter)) AnalyzeButton_Click(sender, e);
         }
         private void InitializeTextBoxes()
         {
             ProjectNameTextBox.Foreground = Brushes.Gray;
             ProjectNameTextBox.FontStyle = FontStyles.Italic;
+            RelativePathTextBox.Foreground = Brushes.Gray;
+            RelativePathTextBox.FontStyle = FontStyles.Italic;
         }
-        private void ProjectNameTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e){ActivateBox(ProjectNameTextBox, "Project Name");}
         private void ActivateBox(System.Windows.Controls.TextBox newlyActiveBox, string text)
         {
             newlyActiveBox.Foreground = Brushes.Black;
             newlyActiveBox.FontStyle = FontStyles.Normal;
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
-        }
-        private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListDirectory();
-        }
-        public void ListDirectory()
-        {
-            UsersProjectsTreeView.Items.Clear();
-            //var rootDirectoryInfo = new DirectoryInfo(usersDirectory + "\\" + userEmail);
-            UsersProjectsTreeView.Items.Add(CreateDirectoryNode(client.GetSVC().GetUserDirectoryInfo(UsersComboBox.SelectedItem.ToString())));
-        }
-        public TreeViewItem CreateDirectoryNode(DirectoryInfo directoryInfo)
-        {
-            //var directoryNode = new TreeViewItem { Header = directoryInfo.Name };
-            var directoryNode = new TreeViewItem();
-            directoryNode.Header = directoryInfo.Name;
-            foreach (var directory in directoryInfo.GetDirectories())
-            {
-                directoryNode.Items.Add(CreateDirectoryNode(directory));
-            }
-            foreach (var file in directoryInfo.GetFiles())
-            {
-                //directoryNode.Items.Add(new TreeViewItem { Header = file.Name });
-                directoryNode.Items.Add(new TreeViewItem().Header = file.Name);
-            }
-            return directoryNode;
         }
         /*private void PickItem()
 {

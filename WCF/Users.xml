@@ -3,4 +3,7 @@
   <User FirstName="Sameer" LastName="Rizvi">
     <Login Email="srizvi@syr.edu" Password="hello" />
   </User>
+  <User FirstName="Sameer" LastName="Rizvi">
+    <Login Email="srizv82@gmail.com" Password="123pass" />
+  </User>
 </Users>
