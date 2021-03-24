@@ -49,7 +49,7 @@ namespace RemoteCodeAnalyzer
     public partial class NewAccountPage : Page
     {
         //private readonly string xmlFileName;
-        Client client;
+        private Client client; //object that allows us to communicate with service
         public NewAccountPage()
         {
             InitializeComponent();
@@ -74,32 +74,7 @@ namespace RemoteCodeAnalyzer
             LoginSignupPage login = new LoginSignupPage();
             this.NavigationService.Navigate(login);
         }
-        /*private void SignUp_Click(object sender, RoutedEventArgs e)
-        {
-            AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
-            LoginSignupPage login = new LoginSignupPage();
-            MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
-            this.NavigationService.Navigate(login);
-        }*/
-        /*public void AddNewUser(string FirstName, string LastName, string email, string password)
-        {
-            XmlDocument UsersXML = new XmlDocument();
-            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
-            UsersXML.Load(xmlFileName);
-
-            XmlElement userElem = UsersXML.CreateElement("User");
-            userElem.SetAttribute("FirstName", FirstName);
-            userElem.SetAttribute("LastName", LastName);
-            
-            XmlElement loginElem = UsersXML.CreateElement("Login");
-            loginElem.SetAttribute("Email", email);
-            loginElem.SetAttribute("Password", password);
-            
-            userElem.AppendChild(loginElem);
-            UsersXML.DocumentElement.AppendChild(userElem);
-            //UsersXML.Save(Console.Out);
-            UsersXML.Save(@"../../Users.xml");
-        }*/
+        
         private void InitializeTextBoxes()
         {
             FirstNameTextBox.Foreground = Brushes.Gray;
@@ -144,5 +119,31 @@ namespace RemoteCodeAnalyzer
             PasswordTextBox.Background = Brushes.AliceBlue;
             PasswordTextBox.Text = "";
         }
+        /*private void SignUp_Click(object sender, RoutedEventArgs e)
+        {
+            AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
+            LoginSignupPage login = new LoginSignupPage();
+            MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
+            this.NavigationService.Navigate(login);
+        }*/
+        /*public void AddNewUser(string FirstName, string LastName, string email, string password)
+        {
+            XmlDocument UsersXML = new XmlDocument();
+            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
+            UsersXML.Load(xmlFileName);
+
+            XmlElement userElem = UsersXML.CreateElement("User");
+            userElem.SetAttribute("FirstName", FirstName);
+            userElem.SetAttribute("LastName", LastName);
+            
+            XmlElement loginElem = UsersXML.CreateElement("Login");
+            loginElem.SetAttribute("Email", email);
+            loginElem.SetAttribute("Password", password);
+            
+            userElem.AppendChild(loginElem);
+            UsersXML.DocumentElement.AppendChild(userElem);
+            //UsersXML.Save(Console.Out);
+            UsersXML.Save(@"../../Users.xml");
+        }*/
     }
 }

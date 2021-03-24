@@ -53,9 +53,9 @@ namespace RemoteCodeAnalyzer
     /// </summary>
     public partial class UserPage : Page
     {
-        private readonly Client client;
+        private readonly Client client; //object that allows us to communicate with service
         private readonly FolderBrowserDialog DirectoryExplorer;
-        User user;
+        private User user;
         //bool aFileIsSelected;
         bool anItemInComboBoxIsSelected;
         public UserPage()
@@ -80,6 +80,8 @@ namespace RemoteCodeAnalyzer
             FolderPathLabel.Content = DirectoryExplorer.SelectedPath;
             //Process.Start("explorer.exe");
         }
+
+        //upload files to user's directory on service
         private void UploadFiles_Click(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(DirectoryExplorer.SelectedPath)) ErrorMessage.Text = "No valid directory selected.";    
@@ -97,21 +99,32 @@ namespace RemoteCodeAnalyzer
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();           
             }      
         }
-        private string GetFileName(string file)//get just the file name minus the directory
+
+        //get just the file name from a directory path string
+        private string GetFileName(string path)
         {
             List<string> pathSubstrings = new List<string>();
-            if (file.Contains("\\"))
+            string fileName = null;
+            if (path.Contains("\\"))
             {
-                pathSubstrings = file.Split('\\').ToList();
-                return pathSubstrings[pathSubstrings.Count - 1];
+                pathSubstrings = path.Split('\\').ToList();
+                fileName = pathSubstrings[pathSubstrings.Count - 1];
+                return fileName;
             }
-            else if (file.Contains("/"))
+            else if (path.Contains("/"))
             {
-                pathSubstrings = file.Split('/').ToList();
-                return pathSubstrings[pathSubstrings.Count - 1];
+                pathSubstrings = path.Split('/').ToList();
+                fileName = pathSubstrings[pathSubstrings.Count - 1];
+                return fileName;
             }
-            else return null;
-        }     
+            else 
+            {
+                //fileName = null;
+                return fileName; 
+            }
+        }
+
+        //choose a file for analysis
         private void AnalyzeButton_Click(object sender, RoutedEventArgs e) 
         {
             ErrorMessage.Text = "";
@@ -120,11 +133,11 @@ namespace RemoteCodeAnalyzer
             {
                 aFileIsSelected = true;
             }*/           
-            if (RelativePathTextBox.Text.Length < 1)
+            if (RelativePathTextBox.Text.Length < 1) //make sure user enters something
             {
                 ErrorMessage.Text = "Invalid selection(s).";
             }
-            else if(RelativePathTextBox.Text == "Enter Relative Path")
+            else if(RelativePathTextBox.Text == "Enter Relative Path") //make sure user enters something
             {
                 ErrorMessage.Text = "Invalid selection(s).";
             }
@@ -143,6 +156,8 @@ namespace RemoteCodeAnalyzer
             anItemInComboBoxIsSelected = true;
             PopulateTreeViewWithDirectory();
         }
+
+        //choose a file, send it to service for analysis, and then retrieve the results from the service
         private async void PickItem()
         {
             //string file = UsersProjectsTreeView.SelectedValue.ToString();
@@ -160,13 +175,17 @@ namespace RemoteCodeAnalyzer
                     AnalysisResults.Items.Add(line.ToString());
                 }
             }
-        }     
+        }
+
+        //fill the TreeView with the different users' directories and subdirectories
         public void PopulateTreeViewWithDirectory()
         {
             UsersProjectsTreeView.Items.Clear();
             //DirectoryInfo root = new DirectoryInfo(usersDirectory + "\\" + userEmail);
             UsersProjectsTreeView.Items.Add(CreateDirectoryTreeViewItem(client.GetSVC().GetUserDirectoryInfo(UsersComboBox.SelectedItem.ToString())));
         }
+
+        //create an item for the TreeView
         public TreeViewItem CreateDirectoryTreeViewItem(DirectoryInfo directoryInfo)
         {
             TreeViewItem directoryTreeViewItem = new TreeViewItem();

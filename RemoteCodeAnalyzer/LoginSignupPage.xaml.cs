@@ -50,7 +50,7 @@ namespace RemoteCodeAnalyzer
         private User user;
         //string xmlFileName = Environment.CurrentDirectory + @"\Users.xml";
         //private readonly string usersData;
-        readonly Client client;
+        private readonly Client client; //object that allows us to communicate with service
 
         public LoginSignupPage()
         {
@@ -60,15 +60,11 @@ namespace RemoteCodeAnalyzer
             client = new Client("http://localhost:8080/Service");
             //usersData = @"../../Users.xml";
         }
-        private void InitializeTextBoxes()
-        {
-            EmailTextBox.Foreground = Brushes.Gray;
-            PasswordTextBox.Foreground = Brushes.Gray;
-            EmailTextBox.FontStyle = FontStyles.Italic;
-            PasswordTextBox.FontStyle = FontStyles.Italic;
-        }
+        
         //event handler below
         private void Login_Click(object sender, RoutedEventArgs e){Login();}
+        
+        //functionality for logging into user page
         private async void Login()
         {
             //string message;
@@ -85,6 +81,8 @@ namespace RemoteCodeAnalyzer
             //else ErrorLabel.Text = message;
             else ErrorMessage.Text = client.GetSVC().GetMessageFromServer();
         }
+
+        //go to NewAccountPage so user can create a new account if they wish
         private void NewAccount_Click(object sender, RoutedEventArgs e)
         {
             NewAccountPage NA = new NewAccountPage();
@@ -139,6 +137,13 @@ namespace RemoteCodeAnalyzer
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.Tab)) ActivateBox(EmailTextBox, "Email");          
+        }
+        private void InitializeTextBoxes()
+        {
+            EmailTextBox.Foreground = Brushes.Gray;
+            PasswordTextBox.Foreground = Brushes.Gray;
+            EmailTextBox.FontStyle = FontStyles.Italic;
+            PasswordTextBox.FontStyle = FontStyles.Italic;
         }
         /*
             public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
