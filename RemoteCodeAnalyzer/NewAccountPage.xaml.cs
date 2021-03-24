@@ -67,7 +67,7 @@ namespace RemoteCodeAnalyzer
                 MessageBox.Show(client.GetSVC().GetMessageFromServer() + " You may now login with your new account. Redirecting to Login page.");
                 GoToLoginSignupPage();
             }
-            else MessageForUser.Text = client.GetSVC().GetMessageFromServer();
+            else ErrorMessage.Text = client.GetSVC().GetMessageFromServer();
         }
         private void GoToLoginSignupPage()
         {
@@ -87,45 +87,129 @@ namespace RemoteCodeAnalyzer
             FirstNameTextBox.FontStyle = FontStyles.Italic;
             LastNameTextBox.FontStyle = FontStyles.Italic;
         }
+        private void ActivateBox(TextBox newlyActiveBox, string text)
+        {
+            newlyActiveBox.Foreground = Brushes.Black;
+            newlyActiveBox.FontStyle = FontStyles.Normal;
+            newlyActiveBox.Background = Brushes.AliceBlue;
+            if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
+        }
+        private void InactivateBox(TextBox newlyInactiveBox) => newlyInactiveBox.Background = Brushes.White;
         private void FirstNameTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            LastNameTextBox.Background = Brushes.White;
+            ActivateBox(FirstNameTextBox, "First Name");
+            InactivateBox(LastNameTextBox);
+            InactivateBox(EmailTextBox);
+            InactivateBox(PasswordTextBox);
+            /*LastNameTextBox.Background = Brushes.White;
             EmailTextBox.Background = Brushes.White;
             PasswordTextBox.Background = Brushes.White;
             FirstNameTextBox.Background = Brushes.AliceBlue;
-            FirstNameTextBox.Text = "";
+            FirstNameTextBox.Text = "";*/
         }
         private void LastNameTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            FirstNameTextBox.Background = Brushes.White;
+            InactivateBox(FirstNameTextBox);
+            ActivateBox(LastNameTextBox, "Last Name");
+            InactivateBox(EmailTextBox);
+            InactivateBox(PasswordTextBox);
+            /*FirstNameTextBox.Background = Brushes.White;
             EmailTextBox.Background = Brushes.White;
             PasswordTextBox.Background = Brushes.White;
             LastNameTextBox.Background = Brushes.AliceBlue;
-            LastNameTextBox.Text = "";
+            LastNameTextBox.Text = "";*/
         }
         private void EmailTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            FirstNameTextBox.Background = Brushes.White;
+            InactivateBox(FirstNameTextBox);
+            InactivateBox(LastNameTextBox);
+            ActivateBox(EmailTextBox, "Email");
+            InactivateBox(PasswordTextBox);
+            /*FirstNameTextBox.Background = Brushes.White;
             LastNameTextBox.Background = Brushes.White;
             PasswordTextBox.Background = Brushes.White;
             EmailTextBox.Background = Brushes.AliceBlue;
-            EmailTextBox.Text = "";
+            EmailTextBox.Text = "";*/
         }
         private void PasswordTextBox_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            FirstNameTextBox.Background = Brushes.White;
+            InactivateBox(FirstNameTextBox);
+            InactivateBox(LastNameTextBox);
+            InactivateBox(EmailTextBox);
+            ActivateBox(PasswordTextBox, "Password");
+            /*FirstNameTextBox.Background = Brushes.White;
             LastNameTextBox.Background = Brushes.White;
             EmailTextBox.Background = Brushes.White;            
             PasswordTextBox.Background = Brushes.AliceBlue;
-            PasswordTextBox.Text = "";
+            PasswordTextBox.Text = "";*/
+        }
+
+        private void FirstNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                InactivateBox(FirstNameTextBox);
+                ActivateBox(LastNameTextBox, "Last Name");
+                InactivateBox(EmailTextBox);
+                InactivateBox(PasswordTextBox);
+            }
+        }
+
+        private void LastNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                InactivateBox(FirstNameTextBox);
+                InactivateBox(LastNameTextBox);
+                ActivateBox(EmailTextBox, "Email");
+                InactivateBox(PasswordTextBox);
+            }
+        }
+
+        private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Tab))
+            {
+                InactivateBox(FirstNameTextBox);
+                InactivateBox(LastNameTextBox);
+                InactivateBox(EmailTextBox);
+                ActivateBox(PasswordTextBox, "Password");
+            }
+        }
+
+        private void PasswordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Enter))
+            {
+                if(FirstNameTextBox.Text.Length < 1)
+                {
+                    ErrorMessage.Text = "Incomplete first name.";
+                }
+                else if(LastNameTextBox.Text.Length < 1)
+                {
+                    ErrorMessage.Text = "Incomplete last name.";
+                }
+                else if(EmailTextBox.Text.Length < 1)
+                {
+                    ErrorMessage.Text = "Incomplete email address.";
+                }
+                else if(PasswordTextBox.Text.Length < 1)
+                {
+                    ErrorMessage.Text = "Incomplete password.";
+                }
+                else
+                {
+                    SignUp_Click(sender, e);
+                }
+            }
         }
         /*private void SignUp_Click(object sender, RoutedEventArgs e)
-        {
-            AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
-            LoginSignupPage login = new LoginSignupPage();
-            MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
-            this.NavigationService.Navigate(login);
-        }*/
+{
+AddNewUser(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, PasswordTextBox.Text);
+LoginSignupPage login = new LoginSignupPage();
+MessageBox.Show("Your new account was successfully created. You may now login with your new account.");
+this.NavigationService.Navigate(login);
+}*/
         /*public void AddNewUser(string FirstName, string LastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
