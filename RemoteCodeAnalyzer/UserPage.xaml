@@ -5,17 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:RemoteCodeAnalyzer"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800"
+      d:DesignHeight="650" d:DesignWidth="600"
       Title="User">
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Height="600" Width="800" Background="AliceBlue">
-            <Label Name="FullNameLabel" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto" Width="Auto" FontSize="20"/>
-            <Button Name="SearchFiles" Content="Search" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="100" Click="SearchFiles_Click"/>
+        <Canvas Height="650" Width="600" Background="AliceBlue">
+            <Label Name="FullNameLabel" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto" Width="Auto" FontSize="20" Canvas.Left="284"/>
+            <Button Name="SearchFiles" Content="Search" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="229" Canvas.Top="104" Click="SearchFiles_Click"/>
             <Label Name="FolderPathLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Canvas.Left="126" Canvas.Top="75"/>
-            <Button x:Name="UploadFiles" Content="Upload" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="10" Canvas.Top="130" Click="UploadFiles_Click"/>
-            <TextBox Name="ProjectNameTextBox" Text="Project Name" Height="23" TextWrapping="Wrap" Canvas.Top="72" Width="120" RenderTransformOrigin="-0.24,0.017" Canvas.Left="1" IsMouseDirectlyOverChanged="ProjectNameTextBox_ActivateOnClick"/>
-            <ListBox Name ="FilesList" Height="Auto" Canvas.Left="10" Canvas.Top="303" Width="Auto" MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged"/>
+            <Button x:Name="UploadFiles" Content="Upload" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="229" Canvas.Top="129" Click="UploadFiles_Click"/>
+            <TextBox Name="ProjectNameTextBox" Text="Project Name" Height="24" TextWrapping="Wrap" Canvas.Top="75" Width="120" RenderTransformOrigin="-0.24,0.017" Canvas.Left="219" IsMouseDirectlyOverChanged="ProjectNameTextBox_ActivateOnClick"/>
+            <!--<ListBox Name ="FilesList" Height="200" Width="179" Canvas.Left="10" Canvas.Top="303"  MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged"/>-->
             <!--<ListView Name="FilesList" Height="Auto" Canvas.Left="10" Canvas.Top="176" Width="Auto" MaxWidth="250" RenderTransformOrigin="0.104,-0.36" SelectionChanged="FilesList_SelectionChanged">
             <ListView.View>
                 <GridView>
@@ -23,8 +23,17 @@
                 </GridView>
             </ListView.View>
         </ListView>-->
-            <ListView Name="AnalysisResultsGrid" Height="287" Canvas.Left="509" Canvas.Top="303" Width="281"/>
+            <ListView Name="AnalysisResultsGrid" Height="287" Canvas.Left="38" Canvas.Top="345" Width="525"/>
             <TextBlock Name="ErrorMessage" Canvas.Left="10" Canvas.Top="160" RenderTransformOrigin="-0.052,0.047" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+            <!--<RadioButton Name="YourFilesRadioButton" Content="Your Files" Canvas.Left="21" Canvas.Top="50" Checked="YourFilesRadioButton_Checked"/>
+            <RadioButton Name="UsersFilesRadioButton" Content="Users' Files" Canvas.Left="121" Canvas.Top="50" Checked="UsersFilesRadioButton_Checked"/>-->
+            <ComboBox Name="UsersComboBox" Canvas.Left="10" Canvas.Top="75" Width="179" RenderTransformOrigin="-0.103,-0.277" SelectionChanged="UsersComboBox_SelectionChanged"/>
+            <TreeView Name="UsersProjectsTreeView" Canvas.Left="10" Canvas.Top="103" Width="179" RenderTransformOrigin="-0.103,-0.277" Height="182"/>
+            <TextBox Name="RelativePathBox" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="Enter Relative Path" Canvas.Top="290" Width="120"/>
+            <Button Name="AnalyzeButton" Content="Analyze" Canvas.Left="130" Canvas.Top="290" Height="23" Width="75" Click="AnalyzeButton_Click" RenderTransformOrigin="1.371,0.302"/>
+            <Label Content="Upload Project to Server" Canvas.Left="209" Canvas.Top="49"/>
+            <Label Content="Choose User and File" Canvas.Left="38" Canvas.Top="50"/>
+            
             <!--<ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" VerticalAlignment="Bottom" Width="669" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373" Canvas.Left="62" Canvas.Top="365"/>-->
         </Canvas>
     </ScrollViewer>

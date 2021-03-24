@@ -1,11 +1,13 @@
 ﻿using CodeAnalyzer;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Xml;
 
 namespace Server
@@ -37,7 +39,7 @@ namespace Server
         User user;
         private string serverMessage;
         private string clientMessage;
-        private byte[] fileBuffer;
+        //private byte[] fileBuffer;
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
         private XmlDocument analysisXML;
@@ -207,8 +209,7 @@ namespace Server
             XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
             for (int i = 0; i < elemList.Count; i++)
             {
-                if (elemList[i].Attributes.GetNamedItem("Email").Value == email) return true;
-                
+                if (elemList[i].Attributes.GetNamedItem("Email").Value == email) return true;               
             }
             return false;
         }
@@ -262,12 +263,30 @@ namespace Server
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + userEmail + "/" + projectName;
         }
-        public void UploadFile(string fileName, List<string> fileText, string userEmail, string projectName)
+        public void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
         {   
             string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
             string filePath = directoryPath + fileName;
-            //File.Create(filePath);
             File.WriteAllLines(filePath, fileText);
+        }
+        public ConcurrentBag<string> GetUsers()
+        {
+            ConcurrentBag<string> users = new ConcurrentBag<string>();
+            XmlDocument UsersXML = new XmlDocument();
+            UsersXML.Load(usersXML);
+            XmlNodeList elemList = UsersXML.GetElementsByTagName("Login");
+            for (int i = 0; i < elemList.Count; i++){users.Add(elemList[i].Attributes.GetNamedItem("Email").Value);}
+            return users;
+        }
+        public List<string> GetFileLines(string file, string relativePath)
+        {
+            //ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList<string>());
+            //return fileLines;
+            return File.ReadAllLines(usersDirectory + "\\" + relativePath + "\\" + file).ToList<string>();
+        }
+        public DirectoryInfo GetUserDirectoryInfo(string userEmail)
+        {
+            return new DirectoryInfo(usersDirectory + "\\" + userEmail);
         }
         public void SendMessage(string message)
         {

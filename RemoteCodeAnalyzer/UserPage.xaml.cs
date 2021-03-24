@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Windows.Forms;//for FolderBrowserDialog
 using System.IO;
 using Server;
+using System.Collections.Concurrent;
 
 namespace RemoteCodeAnalyzer
 {
@@ -32,7 +33,6 @@ namespace RemoteCodeAnalyzer
         {
             InitializeComponent();
             InitializeTextBoxes();
-            FilesList.IsEnabled = false;
             DirectoryExplorer = new FolderBrowserDialog();
         }
         public UserPage(User user): this()
@@ -40,6 +40,7 @@ namespace RemoteCodeAnalyzer
             this.user = user;
             FullNameLabel.Content = this.user.GetFirstName() + " " + this.user.GetLastName();
             client = new Client("http://localhost:8080/Service");
+            UsersComboBox.ItemsSource = client.GetSVC().GetUsers();
         }
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
@@ -50,10 +51,7 @@ namespace RemoteCodeAnalyzer
         }
         private void UploadFiles_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(DirectoryExplorer.SelectedPath))
-            {
-                ErrorMessage.Text = "No valid directory selected.";
-            }
+            if (!Directory.Exists(DirectoryExplorer.SelectedPath)) ErrorMessage.Text = "No valid directory selected.";    
             else
             {
                 List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + "*.cs", SearchOption.AllDirectories).ToList();
@@ -61,23 +59,29 @@ namespace RemoteCodeAnalyzer
                 foreach (var file in files)
                 {
                     fileName = GetFileName(file);
-                    client.GetSVC().UploadFile(fileName, File.ReadAllLines(file).ToList(), this.user.GetEmail(), ProjectNameTextBox.Text);
+                    ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList());
+                    client.GetSVC().UploadFile(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox.Text);
                 }
-                FilesList.IsEnabled = true;
-                FilesList.ItemsSource = files;
+                //FilesList.ItemsSource = files;
+                if (UsersProjectsTreeView.HasItems)
+                {
+                    ListDirectory();
+                }
             }      
         }
         private string GetFileName(string file)//get just the file name minus the directory
         {
             List<string> pathSubstrings = file.Split('\\').ToList();
             return pathSubstrings[pathSubstrings.Count - 1];
+        }     
+        private void AnalyzeButton_Click(object sender, RoutedEventArgs e) 
+        { 
+            PickItem(); 
         }
-        private void FilesList_SelectionChanged(object sender, SelectionChangedEventArgs e){PickItem();}
         private async void PickItem()
         {
-            string file = FilesList.SelectedItem.ToString();
-            List<string> filesLines = new List<string>(File.ReadAllLines(file).ToList<string>());
-            FileData data = new FileData(file, filesLines);
+            string file = UsersProjectsTreeView.SelectedItem.ToString();
+            FileData data = new FileData(file, client.GetSVC().GetFileLines(file, RelativePathBox.Text));
             await client.GetSVC().AnalyzeAsync(data);
             client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             AnalysisResultsGrid.ItemsSource = client.GetSVC().GetAnalysisXML();
@@ -95,19 +99,45 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Text = "";
         }
-        /*private void PickItem()
+        private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FileInfo fileInfo = new FileInfo(FilesList.SelectedItem.ToString());
-            RemoteFileInfo uploadRequestInfo = new RemoteFileInfo();
-
-            using(System.IO.FileStream stream = new System.IO.FileStream(FilesList.SelectedItem.ToString(), System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            ListDirectory();
+        }
+        public void ListDirectory()
+        {
+            UsersProjectsTreeView.Items.Clear();
+            //var rootDirectoryInfo = new DirectoryInfo(usersDirectory + "\\" + userEmail);
+            UsersProjectsTreeView.Items.Add(CreateDirectoryNode(client.GetSVC().GetUserDirectoryInfo(UsersComboBox.SelectedItem.ToString())));
+        }
+        public TreeViewItem CreateDirectoryNode(DirectoryInfo directoryInfo)
+        {
+            //var directoryNode = new TreeViewItem { Header = directoryInfo.Name };
+            var directoryNode = new TreeViewItem();
+            directoryNode.Header = directoryInfo.Name;
+            foreach (var directory in directoryInfo.GetDirectories())
             {
-                uploadRequestInfo.FileName = FilesList.SelectedItem.ToString();
-                uploadRequestInfo.Length = fileInfo.Length;
-                uploadRequestInfo.FileByteStream = stream;                
-                client.GetSVC().UploadFile(uploadRequestInfo);
+                directoryNode.Items.Add(CreateDirectoryNode(directory));
             }
-            client.GetSVC().Analyze(File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
-        }*/
+            foreach (var file in directoryInfo.GetFiles())
+            {
+                //directoryNode.Items.Add(new TreeViewItem { Header = file.Name });
+                directoryNode.Items.Add(new TreeViewItem().Header = file.Name);
+            }
+            return directoryNode;
+        }
+        /*private void PickItem()
+{
+FileInfo fileInfo = new FileInfo(FilesList.SelectedItem.ToString());
+RemoteFileInfo uploadRequestInfo = new RemoteFileInfo();
+
+using(System.IO.FileStream stream = new System.IO.FileStream(FilesList.SelectedItem.ToString(), System.IO.FileMode.Open, System.IO.FileAccess.Read))
+{
+uploadRequestInfo.FileName = FilesList.SelectedItem.ToString();
+uploadRequestInfo.Length = fileInfo.Length;
+uploadRequestInfo.FileByteStream = stream;                
+client.GetSVC().UploadFile(uploadRequestInfo);
+}
+client.GetSVC().Analyze(File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
+}*/
     }
 }

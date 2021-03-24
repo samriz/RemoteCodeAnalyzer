@@ -7,6 +7,9 @@ using System.ServiceModel; //need this for WCF
 using System.Xml;
 using System.Windows;
 using System.Runtime.Serialization;
+using System.Collections.Concurrent;
+using System.Windows.Controls;
+using System.IO;
 
 namespace Server
 {
@@ -41,10 +44,10 @@ namespace Server
         User GetUser();
 
         [OperationContract, XmlSerializerFormat]
-        XmlDocument AnalyzeFile(FileData FT);
+        XmlDocument AnalyzeFile(FileData FD);
 
         [OperationContract]
-        Task AnalyzeAsync(FileData FT);
+        Task AnalyzeAsync(FileData FD);
 
         [OperationContract, XmlSerializerFormat]
         XmlDocument GetAnalysisXML();
@@ -66,7 +69,16 @@ namespace Server
         string CreateNewProjectFolder(string userEmail, string projectName);
 
         [OperationContract]
-        void UploadFile(string fileName, List<string> fileText, string userEmail, string projectName);
+        void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
+
+        [OperationContract]
+        ConcurrentBag<string> GetUsers();
+
+        [OperationContract]
+        DirectoryInfo GetUserDirectoryInfo(string userEmail);
+
+        [OperationContract]
+        List<string> GetFileLines(string file, string relativePath);
     }
 
     [DataContract]
@@ -94,6 +106,7 @@ namespace Server
         //[MessageBodyMember(Order = 1)]
         [DataMember]
         public List<string> fileLines;
+        //public ConcurrentBag<string> fileLines;
 
         public FileData() { }
         public FileData(string fileName, List<string> fileLines)
@@ -102,6 +115,7 @@ namespace Server
             this.fileLines = fileLines;
         }
     }
+
     [DataContract]
     public class User
     {
