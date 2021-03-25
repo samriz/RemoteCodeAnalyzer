@@ -65,6 +65,7 @@ namespace RemoteCodeAnalyzer
             //aFileIsSelected = false;
             anItemInComboBoxIsSelected = false;
             DirectoryExplorer = new FolderBrowserDialog();
+            AnalyzeButton.IsEnabled = false;
         }
         public UserPage(User user): this()
         {
@@ -84,7 +85,10 @@ namespace RemoteCodeAnalyzer
         //upload files to user's directory on service
         private void UploadFiles_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(DirectoryExplorer.SelectedPath)) ErrorMessage.Text = "No valid directory selected.";    
+            if (!Directory.Exists(DirectoryExplorer.SelectedPath)) 
+            { 
+                ErrorMessage.Text = "No valid directory selected."; 
+            }
             else
             {
                 List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + "*.cs", SearchOption.AllDirectories).ToList();
@@ -93,12 +97,43 @@ namespace RemoteCodeAnalyzer
                 {
                     fileName = GetFileName(file);
                     ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList());
-                    client.GetSVC().UploadFile(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox.Text);
+                    client.GetSVC().UploadFile(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox.Text);                    
                 }
-                //FilesList.ItemsSource = files;
-                if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();           
-            }      
+                if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
+            }
+            AnalyzeButton.IsEnabled = true;
         }
+        private async void AnalyzeFiles()
+        {
+            List<string> files = Directory.GetFiles(DirectoryExplorer.SelectedPath, "*" + "*.cs", SearchOption.AllDirectories).ToList();
+            List<string> fileNames = new List<string>();
+            foreach(var file in files)
+            {
+                //fileNames.Add(GetFileName(file));
+                //await client.GetSVC().AnalyzeFileAndCreateXML(data);
+            }
+
+        }
+        //choose a file, send it to service for analysis, and then retrieve the results from the service
+        /*private async void AnalyzeFiles()
+        {
+            //string file = UsersProjectsTreeView.SelectedValue.ToString();
+            string file = GetFileName(RelativePathTextBox.Text);
+            if(file == null) ErrorMessage.Text = "Invalid path.";
+            else
+            {
+            FileData data = new FileData(file, client.GetSVC().GetFileLines(RelativePathTextBox.Text));
+            //await client.GetSVC().AnalyzeAsync(data);
+            await client.GetSVC().AnalyzeFileAndCreateXML(data);
+            client.GetSVC().SendMessage("I received the analysis results. Thank you.");
+            List<string> analysisList = client.GetSVC().GetAnalysis();
+            AnalysisResults.Items.Clear();
+            foreach (string line in analysisList)
+            {
+                AnalysisResults.Items.Add(line.ToString());
+            }
+            }
+        }*/
 
         //get just the file name from a directory path string
         private string GetFileName(string path)
@@ -149,32 +184,12 @@ namespace RemoteCodeAnalyzer
             {
                 ErrorMessage.Text = "Invalid selection(s).";
             }
-            else PickItem();
+            else AnalyzeFiles();
         }
         private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             anItemInComboBoxIsSelected = true;
             PopulateTreeViewWithDirectory();
-        }
-
-        //choose a file, send it to service for analysis, and then retrieve the results from the service
-        private async void PickItem()
-        {
-            //string file = UsersProjectsTreeView.SelectedValue.ToString();
-            string file = GetFileName(RelativePathTextBox.Text);
-            if(file == null) ErrorMessage.Text = "Invalid path.";
-            else
-            {
-                FileData data = new FileData(file, client.GetSVC().GetFileLines(RelativePathTextBox.Text));
-                await client.GetSVC().AnalyzeAsync(data);
-                client.GetSVC().SendMessage("I received the analysis results. Thank you.");
-                List<string> analysisList = client.GetSVC().GetAnalysis();
-                AnalysisResults.Items.Clear();
-                foreach (string line in analysisList)
-                {
-                    AnalysisResults.Items.Add(line.ToString());
-                }
-            }
         }
 
         //fill the TreeView with the different users' directories and subdirectories

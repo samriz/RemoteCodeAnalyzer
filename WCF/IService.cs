@@ -48,9 +48,6 @@ namespace Server
         string GetMessageFromServer();
 
         [OperationContract]
-        bool Login(string email, string password);
-
-        [OperationContract]
         Task SignInAsync(string email, string password);
 
         [OperationContract]
@@ -59,24 +56,19 @@ namespace Server
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
-        
-        //[OperationContract]
-        //void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
         User GetUser();
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument AnalyzeFile(FileData FD);
-
-        [OperationContract]
-        List<string> AnalyzeFile(FileData FD);
+        [OperationContract, XmlSerializerFormat]
+        Task AnalyzeFileAndCreateXML(FileData FD);
 
         [OperationContract]
         Task AnalyzeAsync(FileData FD);
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument GetAnalysisXML();
+        [OperationContract, XmlSerializerFormat]
+        XmlDocument GetAnalysisXML();
+
         [OperationContract]
         List<string> GetAnalysis();
 

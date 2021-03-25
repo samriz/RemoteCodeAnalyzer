@@ -66,8 +66,8 @@ namespace Server
         [OperationContract]
         User GetUser();
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument AnalyzeFile(FileData FD);
+        [OperationContract, XmlSerializerFormat]
+        Task AnalyzeFileAndCreateXML(FileData FD);
 
         [OperationContract]
         List<string> AnalyzeFile(FileData FD);
@@ -75,8 +75,9 @@ namespace Server
         [OperationContract]
         Task AnalyzeAsync(FileData FD);
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument GetAnalysisXML();
+        [OperationContract, XmlSerializerFormat]
+        XmlDocument GetAnalysisXML();
+
         [OperationContract]
         List<string> GetAnalysis();
 

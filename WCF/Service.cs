@@ -58,48 +58,33 @@ namespace Server
     public class BasicService : IBasicService
     {
         private readonly string usersXML;
-        //FileStream targetStream;
-        User user;
+        private readonly string usersDirectory;
+        private User user;
         private string serverMessage;
         private string clientMessage;
-        //private byte[] fileBuffer;
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
-        //private XmlDocument analysisXML;
+        private XmlDocument analysisXML;
         private bool loginSuccessful;
-        private bool wasUserAdded;
-        private string usersDirectory;
-        List<string> analysisLines;
+        private bool wasUserAdded;       
+        private List<string> analysisLines;
 
         public BasicService()
         {
-            //targetStream = null;
             usersXML = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
             usersDirectory = @"../../Users";
         }
 
-        //analyze a file
-        public List<string> AnalyzeFile(FileData FT)
-        {
-            //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
-            FuncTrac = new FunctionTracker(FT.fileLines);
-            AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());    
-            serverMessage = "Analysis done. Results returned.";
-            Console.WriteLine(serverMessage);
-            analysisLines = AD.GetAnalysis();
-            return analysisLines;
-        }
-
         //analyze a file asynchronously
-        public async Task AnalyzeAsync(FileData FT)
+        public async Task AnalyzeAsync(FileData FD)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             Task<List<string>> analysisTask = Task.Run(() =>
             {
-                FuncTrac = new FunctionTracker(FT.fileLines);
-                AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());
+                FuncTrac = new FunctionTracker(FD.fileLines);
+                AD = new AnalysisDisplayer(FD.fileName, null, FuncTrac.GetFunctionNodes());
                 return AD.GetAnalysis();
             });
             analysisLines = await analysisTask;
@@ -107,31 +92,17 @@ namespace Server
             Console.WriteLine(serverMessage);
         }
 
-        //login functionality
-        public bool Login(string email, string password)
+        public async Task AnalyzeFileAndCreateXML(FileData FD)
         {
-            if (email.Length > 0 && password.Length > 0) 
-            { 
-                AuthenticateUser(email, password); 
-                if(user == null)
-                {                   
-                    serverMessage = "Incorrect Login.";
-                    Console.WriteLine(serverMessage);
-                    return false;
-                }
-                else
-                {                    
-                    serverMessage = "Login successful! Returned page!";
-                    Console.WriteLine(serverMessage);
-                    return true;
-                }
-            }
-            else
+            Task<XmlDocument> analysisTask = Task.Run(() =>
             {
-                serverMessage = "Email or Password fields cannot be empty.";
-                Console.WriteLine(serverMessage);
-                return false;
-            }
+                FuncTrac = new FunctionTracker(FD.fileLines);
+                AD = new AnalysisDisplayer(FD.fileName, null, FuncTrac.GetFunctionNodes());
+                return AD.GetAnalysisInXML();
+            });
+            analysisXML = await analysisTask;
+            serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
+            Console.WriteLine(serverMessage);
         }
 
         //login asynchronously
@@ -169,21 +140,11 @@ namespace Server
         //instantiate user for UserPage
         public void AuthenticateUser(string email, string password)
         {
-            //string firstName = "";
-            //string lastName = "";
-            //user = new User(email, password);
-
             if (UserExists(out string firstName, out string lastName, email, password))
             {
                 user = new User(firstName, lastName, email, password);
-                //this.NavigationService.Navigate(userpage);
-                //return user;
             }
-            else 
-            {
-                user = null;
-                //return null;//MessageBox.Show("Incorrect Login.");
-            }
+            else user = null;
         }
 
         //tells us whether the user exists in the server or not. if it does, then retrieve their first and last names
@@ -211,7 +172,6 @@ namespace Server
         public void AddNewUser(NewAccountInfo newAccountInfo)
         {
             XmlDocument UsersXML = new XmlDocument();
-            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
             UsersXML.Load(usersXML);
 
             XmlElement userElem = UsersXML.CreateElement("User");
@@ -332,8 +292,6 @@ namespace Server
         //get all file text in a given file on the server
         public List<string> GetFileLines(string relativePath)
         {
-            //ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList<string>());
-            //return fileLines;
             string path = usersDirectory + "/" + relativePath;
             return File.ReadAllLines(path).ToList<string>();
         }
@@ -345,37 +303,12 @@ namespace Server
         {
             clientMessage = message;
             Console.WriteLine("Message received by service: {0}", clientMessage);
-            //print message that client had sent
-            //Console.WriteLine("Message received by service: {0}", message);
         }
-        //public string GetMessage() => "New message from Service.";
         public string GetMessageFromServer() => serverMessage;
         public User GetUser() => user;
         public List<string> GetAnalysis() => analysisLines;
+        public XmlDocument GetAnalysisXML() => analysisXML;
         public bool IsLoginSuccessful() => loginSuccessful;
         public bool WasUserAdded() => wasUserAdded;
-        /*public void UploadFile(RemoteFileInfo request)
-        {
-            FileStream targetStream = null;
-            Stream sourceStream = request.FileByteStream;
-            //string uploadFolder = @".";
-            //string filePath = Path.Combine(uploadFolder, request.FileName);
-            string filePath = request.FileName;
-
-            using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                //read from the input stream in 65000 byte chunks
-                const int bufferLen = 65000;
-                fileBuffer = new byte[bufferLen];
-                int count = 0;
-                while ((count = sourceStream.Read(fileBuffer, 0, bufferLen)) > 0)
-                {
-                    // save to output stream
-                    targetStream.Write(fileBuffer, 0, count);
-                }
-                targetStream.Close();
-                sourceStream.Close();
-            }
-        }*/
     }
 }
