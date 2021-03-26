@@ -69,8 +69,12 @@ namespace RemoteCodeAnalyzer
             InitializeComponent();
             InitializeTextBoxes();
             anItemInComboBoxIsSelected = false;
+
             DirectoryExplorer = new FolderBrowserDialog();
             FileExplorer = new Microsoft.Win32.OpenFileDialog();
+            FileExplorer.DefaultExt = ".cs"; // Default file extension
+            FileExplorer.Filter = "C# Files (.cs)|*.cs"; // Filter files by extension
+
             AnalyzeFilesButton.IsEnabled = false;
             AnalyzeSingleFileButton.IsEnabled = false;
             isRelativePathBoxActive = false;
@@ -83,7 +87,11 @@ namespace RemoteCodeAnalyzer
             FullNameLabel.Content = this.user.GetFirstName() + " " + this.user.GetLastName() + " (" + this.user.GetEmail() + ")";
             client = new Client("http://localhost:8080/Service");
             UsersComboBox.ItemsSource = client.GetSVC().GetUsers();
+
+            
         }
+
+        //for searching for a folder on local computer to upload to server
         private void SearchFiles_Click(object sender, RoutedEventArgs e)
         {
             DirectoryExplorer.ShowDialog();
@@ -91,13 +99,14 @@ namespace RemoteCodeAnalyzer
             //Process.Start("explorer.exe");
         }
 
+        //for searching for a single file on local computer to upload to server
         private void SearchFile_Click(object sender, RoutedEventArgs e)
         {
             FileExplorer.ShowDialog();
             FolderPathLabel2.Content += FileExplorer.FileName;
         }
 
-        //upload files asynchronously to user's directory on service
+        //upload files asynchronously to user's directory on server
         private async void UploadFiles_Click(object sender, RoutedEventArgs e)
         {
             ErrorMessage2.Text = "";
@@ -127,15 +136,12 @@ namespace RemoteCodeAnalyzer
             UploadLabel.Content = "Uploading done.";
         }
 
-        //Functionality to upload a single file
+        //Functionality to upload a single file asynchronously to user's directory on server
         private async void UploadSingleFile_Click(object sender, RoutedEventArgs e)
         {
             ErrorMessage3.Text = "";
             string file = FileExplorer.FileName;
-            if (!File.Exists(file))
-            {
-                ErrorMessage3.Text = "No valid file selected.";
-            }
+            if (!File.Exists(file)) ErrorMessage3.Text = "No valid file selected.";           
             else
             {
                 string fileName = GetFileName(file);
