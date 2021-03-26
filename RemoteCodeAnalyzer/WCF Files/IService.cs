@@ -48,9 +48,6 @@ namespace Server
         string GetMessageFromServer();
 
         [OperationContract]
-        bool Login(string email, string password);
-
-        [OperationContract]
         Task SignInAsync(string email, string password);
 
         [OperationContract]
@@ -59,27 +56,15 @@ namespace Server
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
-        
-        //[OperationContract]
-        //void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
-        User GetUser();
+        Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
 
         [OperationContract, XmlSerializerFormat]
-        Task AnalyzeFileAndCreateXML(FileData FD);
-
-        [OperationContract]
-        List<string> AnalyzeFile(FileData FD);
+        Task AnalyzeFileAndCreateXML(string fileName, string userEmail, string projectName);
 
         [OperationContract]
         Task AnalyzeAsync(FileData FD);
-
-        [OperationContract, XmlSerializerFormat]
-        XmlDocument GetAnalysisXML();
-
-        [OperationContract]
-        List<string> GetAnalysis();
 
         [OperationContract]
         void AddNewUser(NewAccountInfo newAccountInfo);
@@ -97,8 +82,7 @@ namespace Server
         [OperationContract]
         string CreateNewProjectFolder(string userEmail, string projectName);
 
-        [OperationContract]
-        void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
+        //"Get" functions below
 
         [OperationContract]
         ConcurrentBag<string> GetUsers();
@@ -107,7 +91,23 @@ namespace Server
         DirectoryInfo GetUserDirectoryInfo(string userEmail);
 
         [OperationContract]
+        List<string> GetCSharpFilesInUserDirectory(string path, string userEmail, string projectName);
+
+        [OperationContract]
         List<string> GetFileLines(string relativePath);
+
+        [OperationContract]
+        User GetUser();
+
+        [OperationContract, XmlSerializerFormat]
+        XmlDocument GetAnalysisXML();
+
+        [OperationContract]
+        List<string> GetAnalysis();
+
+        [OperationContract, XmlSerializerFormat]
+        Task<List<string>> RetrieveFileAsync(string relativePath);
+        //Task GetXMLFileFromServerAsync();
     }
 
     [DataContract]

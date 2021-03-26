@@ -10,22 +10,26 @@
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Canvas Height="680" Width="600" Background="AliceBlue">
-            <Label Name="FullNameLabel" VerticalAlignment="Top" HorizontalAlignment="Center" Height="Auto" Width="Auto" FontSize="20" Canvas.Left="284"/>
-            <Button Name="SearchFiles" Content="Search" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="229" Canvas.Top="104" Click="SearchFiles_Click"/>
-            <Button Name="UploadFiles" Content="Upload" Width="100" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="229" Canvas.Top="129" Click="UploadFiles_Click"/>
-            <Button Name="AnalyzeButton" Content="Analyze" Canvas.Left="229" Canvas.Top="154" Height="23" Width="100" Click="AnalyzeButton_Click" RenderTransformOrigin="1.371,0.302"/>
-            <Label Name="FolderPathLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Canvas.Left="225" Canvas.Top="160" FontSize="10"/>
-            <TextBox Name="ProjectNameTextBox" Text="Project Name" Height="24" TextWrapping="Wrap" Canvas.Top="75" Width="120" RenderTransformOrigin="-0.24,0.017" Canvas.Left="219" IsMouseDirectlyOverChanged="ProjectNameTextBox_ActivateOnClick"/>
-            <Label Content="Choose User and File" Canvas.Left="38" Canvas.Top="50"/>
-            <ComboBox Name="UsersComboBox" Canvas.Left="10" Canvas.Top="75" Width="179" RenderTransformOrigin="-0.103,-0.277" SelectionChanged="UsersComboBox_SelectionChanged"/>
-            <TreeView Name="UsersProjectsTreeView" Canvas.Left="10" Canvas.Top="103" Width="179" RenderTransformOrigin="-0.103,-0.277" Height="182"/>
-            <Label Content="Separate each level in path with a forward slash (/)" Height="Auto" Width="Auto" Canvas.Left="5" Canvas.Top="285" FontSize="10"/>
-            <TextBox Name="RelativePathTextBox" Height="23" Canvas.Left="10" TextWrapping="Wrap" Text="Enter Path" Canvas.Top="310" Width="120" IsMouseDirectlyOverChanged="RelativePathTextBox_ActivateOnClick" KeyDown="RelativePathTextBox_KeyDown"/>
-            <Button Name="View" Content="View" Canvas.Left="130" Canvas.Top="310" Width="100" Height="23"/>
-            <TextBlock Name="ErrorMessage" Height="Auto" Width="Auto" Canvas.Left="10" Canvas.Top="335" RenderTransformOrigin="-0.052,0.047" FontSize="10" FontStyle="Italic" Foreground="Red"/>
-            <Label Content="Upload Project to Server" Canvas.Left="209" Canvas.Top="49"/>
-            <ListView Name="AnalysisResults" Height="287" Canvas.Left="38" Canvas.Top="360" Width="525"/>
+            <Label Name="FullNameLabel" Content="Sameer Rizvi (srizv82@gmail.com)" Height="Auto" Width="Auto" FontSize="20" Canvas.Left="140" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Choose User and File" Canvas.Left="53" Canvas.Top="50" Height="Auto" Width="Auto"/>
+            <ComboBox Name="UsersComboBox" Canvas.Left="10" Canvas.Top="75" Width="210" RenderTransformOrigin="-0.103,-0.277" SelectionChanged="UsersComboBox_SelectionChanged"/>
+            <Label Content="Double click on an item in the tree to add it to path" Height="Auto" Width="Auto" Canvas.Left="-3" Canvas.Top="95" FontSize="10"/>
+            <TreeView Name="UsersProjectsTreeView" Width="210" Height="166" Canvas.Top="119" Canvas.Left="10" SelectedItemChanged="UsersProjectsTreeView_SelectedItemChanged" MouseDoubleClick="UsersProjectsTreeView_MouseDoubleClick" KeyDown="UsersProjectsTreeView_KeyDown" TreeViewItem.Selected="TreeViewItem_OnItemSelected"/>
+            <Label Content="Separate each level in path with a backslash (\)" Height="Auto" Width="Auto" Canvas.Left="-3" Canvas.Top="285" FontSize="10"/>
+            <TextBox Name="RelativePathTextBox" Height="61" Width="210" Canvas.Top="309" Canvas.Left="10" TextWrapping="Wrap" Text="Enter Path"   IsMouseDirectlyOverChanged="RelativePathTextBox_ActivateOnClick" KeyDown="RelativePathTextBox_KeyDown" FontStyle="Italic" Foreground="Gray" />
+            <TextBlock Name="ErrorMessage1" Height="Auto" Width="Auto" Canvas.Left="10" Canvas.Top="370" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+            <Button Name="ViewButton" Content="View" Height="24" Width="211" Canvas.Top="385" Canvas.Left="10" Click="ViewButton_Click"/>
+            <Label Content="Upload Project to Server" Height="Auto" Width="Auto" Canvas.Left="239" Canvas.Top="49"/>
+            <TextBox Name="ProjectNameTextBox" Text="Project Name" Height="24" Width="120" Canvas.Top="75"  Canvas.Left="249" TextWrapping="Wrap"  IsMouseDirectlyOverChanged="ProjectNameTextBox_ActivateOnClick" FontStyle="Italic" Foreground="Gray"/>
+            <TextBlock Name="ErrorMessage2" Height="Auto" Width="Auto" Canvas.Left="249" Canvas.Top="100" FontSize="10" FontStyle="Italic" Foreground="Red"/>
             
+            <Button Name="SearchFiles" Content="Search" Width="120" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="249" Canvas.Top="119" Click="SearchFiles_Click"/>
+            <Button Name="UploadFiles" Content="Upload" Width="120" Height="25" RenderTransformOrigin="0.496,-3.53" Canvas.Left="249" Canvas.Top="144" Click="UploadFiles_Click"/>
+            <Button Name="AnalyzeButton" Content="Analyze" Canvas.Left="249" Canvas.Top="169" Height="23" Width="120" Click="AnalyzeButton_Click" RenderTransformOrigin="1.371,0.302"/>
+            <Label Name="FolderPathLabel" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Canvas.Left="245" Canvas.Top="190" FontSize="10" Content="Path: " FontStyle="Italic"/>
+            <ListView Name="AnalysisResults" Height="239" Canvas.Left="38" Canvas.Top="413" Width="525"/>
+
+            <!--<TextBlock Name="test" Canvas.Left="374" TextWrapping="Wrap" Text="Text" Canvas.Top="219" Height="67" Width="151"/>-->
             <!--<ProgressBar Name="progress" HorizontalAlignment="Left" Height="25" VerticalAlignment="Bottom" Width="669" ValueChanged="progress_ValueChanged" RenderTransformOrigin="0.51,-0.373" Canvas.Left="62" Canvas.Top="365"/>-->
         </Canvas>
     </ScrollViewer>

@@ -1,3 +1,26 @@
+//////////////////////////////////////////////////////////////////////////
+// Service.cs - Implement service interface                             //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Implements functions declared in service interface.
+ */
+/* Required Files:
+ *   
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
 using CodeAnalyzer;
 using System;
 using System.Collections.Concurrent;
@@ -35,75 +58,78 @@ namespace Server
     public class BasicService : IBasicService
     {
         private readonly string usersXML;
-        //FileStream targetStream;
-        User user;
+        private readonly string usersDirectory;
+        private User user;
         private string serverMessage;
         private string clientMessage;
-        //private byte[] fileBuffer;
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
         private XmlDocument analysisXML;
         private bool loginSuccessful;
-        private bool wasUserAdded;
-        private string usersDirectory;
-        List<string> analysisLines;
+        private bool wasUserAdded;       
+        private List<string> analysisLines;
 
         public BasicService()
         {
-            //targetStream = null;
             usersXML = @"../../Users.xml";
             serverMessage = "Default message";
             clientMessage = "";
             usersDirectory = @"../../Users";
         }
-        public List<string> AnalyzeFile(FileData FT)
+
+        //upload a file into a project folder
+        public async Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
         {
-            //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
-            FuncTrac = new FunctionTracker(FT.fileLines);
-            AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());    
-            serverMessage = "Analysis done. Results returned.";
+            Task uploadTask = Task.Run(() =>
+            {
+                string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
+                string filePath = directoryPath + fileName;
+                File.WriteAllLines(filePath, fileText);
+            });
+            await uploadTask;
+            serverMessage = fileName + " uploaded!";
             Console.WriteLine(serverMessage);
-            analysisLines = AD.GetAnalysis();
-            return analysisLines;
         }
-        public async Task AnalyzeAsync(FileData FT)
+
+        public async Task AnalyzeFileAndCreateXML(string fileName, string userEmail, string projectName)
+        {
+            Task analysisTask = Task.Run(() =>
+            {
+                string path = "..\\..\\Users" + "\\" + userEmail + "\\" + projectName + "\\" + fileName;
+                List<string> fileLines = GetFileLines(path);
+                FuncTrac = new FunctionTracker(fileLines);
+                AD = new AnalysisDisplayer(fileName, null, FuncTrac.GetFunctionNodes());
+                if (AD.GetFunctionNodes() == null || AD.GetFunctionNodes().Count <= 0) 
+                {
+                    serverMessage = fileName + "cannot be analyzed. It may not contain a class or functions.";
+                    Console.WriteLine(serverMessage);                     
+                }
+                else
+                {
+                    AD.GetAnalysisInXML().Save(path + "_analysis" + "(" + DateTime.Now.ToString("yyyy-MM-dd(HH-mm-ss)") + ")" + ".xml");
+                }
+            });
+            await analysisTask;
+            serverMessage = "Task " + analysisTask.Id + " has finished creating the analyses xmls.";
+            Console.WriteLine(serverMessage);
+        }
+
+        //analyze a file asynchronously
+        public async Task AnalyzeAsync(FileData FD)
         {
             //Console.WriteLine(Encoding.ASCII.GetString(fileBuffer));
             Task<List<string>> analysisTask = Task.Run(() =>
             {
-                FuncTrac = new FunctionTracker(FT.fileLines);
-                AD = new AnalysisDisplayer(FT.fileName, null, FuncTrac.GetFunctionNodes());
+                FuncTrac = new FunctionTracker(FD.fileLines);
+                AD = new AnalysisDisplayer(FD.fileName, null, FuncTrac.GetFunctionNodes());
                 return AD.GetAnalysis();
             });
             analysisLines = await analysisTask;
             serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
             Console.WriteLine(serverMessage);
         }
-        public bool Login(string email, string password)
-        {
-            if (email.Length > 0 && password.Length > 0) 
-            { 
-                AuthenticateUser(email, password); 
-                if(user == null)
-                {                   
-                    serverMessage = "Incorrect Login.";
-                    Console.WriteLine(serverMessage);
-                    return false;
-                }
-                else
-                {                    
-                    serverMessage = "Login successful! Returned page!";
-                    Console.WriteLine(serverMessage);
-                    return true;
-                }
-            }
-            else
-            {
-                serverMessage = "Email or Password fields cannot be empty.";
-                Console.WriteLine(serverMessage);
-                return false;
-            }
-        }
+
+        //login asynchronously
         public async Task SignInAsync(string email, string password)
         {
             Task<bool> loginTask = Task.Run(() =>
@@ -134,24 +160,18 @@ namespace Server
             loginSuccessful = await loginTask;
             Console.WriteLine(serverMessage);
         }
+
+        //instantiate user for UserPage
         public void AuthenticateUser(string email, string password)
         {
-            //string firstName = "";
-            //string lastName = "";
-            //user = new User(email, password);
-
             if (UserExists(out string firstName, out string lastName, email, password))
             {
                 user = new User(firstName, lastName, email, password);
-                //this.NavigationService.Navigate(userpage);
-                //return user;
             }
-            else 
-            {
-                user = null;
-                //return null;//MessageBox.Show("Incorrect Login.");
-            }
+            else user = null;
         }
+
+        //tells us whether the user exists in the server or not. if it does, then retrieve their first and last names
         public bool UserExists(out string firstName, out string lastName, string email, string password)
         {
             XmlDocument UsersXML = new XmlDocument();
@@ -171,10 +191,11 @@ namespace Server
             lastName = "";
             return false;
         }
+
+        //create a new entry in Users.xml
         public void AddNewUser(NewAccountInfo newAccountInfo)
         {
             XmlDocument UsersXML = new XmlDocument();
-            //UsersXML.Load(@"C:\Users\srizv\OneDrive - Syracuse University\Syracuse University\Courses\CSE 681 (2)\Project 3\RemoteCodeAnalyzer\RemoteCodeAnalyzer\Users.xml");
             UsersXML.Load(usersXML);
 
             XmlElement userElem = UsersXML.CreateElement("User");
@@ -202,6 +223,8 @@ namespace Server
                 return;
             }        
         }
+
+        //makes sure we don't have duplicate email addresses in the system
         public bool AnAccountWithThisEmailAlreadyExists(string email)
         {
             XmlDocument UsersXML = new XmlDocument();
@@ -214,6 +237,8 @@ namespace Server
             }
             return false;
         }
+
+        //create a new entry in Users.xml asynchronously
         public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
         {
             Task<bool> addUserTask = Task.Run(() =>
@@ -252,24 +277,24 @@ namespace Server
                 Console.WriteLine(serverMessage);
             }
         }
+
+        //create a new account folder when a new account is created
         public string CreateNewAccountFolder(string folderName)
         {
             string path = usersDirectory + "/" + folderName;
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + folderName;
         }
+
+        //allows the user to upload a new project to their directory
         public string CreateNewProjectFolder(string userEmail, string projectName)
         {
             string path = usersDirectory + "/" + userEmail + "/" + projectName;
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + userEmail + "/" + projectName;
-        }
-        public void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
-        {   
-            string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
-            string filePath = directoryPath + fileName;
-            File.WriteAllLines(filePath, fileText);
-        }
+        }       
+
+        //get all the users in Users.xml
         public ConcurrentBag<string> GetUsers()
         {
             ConcurrentBag<string> users = new ConcurrentBag<string>();
@@ -279,52 +304,32 @@ namespace Server
             for (int i = 0; i < elemList.Count; i++){users.Add(elemList[i].Attributes.GetNamedItem("Email").Value);}
             return users;
         }
-        public List<string> GetFileLines(string relativePath)
+
+        //get all file text in a given file on the server
+        public List<string> GetFileLines(string path)
         {
-            //ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList<string>());
-            //return fileLines;
-            string path = usersDirectory + "/" + relativePath;
+            //string path = usersDirectory + "/" + relativePath;
             return File.ReadAllLines(path).ToList<string>();
         }
         public DirectoryInfo GetUserDirectoryInfo(string userEmail)
         {
             return new DirectoryInfo(usersDirectory + "\\" + userEmail);
         }
+        public List<string> GetCSharpFilesInUserDirectory(string path, string userEmail, string projectName)
+        {
+            List<string> files = Directory.GetFiles(path, "*" + "*.cs", SearchOption.AllDirectories).ToList();
+            return files;
+        }
         public void SendMessage(string message)
         {
             clientMessage = message;
             Console.WriteLine("Message received by service: {0}", clientMessage);
-            //print message that client had sent
-            //Console.WriteLine("Message received by service: {0}", message);
         }
-        //public string GetMessage() => "New message from Service.";
         public string GetMessageFromServer() => serverMessage;
         public User GetUser() => user;
         public List<string> GetAnalysis() => analysisLines;
+        public XmlDocument GetAnalysisXML() => analysisXML;
         public bool IsLoginSuccessful() => loginSuccessful;
         public bool WasUserAdded() => wasUserAdded;
-        /*public void UploadFile(RemoteFileInfo request)
-        {
-            FileStream targetStream = null;
-            Stream sourceStream = request.FileByteStream;
-            //string uploadFolder = @".";
-            //string filePath = Path.Combine(uploadFolder, request.FileName);
-            string filePath = request.FileName;
-
-            using (targetStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                //read from the input stream in 65000 byte chunks
-                const int bufferLen = 65000;
-                fileBuffer = new byte[bufferLen];
-                int count = 0;
-                while ((count = sourceStream.Read(fileBuffer, 0, bufferLen)) > 0)
-                {
-                    // save to output stream
-                    targetStream.Write(fileBuffer, 0, count);
-                }
-                targetStream.Close();
-                sourceStream.Close();
-            }
-        }*/
     }
 }

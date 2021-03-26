@@ -1,0 +1,49 @@
+<Class>
+  <ClassName>
+  </ClassName>
+  <Function>
+    <FunctionName>public string GetFirstName() =&gt; firstName</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>7</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public string GetLastName() =&gt; lastName</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>6</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public string GetEmail() =&gt; email</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>5</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public string GetPassword() =&gt; password</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>4</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public void SetFirstName(string firstName) =&gt; this.firstName = firstName</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>3</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public void SetLastName(string lastName) =&gt; this.lastName = lastName</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>2</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public void SetEmail(string email) =&gt; this.email = email</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>1</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public void SetPassword(string password) =&gt; this.password = password</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>0</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public void Dispose()</FunctionName>
+    <NumberOfScopes>1</NumberOfScopes>
+    <NumberOfLines>5</NumberOfLines>
+  </Function>
+</Class>

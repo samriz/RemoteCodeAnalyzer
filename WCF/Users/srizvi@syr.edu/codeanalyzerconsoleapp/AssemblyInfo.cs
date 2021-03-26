@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CodeAnalyzer")]
+[assembly: AssemblyTitle("CodeAnalyzerConsoleApp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CodeAnalyzer")]
+[assembly: AssemblyProduct("CodeAnalyzerConsoleApp")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("17723223-e428-4beb-9f52-82b199e0f830")]
+[assembly: Guid("97e2dd2b-2f44-435d-a536-8b3fde2b8114")]
 
 // Version information for an assembly consists of the following four values:
 //

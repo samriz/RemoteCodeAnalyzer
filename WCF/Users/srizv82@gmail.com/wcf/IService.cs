@@ -1,3 +1,26 @@
+//////////////////////////////////////////////////////////////////////////
+// IService.cs - Service interface                                      //
+// ver 1.0                                                              //
+// Language:    C#, 2020, .Net Framework 4.7.2                          //
+// Platform:    MSI GS65 Stealth, Win10                                 //
+// Application: CSE681, Project #3&4, Winter 2021                       //
+// Author:      Sameer Rizvi, Syracuse University                       //
+//              srizvi@syr.edu                                          //
+//////////////////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ *  Interface with server.
+ */
+/* Required Files:
+ *   
+ *   
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 23 February 2021
+ * - first release
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +48,6 @@ namespace Server
         string GetMessageFromServer();
 
         [OperationContract]
-        bool Login(string email, string password);
-
-        [OperationContract]
         Task SignInAsync(string email, string password);
 
         [OperationContract]
@@ -36,26 +56,15 @@ namespace Server
         void AuthenticateUser(string email, string password);
 
         bool UserExists(out string firstName, out string lastName, string email, string password);
-        
-        //[OperationContract]
-        //void UploadFile(RemoteFileInfo request);
 
         [OperationContract]
-        User GetUser();
+        Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
 
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument AnalyzeFile(FileData FD);
-
-        [OperationContract]
-        List<string> AnalyzeFile(FileData FD);
+        [OperationContract, XmlSerializerFormat]
+        Task AnalyzeFileAndCreateXML(string fileName, string userEmail, string projectName);
 
         [OperationContract]
         Task AnalyzeAsync(FileData FD);
-
-        //[OperationContract, XmlSerializerFormat]
-        //XmlDocument GetAnalysisXML();
-        [OperationContract]
-        List<string> GetAnalysis();
 
         [OperationContract]
         void AddNewUser(NewAccountInfo newAccountInfo);
@@ -73,8 +82,7 @@ namespace Server
         [OperationContract]
         string CreateNewProjectFolder(string userEmail, string projectName);
 
-        [OperationContract]
-        void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
+        //"Get" functions below
 
         [OperationContract]
         ConcurrentBag<string> GetUsers();
@@ -83,11 +91,23 @@ namespace Server
         DirectoryInfo GetUserDirectoryInfo(string userEmail);
 
         [OperationContract]
+        List<string> GetCSharpFilesInUserDirectory(string path, string userEmail, string projectName);
+
+        [OperationContract]
         List<string> GetFileLines(string relativePath);
+
+        [OperationContract]
+        User GetUser();
+
+        [OperationContract, XmlSerializerFormat]
+        XmlDocument GetAnalysisXML();
+
+        [OperationContract]
+        List<string> GetAnalysis();
     }
 
     [DataContract]
-    public struct NewAccountInfo
+    public struct NewAccountInfo //encapsulates information needed for creating a new account
     {
         [DataMember]
         public string firstName, lastName, email, password;
@@ -122,7 +142,7 @@ namespace Server
     }
 
     [DataContract]
-    public class User
+    public class User //for UserPage purposes. creates instance of a user
     {
         [DataMember]
         private string firstName, lastName, email, password;

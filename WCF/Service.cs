@@ -77,6 +77,65 @@ namespace Server
             usersDirectory = @"../../Users";
         }
 
+        //upload a file into a project folder
+        public async Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
+        {
+            Task uploadTask = Task.Run(() =>
+            {
+                string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
+                string filePath = directoryPath + fileName;
+                File.WriteAllLines(filePath, fileText);
+            });
+            await uploadTask;
+            serverMessage = fileName + " uploaded!";
+            Console.WriteLine(serverMessage);
+        }
+
+        public async Task AnalyzeFileAndCreateXML(string fileName, string userEmail, string projectName)
+        {
+            Task analysisTask = Task.Run(() =>
+            {
+                string path = "..\\..\\Users" + "\\" + userEmail + "\\" + projectName + "\\" + fileName;
+                List<string> fileLines = GetFileLines(path);
+                FuncTrac = new FunctionTracker(fileLines);
+                AD = new AnalysisDisplayer(fileName, null, FuncTrac.GetFunctionNodes());
+                if (AD.GetFunctionNodes() == null || AD.GetFunctionNodes().Count <= 0) 
+                {
+                    serverMessage = fileName + "cannot be analyzed. It may not contain a class or functions.";
+                    Console.WriteLine(serverMessage);                     
+                }
+                else
+                {
+                    AD.GetAnalysisInXML().Save(path + "_analysis" + "(" + DateTime.Now.ToString("yyyy-MM-dd(HH-mm-ss)") + ")" + ".xml");
+                }
+            });
+            await analysisTask;
+            serverMessage = "Task " + analysisTask.Id + " has finished creating the analyses xmls.";
+            Console.WriteLine(serverMessage);
+        }
+
+        //retrieve file on server asynchronously
+        public async Task<List<string>> RetrieveFileAsync(string relativePath)
+        {
+            string path = "..\\..\\Users" + "\\" + relativePath;
+            //XmlDocument xmlFile = new XmlDocument();
+            List<string> lines = new List<string>(); 
+            await Task.Run(() =>
+            {
+                if (File.Exists(path)) 
+                {
+                    //xmlFile.Load(path);
+                    lines = GetFileLines(path);
+                }
+                else
+                {
+                    serverMessage = "Invalid path.";
+                }
+            });
+            //return xmlFile;
+            return lines;
+        }
+
         //analyze a file asynchronously
         public async Task AnalyzeAsync(FileData FD)
         {
@@ -88,19 +147,6 @@ namespace Server
                 return AD.GetAnalysis();
             });
             analysisLines = await analysisTask;
-            serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
-            Console.WriteLine(serverMessage);
-        }
-
-        public async Task AnalyzeFileAndCreateXML(FileData FD)
-        {
-            Task<XmlDocument> analysisTask = Task.Run(() =>
-            {
-                FuncTrac = new FunctionTracker(FD.fileLines);
-                AD = new AnalysisDisplayer(FD.fileName, null, FuncTrac.GetFunctionNodes());
-                return AD.GetAnalysisInXML();
-            });
-            analysisXML = await analysisTask;
             serverMessage = "Task " + analysisTask.Id + " has finished executing. Results returned.";
             Console.WriteLine(serverMessage);
         }
@@ -268,15 +314,7 @@ namespace Server
             string path = usersDirectory + "/" + userEmail + "/" + projectName;
             Directory.CreateDirectory(path);
             return usersDirectory + "/" + userEmail + "/" + projectName;
-        }
-
-        //upload a file into a project folder
-        public void UploadFile(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
-        {   
-            string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
-            string filePath = directoryPath + fileName;
-            File.WriteAllLines(filePath, fileText);
-        }
+        }       
 
         //get all the users in Users.xml
         public ConcurrentBag<string> GetUsers()
@@ -290,14 +328,19 @@ namespace Server
         }
 
         //get all file text in a given file on the server
-        public List<string> GetFileLines(string relativePath)
+        public List<string> GetFileLines(string path)
         {
-            string path = usersDirectory + "/" + relativePath;
+            //string path = usersDirectory + "/" + relativePath;
             return File.ReadAllLines(path).ToList<string>();
         }
         public DirectoryInfo GetUserDirectoryInfo(string userEmail)
         {
             return new DirectoryInfo(usersDirectory + "\\" + userEmail);
+        }
+        public List<string> GetCSharpFilesInUserDirectory(string path, string userEmail, string projectName)
+        {
+            List<string> files = Directory.GetFiles(path, "*" + "*.cs", SearchOption.AllDirectories).ToList();
+            return files;
         }
         public void SendMessage(string message)
         {
