@@ -64,8 +64,7 @@ namespace Server
         private string clientMessage;
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
-        private XmlDocument analysisXML;
-        private bool loginSuccessful;
+        //private XmlDocument analysisXML;
         private bool wasUserAdded;       
         private List<string> analysisLines;
 
@@ -80,20 +79,22 @@ namespace Server
         //upload a file into a project folder
         public async Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName)
         {
-            Task uploadTask = Task.Run(() =>
+            Task<bool> uploadTask = Task.Run(() =>
             {
                 string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
                 string filePath = directoryPath + fileName;
                 File.WriteAllLines(filePath, fileText);
+                if (File.Exists(filePath)) return true;
+                else return false;
             });
-            await uploadTask;
-            serverMessage = fileName + " uploaded!";
+            if (await uploadTask == false) serverMessage = fileName + " was not uploaded.";
+            else serverMessage = fileName + " uploaded!";
             Console.WriteLine(serverMessage);
         }
 
         public async Task AnalyzeFileAndCreateXML(string fileName, string userEmail, string projectName)
         {
-            Task analysisTask = Task.Run(() =>
+            Task<bool> analysisTask = Task.Run(() =>
             {
                 string path = "..\\..\\Users" + "\\" + userEmail + "\\" + projectName + "\\" + fileName;
                 List<string> fileLines = GetFileLines(path);
@@ -101,16 +102,23 @@ namespace Server
                 AD = new AnalysisDisplayer(fileName, null, FuncTrac.GetFunctionNodes());
                 if (AD.GetFunctionNodes() == null || AD.GetFunctionNodes().Count <= 0) 
                 {
-                    serverMessage = fileName + "cannot be analyzed. It may not contain a class or functions.";
-                    Console.WriteLine(serverMessage);                     
+                    return false;                 
                 }
                 else
                 {
-                    AD.GetAnalysisInXML().Save(path + "_analysis" + "(" + DateTime.Now.ToString("yyyy-MM-dd(HH-mm-ss)") + ")" + ".xml");
+                    string xmlPath = path + "_analysis" + "(" + DateTime.Now.ToString("yyyy-MM-dd(HH-mm-ss)") + ")" + ".xml";
+                    AD.GetAnalysisInXML().Save(xmlPath);
+                    if (File.Exists(xmlPath)) return true;                    
+                    else return false;
                 }
             });
-            await analysisTask;
-            serverMessage = "Task " + analysisTask.Id + " has finished creating the analyses xmls.";
+            if (await analysisTask) serverMessage = "Task " + analysisTask.Id + " has finished creating the analysis xml for " + fileName;
+            else 
+            {
+                string message1 = fileName + " cannot be analyzed. It may not contain any classes and/or functions.";
+                Console.WriteLine("Task " + analysisTask.Id + " did not create the analysis xml for " + fileName);
+                serverMessage = message1;
+            }
             Console.WriteLine(serverMessage);
         }
 
@@ -120,20 +128,23 @@ namespace Server
             string path = "..\\..\\Users" + "\\" + relativePath;
             //XmlDocument xmlFile = new XmlDocument();
             List<string> lines = new List<string>(); 
-            await Task.Run(() =>
+            Task<bool> retriever = Task.Run(() =>
             {
                 if (File.Exists(path)) 
                 {
                     //xmlFile.Load(path);
                     lines = GetFileLines(path);
+                    return true;
                 }
                 else
                 {
-                    serverMessage = "Invalid path.";
+                    serverMessage = "File does not exist at that path. It may be an invalid path.";
+                    return false;
                 }
             });
             //return xmlFile;
-            return lines;
+            if (await retriever) return lines;
+            else return null;
         }
 
         //analyze a file asynchronously
@@ -152,45 +163,50 @@ namespace Server
         }
 
         //login asynchronously
-        public async Task SignInAsync(string email, string password)
+        public async Task<bool> LoginAsync(string email, string password)
         {
-            Task<bool> loginTask = Task.Run(() =>
+            bool loginSuccessful = false;
+            Task loginTask = Task.Run(() =>
             {
                 if (email.Length > 0 && password.Length > 0)
                 {
                     AuthenticateUser(email, password);
-                    if (user == null)
+                    if (this.user == null)
                     {                        
                         serverMessage = "Incorrect Login.";
                         //Console.WriteLine(serverMessage);
-                        return false;
+                        loginSuccessful = false;
                     }
                     else
                     {                       
                         serverMessage = "Login successful! Returned page!";
-                        //Console.WriteLine(serverMessage);
-                        return true;
+                        loginSuccessful = true;
                     }
                 }
                 else
                 {
                     serverMessage = "Email or Password fields cannot be empty.";
-                    //Console.WriteLine(serverMessage);
-                    return false;
+                    loginSuccessful = false;
                 }
             });
-            loginSuccessful = await loginTask;
+            await loginTask;
             Console.WriteLine(serverMessage);
+            return loginSuccessful;
         }
 
         //instantiate user for UserPage
         public void AuthenticateUser(string email, string password)
-        {
+        {         
             if (UserExists(out string firstName, out string lastName, email, password))
             {
-                user = new User(firstName, lastName, email, password);
+                this.user = new User(firstName, lastName, email, password);
+                Console.WriteLine("User authenticated.");
             }
-            else user = null;
+            else 
+            { 
+               this.user = null;
+               Console.WriteLine("User not authenticated.");
+            }
         }
 
         //tells us whether the user exists in the server or not. if it does, then retrieve their first and last names
@@ -214,38 +230,6 @@ namespace Server
             return false;
         }
 
-        //create a new entry in Users.xml
-        public void AddNewUser(NewAccountInfo newAccountInfo)
-        {
-            XmlDocument UsersXML = new XmlDocument();
-            UsersXML.Load(usersXML);
-
-            XmlElement userElem = UsersXML.CreateElement("User");
-            userElem.SetAttribute("FirstName", newAccountInfo.firstName);
-            userElem.SetAttribute("LastName", newAccountInfo.lastName);
-
-            XmlElement loginElem = UsersXML.CreateElement("Login");
-
-            //need to validate that this email doesn't already have an account associated with it
-            if (!AnAccountWithThisEmailAlreadyExists(newAccountInfo.email))
-            {
-                loginElem.SetAttribute("Email", newAccountInfo.email);
-                loginElem.SetAttribute("Password", newAccountInfo.password);
-
-                userElem.AppendChild(loginElem);
-                UsersXML.DocumentElement.AppendChild(userElem);
-                //UsersXML.Save(Console.Out);
-                UsersXML.Save(usersXML);
-                serverMessage = "New account " + newAccountInfo.email + " created.";
-                Console.WriteLine(serverMessage);
-            }
-            else
-            {
-                serverMessage = "An account associated with this email address already exists.";
-                return;
-            }        
-        }
-
         //makes sure we don't have duplicate email addresses in the system
         public bool AnAccountWithThisEmailAlreadyExists(string email)
         {
@@ -261,7 +245,49 @@ namespace Server
         }
 
         //create a new entry in Users.xml asynchronously
-        public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
+        public async Task<bool> AddNewAccountAsync(NewAccountInfo newAccountInfo)
+        {
+            Task<bool> addUserTask = Task.Run(() =>
+            {
+                XmlDocument UsersXML = new XmlDocument();
+                UsersXML.Load(usersXML);
+
+                XmlElement userElem = UsersXML.CreateElement("User");
+                userElem.SetAttribute("FirstName", newAccountInfo.firstName);
+                userElem.SetAttribute("LastName", newAccountInfo.lastName);
+
+                XmlElement loginElem = UsersXML.CreateElement("Login");
+
+                //need to validate that this email doesn't already have an account associated with it
+                if (!AnAccountWithThisEmailAlreadyExists(newAccountInfo.email))
+                {
+                    loginElem.SetAttribute("Email", newAccountInfo.email);
+                    loginElem.SetAttribute("Password", newAccountInfo.password);
+                    userElem.AppendChild(loginElem);
+                    UsersXML.DocumentElement.AppendChild(userElem);
+                    UsersXML.Save(usersXML);
+                    CreateNewAccountFolder(newAccountInfo.email);
+                    return true;
+                }
+                else return false;
+            });
+            wasUserAdded = await addUserTask;
+            if (wasUserAdded)
+            {
+                serverMessage = "New account " + newAccountInfo.email + " successfully created.";
+                Console.WriteLine(serverMessage);
+                return wasUserAdded;
+            }
+            else
+            {
+                serverMessage = "An account associated with this email address already exists.";
+                Console.WriteLine(serverMessage);
+                return wasUserAdded;
+            }
+        }
+
+        //create a new entry in Users.xml asynchronously
+        /*public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
         {
             Task<bool> addUserTask = Task.Run(() =>
             {
@@ -298,7 +324,7 @@ namespace Server
                 serverMessage = "An account associated with this email address already exists.";
                 Console.WriteLine(serverMessage);
             }
-        }
+        }*/
 
         //create a new account folder when a new account is created
         public string CreateNewAccountFolder(string folderName)
@@ -348,10 +374,8 @@ namespace Server
             Console.WriteLine("Message received by service: {0}", clientMessage);
         }
         public string GetMessageFromServer() => serverMessage;
-        public User GetUser() => user;
         public List<string> GetAnalysis() => analysisLines;
-        public XmlDocument GetAnalysisXML() => analysisXML;
-        public bool IsLoginSuccessful() => loginSuccessful;
         public bool WasUserAdded() => wasUserAdded;
+        public User GetUser() => user;
     }
 }

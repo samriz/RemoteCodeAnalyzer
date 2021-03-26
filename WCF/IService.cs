@@ -48,14 +48,14 @@ namespace Server
         string GetMessageFromServer();
 
         [OperationContract]
-        Task SignInAsync(string email, string password);
+        Task<bool> LoginAsync(string email, string password);
 
-        [OperationContract]
-        bool IsLoginSuccessful();
+        //[OperationContract]
+        //bool IsLoginSuccessful();
 
-        void AuthenticateUser(string email, string password);
+        //void AuthenticateUser(string email, string password);
 
-        bool UserExists(out string firstName, out string lastName, string email, string password);
+        //bool UserExists(out string firstName, out string lastName, string email, string password);
 
         [OperationContract]
         Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
@@ -67,10 +67,8 @@ namespace Server
         Task AnalyzeAsync(FileData FD);
 
         [OperationContract]
-        void AddNewUser(NewAccountInfo newAccountInfo);
-
-        [OperationContract]
-        Task AddNewAccountAsync(NewAccountInfo newAccountInfo);
+        Task<bool> AddNewAccountAsync(NewAccountInfo newAccountInfo);
+        //Task AddNewAccountAsync(NewAccountInfo newAccountInfo);
 
         bool AnAccountWithThisEmailAlreadyExists(string email);
 
@@ -97,16 +95,14 @@ namespace Server
         List<string> GetFileLines(string relativePath);
 
         [OperationContract]
-        User GetUser();
-
-        [OperationContract, XmlSerializerFormat]
-        XmlDocument GetAnalysisXML();
-
-        [OperationContract]
         List<string> GetAnalysis();
 
-        [OperationContract, XmlSerializerFormat]
+        [OperationContract]
+        User GetUser();
+
+        [OperationContract]
         Task<List<string>> RetrieveFileAsync(string relativePath);
+        //Task<List<string>> RetrieveFileAsync(string relativePath);
         //Task GetXMLFileFromServerAsync();
     }
 

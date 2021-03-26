@@ -45,6 +45,7 @@ using System.IO;
 using Server;
 using System.Collections.Concurrent;
 using System.Xml;
+using ListViewItem = System.Windows.Controls.ListViewItem;
 
 namespace RemoteCodeAnalyzer
 {
@@ -55,7 +56,7 @@ namespace RemoteCodeAnalyzer
     {
         private readonly Client client; //object that allows us to communicate with service
         private readonly FolderBrowserDialog DirectoryExplorer;
-        private User user;
+        private readonly User user;
         private bool anItemInComboBoxIsSelected;
         private List<string> uploadedFileNames;
         bool isRelativePathBoxActive;
@@ -111,6 +112,8 @@ namespace RemoteCodeAnalyzer
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
             AnalyzeButton.IsEnabled = true;
+            UsersProjectsTreeView.Items.Refresh();
+            UploadLabel.Content = "Uploading done.";
         }
 
         //choose a file for analysis
@@ -118,6 +121,8 @@ namespace RemoteCodeAnalyzer
         {
             ErrorMessage2.Text = "";
             AnalyzeFiles();
+            UsersProjectsTreeView.Items.Refresh();
+            AnalyzeLabel.Content = "Analyzing done.";
         }
 
         private async void AnalyzeFiles()
@@ -125,6 +130,7 @@ namespace RemoteCodeAnalyzer
             foreach (var fileName in uploadedFileNames)
             {
                 await client.GetSVC().AnalyzeFileAndCreateXML(fileName, this.user.GetEmail(), ProjectNameTextBox.Text);
+                ErrorMessage2.Text = client.GetSVC().GetMessageFromServer();
                 client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             }
         }
@@ -132,9 +138,8 @@ namespace RemoteCodeAnalyzer
         private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
             ErrorMessage1.Text = "";
-            var selectedItem = (TreeViewItem)UsersProjectsTreeView.SelectedItem;
-            //test.Text += selectedItem.Header.ToString();
-            //string extension = System.IO.Path.GetExtension(UsersProjectsTreeView.SelectedItem.ToString());          
+            //AnalysisResults.Items.Refresh();
+            //var selectedItem = (TreeViewItem)UsersProjectsTreeView.SelectedItem;        
             if (RelativePathTextBox.Text.Length < 1) //make sure user enters something
             {
                 ErrorMessage1.Text = "Invalid selection(s).";
@@ -164,6 +169,7 @@ namespace RemoteCodeAnalyzer
 
         private async void View()
         {
+            
             string relativePath = RelativePathTextBox.Text;
             if (relativePath == null || relativePath.Length <= 0) ErrorMessage1.Text = "Invalid path.";
             else
@@ -171,9 +177,14 @@ namespace RemoteCodeAnalyzer
                 //XmlDocument analysis = await client.GetSVC().RetrieveFileAsync(relativePath);
                 List<string> analysis = await client.GetSVC().RetrieveFileAsync(relativePath);
                 ErrorMessage1.Text = client.GetSVC().GetMessageFromServer();
-                client.GetSVC().SendMessage("I received the analysis results. Thank you.");               
-                //AnalysisResults.Items.Clear();                
+                client.GetSVC().SendMessage("I received the analysis results. Thank you.");                          
                 AnalysisResults.ItemsSource = analysis;
+                AnalysisResults.Items.Refresh();
+                AnalysisResults.ScrollIntoView(AnalysisResults.Items[0]); 
+                /*foreach(ListViewItem i in AnalysisResults.Items)
+                {
+                    i.Background = Brushes.Yellow;
+                }*/
             }
         }
 
