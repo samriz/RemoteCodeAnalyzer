@@ -1,0 +1,48 @@
+<Class>
+  <ClassName>public class CodeAnalyzerConsoleApp</ClassName>
+  <Function>
+    <FunctionName>public static void Main(string[] args)</FunctionName>
+    <NumberOfScopes>2</NumberOfScopes>
+    <NumberOfLines>29</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void SearchAndAnalyze(string[] args, ref DirectorySearcher DS, ref FileExtractor FE, ref FunctionTracker FT, ref AnalysisDisplayer AD, ref TypeRelationshipFinder TRF)</FunctionName>
+    <NumberOfScopes>1</NumberOfScopes>
+    <NumberOfLines>8</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void CollectFunctionNodes(ref DirectorySearcher DS, ref FileExtractor FE, ref FunctionTracker FT)</FunctionName>
+    <NumberOfScopes>1</NumberOfScopes>
+    <NumberOfLines>6</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void CollectClassNames(ref ClassNameFinder CNF, ref DirectorySearcher DS)</FunctionName>
+    <NumberOfScopes>2</NumberOfScopes>
+    <NumberOfLines>7</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static string GetPathFromCommandLine(string[] args)</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>2</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void DisplayListOfFoundFiles(DirectorySearcher DS)</FunctionName>
+    <NumberOfScopes>0</NumberOfScopes>
+    <NumberOfLines>1</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static bool VerifyCommandLineArguments(string[] args)</FunctionName>
+    <NumberOfScopes>6</NumberOfScopes>
+    <NumberOfLines>29</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void SetFilesBasedOnCommandLineArguments(string[] args, DirectorySearcher DS)</FunctionName>
+    <NumberOfScopes>11</NumberOfScopes>
+    <NumberOfLines>41</NumberOfLines>
+  </Function>
+  <Function>
+    <FunctionName>public static void DisplayBasedOnCommandLineArguments(string[] args, AnalysisDisplayer AD)</FunctionName>
+    <NumberOfScopes>11</NumberOfScopes>
+    <NumberOfLines>46</NumberOfLines>
+  </Function>
+</Class>

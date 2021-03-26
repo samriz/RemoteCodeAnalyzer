@@ -55,12 +55,14 @@ namespace RemoteCodeAnalyzer
     public partial class UserPage : Page
     {
         private readonly Client client; //object that allows us to communicate with service
+        private Microsoft.Win32.OpenFileDialog FileExplorer;
         private readonly FolderBrowserDialog DirectoryExplorer;
         private readonly User user;
         private bool anItemInComboBoxIsSelected;
         private List<string> uploadedFileNames;
-        bool isRelativePathBoxActive;
-        bool isProjectNameBoxActive;
+        private bool isRelativePathBoxActive;
+        private bool isProjectNameBoxActive;
+        private bool isProjectNameBox2Active;
 
         public UserPage()
         {
@@ -68,9 +70,12 @@ namespace RemoteCodeAnalyzer
             InitializeTextBoxes();
             anItemInComboBoxIsSelected = false;
             DirectoryExplorer = new FolderBrowserDialog();
-            AnalyzeButton.IsEnabled = false;
+            FileExplorer = new Microsoft.Win32.OpenFileDialog();
+            AnalyzeFilesButton.IsEnabled = false;
+            AnalyzeSingleFileButton.IsEnabled = false;
             isRelativePathBoxActive = false;
             isProjectNameBoxActive = false;
+            isProjectNameBox2Active = false;
         }
         public UserPage(User user): this()
         {
@@ -84,6 +89,12 @@ namespace RemoteCodeAnalyzer
             DirectoryExplorer.ShowDialog();
             FolderPathLabel.Content += DirectoryExplorer.SelectedPath;
             //Process.Start("explorer.exe");
+        }
+
+        private void SearchFile_Click(object sender, RoutedEventArgs e)
+        {
+            FileExplorer.ShowDialog();
+            FolderPathLabel2.Content += FileExplorer.FileName;
         }
 
         //upload files asynchronously to user's directory on service
@@ -111,35 +122,59 @@ namespace RemoteCodeAnalyzer
                 }
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
-            AnalyzeButton.IsEnabled = true;
+            AnalyzeFilesButton.IsEnabled = true;
             UsersProjectsTreeView.Items.Refresh();
             UploadLabel.Content = "Uploading done.";
         }
 
-        //choose a file for analysis
-        private void AnalyzeButton_Click(object sender, RoutedEventArgs e) 
+        //Functionality to upload a single file
+        private async void UploadSingleFile_Click(object sender, RoutedEventArgs e)
         {
-            ErrorMessage2.Text = "";
-            AnalyzeFiles();
+            ErrorMessage3.Text = "";
+            string file = FileExplorer.FileName;
+            if (!File.Exists(file))
+            {
+                ErrorMessage3.Text = "No valid file selected.";
+            }
+            else
+            {
+                string fileName = GetFileName(file);
+                ConcurrentBag<string> fileLines = new ConcurrentBag<string>(File.ReadAllLines(file).ToList());
+                await client.GetSVC().UploadFileAsync(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox2.Text);
+                if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
+            }
+            AnalyzeSingleFileButton.IsEnabled = true;
             UsersProjectsTreeView.Items.Refresh();
-            AnalyzeLabel.Content = "Analyzing done.";
+            UploadLabel2.Content = "Uploading done.";
         }
 
-        private async void AnalyzeFiles()
+        //choose a file for analysis
+        private async void AnalyzeFilesButton_Click(object sender, RoutedEventArgs e) 
         {
+            ErrorMessage2.Text = "";
             foreach (var fileName in uploadedFileNames)
             {
                 await client.GetSVC().AnalyzeFileAndCreateXML(fileName, this.user.GetEmail(), ProjectNameTextBox.Text);
                 ErrorMessage2.Text = client.GetSVC().GetMessageFromServer();
                 client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             }
+            UsersProjectsTreeView.Items.Refresh();
+            AnalyzeLabel.Content = "Analyzing done.";
+        }
+        private async void AnalyzeSingleFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            string file = FileExplorer.FileName;
+            string fileName = GetFileName(file);
+            await client.GetSVC().AnalyzeFileAndCreateXML(fileName, this.user.GetEmail(), ProjectNameTextBox2.Text);
+            ErrorMessage3.Text = client.GetSVC().GetMessageFromServer();
+            client.GetSVC().SendMessage("I received the analysis results. Thank you.");
+            UsersProjectsTreeView.Items.Refresh();
+            AnalyzeLabel.Content = "Analyzing done.";
         }
 
         private void ViewButton_Click(object sender, RoutedEventArgs e)
         {
-            ErrorMessage1.Text = "";
-            //AnalysisResults.Items.Refresh();
-            //var selectedItem = (TreeViewItem)UsersProjectsTreeView.SelectedItem;        
+            ErrorMessage1.Text = "";      
             if (RelativePathTextBox.Text.Length < 1) //make sure user enters something
             {
                 ErrorMessage1.Text = "Invalid selection(s).";
@@ -162,7 +197,6 @@ namespace RemoteCodeAnalyzer
             }
             else 
             {
-                //ErrorMessage1.Text = "";
                 View(); 
             }
         }
@@ -268,6 +302,11 @@ namespace RemoteCodeAnalyzer
             ActivateBox(ProjectNameTextBox, "Project Name");
             isProjectNameBoxActive = true;
         }
+        private void ProjectNameTextBox2_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ActivateBox(ProjectNameTextBox2, "Project Name");
+            isProjectNameBox2Active = true;
+        }
         private void RelativePathTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (!isRelativePathBoxActive) ActivateBox(RelativePathTextBox, "Enter Path");
@@ -299,18 +338,13 @@ namespace RemoteCodeAnalyzer
                 RelativePathTextBox.Text += treeItemString;
             }
         }
-        private void UsersProjectsTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            //UsersProjectsTreeView_MouseDoubleClick(sender, e);
-        }
-        private void TreeViewItem_OnItemSelected(object sender, RoutedEventArgs e)
-        {
-            
-        }
+
         private void InitializeTextBoxes()
         {
             ProjectNameTextBox.Foreground = Brushes.Gray;
             ProjectNameTextBox.FontStyle = FontStyles.Italic;
+            ProjectNameTextBox2.Foreground = Brushes.Gray;
+            ProjectNameTextBox2.FontStyle = FontStyles.Italic;
             RelativePathTextBox.Foreground = Brushes.Gray;
             RelativePathTextBox.FontStyle = FontStyles.Italic;
         }
@@ -321,6 +355,8 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Clear();
         }
+
+        
         //choose a file, send it to service for analysis, and then retrieve the results from the service
         /*private async void AnalyzeFiles()
         {

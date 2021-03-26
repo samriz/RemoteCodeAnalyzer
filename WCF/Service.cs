@@ -81,6 +81,7 @@ namespace Server
         {
             Task<bool> uploadTask = Task.Run(() =>
             {
+                //if the project folder doesn't exist, a new one will be created
                 string directoryPath = CreateNewProjectFolder(userEmail, projectName) + "/";
                 string filePath = directoryPath + fileName;
                 File.WriteAllLines(filePath, fileText);
@@ -338,8 +339,17 @@ namespace Server
         public string CreateNewProjectFolder(string userEmail, string projectName)
         {
             string path = usersDirectory + "/" + userEmail + "/" + projectName;
-            Directory.CreateDirectory(path);
-            return usersDirectory + "/" + userEmail + "/" + projectName;
+
+            //if project directory doesn't exist, then create that directory and return its path
+            if (!Directory.Exists(usersDirectory + "\\" + userEmail + "\\" + projectName)) 
+            { 
+                Directory.CreateDirectory(path);
+                return usersDirectory + "/" + userEmail + "/" + projectName;
+            }
+            else //if the project directory does exist, then return its path
+            {
+                return usersDirectory + "\\" + userEmail + "\\" + projectName;
+            }           
         }       
 
         //get all the users in Users.xml
