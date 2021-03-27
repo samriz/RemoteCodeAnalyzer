@@ -369,40 +369,5 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Clear();
         }
-    
-        //choose a file, send it to service for analysis, and then retrieve the results from the service
-        /*private async void AnalyzeFiles()
-        {
-            //string file = UsersProjectsTreeView.SelectedValue.ToString();
-            string file = GetFileName(RelativePathTextBox.Text);
-            if(file == null) ErrorMessage.Text = "Invalid path.";
-            else
-            {
-            FileData data = new FileData(file, client.GetSVC().GetFileLines(RelativePathTextBox.Text));
-            //await client.GetSVC().AnalyzeAsync(data);
-            await client.GetSVC().AnalyzeFileAndCreateXML(data);
-            client.GetSVC().SendMessage("I received the analysis results. Thank you.");
-            List<string> analysisList = client.GetSVC().GetAnalysis();
-            AnalysisResults.Items.Clear();
-            foreach (string line in analysisList)
-            {
-                AnalysisResults.Items.Add(line.ToString());
-            }
-            }
-        }*/
-        /*private void PickItem()
-{
-FileInfo fileInfo = new FileInfo(FilesList.SelectedItem.ToString());
-RemoteFileInfo uploadRequestInfo = new RemoteFileInfo();
-
-using(System.IO.FileStream stream = new System.IO.FileStream(FilesList.SelectedItem.ToString(), System.IO.FileMode.Open, System.IO.FileAccess.Read))
-{
-uploadRequestInfo.FileName = FilesList.SelectedItem.ToString();
-uploadRequestInfo.Length = fileInfo.Length;
-uploadRequestInfo.FileByteStream = stream;                
-client.GetSVC().UploadFile(uploadRequestInfo);
-}
-client.GetSVC().Analyze(File.ReadAllLines(FilesList.SelectedItem.ToString()).ToList());
-}*/
     }
 }
