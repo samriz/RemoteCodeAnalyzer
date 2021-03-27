@@ -10,9 +10,9 @@
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Canvas Height="300" Width="600" Background="AliceBlue" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" KeyDown="Canvas_KeyDown" Loaded="Canvas_Loaded">
-            <Canvas.Resources>
+            <!--<Canvas.Resources>
                 <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
-            </Canvas.Resources>
+            </Canvas.Resources>-->
             <!--<Menu DockPanel.Dock="Top">
             <MenuItem Header="File"/>
         </Menu>-->
