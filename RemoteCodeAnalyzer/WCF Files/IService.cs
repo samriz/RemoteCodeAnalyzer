@@ -72,15 +72,15 @@ namespace Server
 
         bool AnAccountWithThisEmailAlreadyExists(string email);
 
-        [OperationContract]
-        bool WasUserAdded();
+        //[OperationContract]
+        //bool WasUserAdded();
 
         string CreateNewAccountFolder(string folderName);
 
         [OperationContract]
         string CreateNewProjectFolder(string userEmail, string projectName);
 
-        //"Get" functions below
+        //Getters below
 
         [OperationContract]
         ConcurrentBag<string> GetUsers();
@@ -101,7 +101,10 @@ namespace Server
         User GetUser();
 
         [OperationContract]
-        Task<List<string>> RetrieveFileAsync(string relativePath);
+        Task<List<string>> RetrieveFileAndReturnStringListAsync(string relativePath);
+
+        [OperationContract, XmlSerializerFormat]
+        Task<XmlDocument> RetrieveFileAndReturnXMLAsync(string relativePath);
         //Task<List<string>> RetrieveFileAsync(string relativePath);
         //Task GetXMLFileFromServerAsync();
     }
@@ -133,6 +136,7 @@ namespace Server
         public List<string> fileLines;
         //public ConcurrentBag<string> fileLines;
 
+        //constructors below
         public FileData() { }
         public FileData(string fileName, List<string> fileLines)
         {
@@ -162,6 +166,8 @@ namespace Server
             this.email = email;
             this.password = password;
         }
+
+        //Getters and Setters below:
         public string GetFirstName() => firstName;
         public string GetLastName() => lastName;
         public string GetEmail() => email;

@@ -65,7 +65,7 @@ namespace Server
         private FunctionTracker FuncTrac;
         private AnalysisDisplayer AD;
         //private XmlDocument analysisXML;
-        private bool wasUserAdded;       
+        //private bool wasUserAdded;       
         private List<string> analysisLines;
 
         public BasicService()
@@ -123,17 +123,22 @@ namespace Server
             Console.WriteLine(serverMessage);
         }
 
-        //retrieve file on server asynchronously
-        public async Task<List<string>> RetrieveFileAsync(string relativePath)
+        //retrieve file on server asynchronously and return List<string>
+        public async Task<List<string>> RetrieveFileAndReturnStringListAsync(string relativePath)
         {
             string path = "..\\..\\Users" + "\\" + relativePath;
-            //XmlDocument xmlFile = new XmlDocument();
-            List<string> lines = new List<string>(); 
+            List<string> lines = new List<string>();
+
+            if (File.Exists(path))
+            {
+                lines = GetFileLines(path);
+                //return true;
+            }
+
             Task<bool> retriever = Task.Run(() =>
             {
                 if (File.Exists(path)) 
                 {
-                    //xmlFile.Load(path);
                     lines = GetFileLines(path);
                     return true;
                 }
@@ -143,8 +148,29 @@ namespace Server
                     return false;
                 }
             });
-            //return xmlFile;
             if (await retriever) return lines;
+            else return null;
+        }
+
+        //retrieve file on server asynchronously and return XmlDocument
+        public async Task<XmlDocument> RetrieveFileAndReturnXMLAsync(string relativePath)
+        {
+            string path = "..\\..\\Users" + "\\" + relativePath;
+            XmlDocument xmlFile = new XmlDocument();
+            Task<bool> retriever = Task.Run(() =>
+            {
+                if (File.Exists(path))
+                {
+                    xmlFile.Load(path);
+                    return true;
+                }
+                else
+                {
+                    serverMessage = "File does not exist at that path. It may be an invalid path.";
+                    return false;
+                }
+            });
+            if (await retriever) return xmlFile;
             else return null;
         }
 
@@ -248,15 +274,14 @@ namespace Server
         //create a new entry in Users.xml asynchronously
         public async Task<bool> AddNewAccountAsync(NewAccountInfo newAccountInfo)
         {
+            bool wasUserAdded = false;
             Task<bool> addUserTask = Task.Run(() =>
             {
                 XmlDocument UsersXML = new XmlDocument();
                 UsersXML.Load(usersXML);
-
                 XmlElement userElem = UsersXML.CreateElement("User");
                 userElem.SetAttribute("FirstName", newAccountInfo.firstName);
                 userElem.SetAttribute("LastName", newAccountInfo.lastName);
-
                 XmlElement loginElem = UsersXML.CreateElement("Login");
 
                 //need to validate that this email doesn't already have an account associated with it
@@ -380,12 +405,14 @@ namespace Server
         }
         public void SendMessage(string message)
         {
-            clientMessage = message;
-            Console.WriteLine("Message received by service: {0}", clientMessage);
+            //clientMessage = message;
+            Console.WriteLine("Message received by service: {0}", clientMessage = message);
         }
+
+        //Getters Below
         public string GetMessageFromServer() => serverMessage;
         public List<string> GetAnalysis() => analysisLines;
-        public bool WasUserAdded() => wasUserAdded;
+        //public bool WasUserAdded() => wasUserAdded;
         public User GetUser() => user;
     }
 }

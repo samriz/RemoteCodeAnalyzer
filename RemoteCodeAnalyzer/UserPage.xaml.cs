@@ -72,8 +72,8 @@ namespace RemoteCodeAnalyzer
 
             DirectoryExplorer = new FolderBrowserDialog();
             FileExplorer = new Microsoft.Win32.OpenFileDialog();
-            FileExplorer.DefaultExt = ".cs"; // Default file extension
-            FileExplorer.Filter = "C# Files (.cs)|*.cs"; // Filter files by extension
+            FileExplorer.DefaultExt = ".cs"; //default file extension
+            FileExplorer.Filter = "C# Files (.cs)|*.cs"; //only show .cs files
 
             AnalyzeFilesButton.IsEnabled = false;
             AnalyzeSingleFileButton.IsEnabled = false;
@@ -86,9 +86,7 @@ namespace RemoteCodeAnalyzer
             this.user = user;
             FullNameLabel.Content = this.user.GetFirstName() + " " + this.user.GetLastName() + " (" + this.user.GetEmail() + ")";
             client = new Client("http://localhost:8080/Service");
-            UsersComboBox.ItemsSource = client.GetSVC().GetUsers();
-
-            
+            UsersComboBox.ItemsSource = client.GetSVC().GetUsers();  
         }
 
         //for searching for a folder on local computer to upload to server
@@ -112,7 +110,7 @@ namespace RemoteCodeAnalyzer
             ErrorMessage2.Text = "";
             if (!Directory.Exists(DirectoryExplorer.SelectedPath)) 
             { 
-                ErrorMessage2.Text = "No valid directory selected."; 
+                ErrorMessage2.Text = "Invalid directory selected."; 
             }
             else
             {
@@ -132,8 +130,8 @@ namespace RemoteCodeAnalyzer
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
             AnalyzeFilesButton.IsEnabled = true;
-            UsersProjectsTreeView.Items.Refresh();
             UploadLabel.Content = "Uploading done.";
+            UsersProjectsTreeView.Items.Refresh();          
         }
 
         //Functionality to upload a single file asynchronously to user's directory on server
@@ -150,8 +148,8 @@ namespace RemoteCodeAnalyzer
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
             AnalyzeSingleFileButton.IsEnabled = true;
-            UsersProjectsTreeView.Items.Refresh();
             UploadLabel2.Content = "Uploading done.";
+            UsersProjectsTreeView.Items.Refresh();
         }
 
         //choose a file for analysis
@@ -174,8 +172,8 @@ namespace RemoteCodeAnalyzer
             await client.GetSVC().AnalyzeFileAndCreateXML(fileName, this.user.GetEmail(), ProjectNameTextBox2.Text);
             ErrorMessage3.Text = client.GetSVC().GetMessageFromServer();
             client.GetSVC().SendMessage("I received the analysis results. Thank you.");
-            UsersProjectsTreeView.Items.Refresh();
-            AnalyzeLabel.Content = "Analyzing done.";
+            AnalyzeLabel2.Content = "Analyzing done.";
+            UsersProjectsTreeView.Items.Refresh();          
         }
 
         private void ViewButton_Click(object sender, RoutedEventArgs e)
@@ -191,7 +189,7 @@ namespace RemoteCodeAnalyzer
             }
             else if (GetExtension(RelativePathTextBox.Text) != "xml")
             {
-                if (user.GetEmail() != GetRoot(RelativePathTextBox.Text))
+                if (GetRoot(RelativePathTextBox.Text) != this.user.GetEmail())
                 {
                     ErrorMessage1.Text = "You can only view non-XML files in your own directory.";
                 }
@@ -203,24 +201,24 @@ namespace RemoteCodeAnalyzer
             }
             else 
             {
+                if (AnalysisResults.Items != null) AnalysisResults.Items.Refresh();
                 View(); 
             }
         }
 
         private async void View()
-        {
-            
+        {          
             string relativePath = RelativePathTextBox.Text;
             if (relativePath == null || relativePath.Length <= 0) ErrorMessage1.Text = "Invalid path.";
             else
             {
-                //XmlDocument analysis = await client.GetSVC().RetrieveFileAsync(relativePath);
-                List<string> analysis = await client.GetSVC().RetrieveFileAsync(relativePath);
+                //XmlDocument analysis = await client.GetSVC().RetrieveFileAndReturnXMLAsync(relativePath);
+                List<string> analysis = await client.GetSVC().RetrieveFileAndReturnStringListAsync(relativePath);
                 ErrorMessage1.Text = client.GetSVC().GetMessageFromServer();
                 client.GetSVC().SendMessage("I received the analysis results. Thank you.");                          
                 AnalysisResults.ItemsSource = analysis;
-                AnalysisResults.Items.Refresh();
-                AnalysisResults.ScrollIntoView(AnalysisResults.Items[0]); 
+                if (AnalysisResults.Items != null) AnalysisResults.Items.Refresh();
+                 
                 /*foreach(ListViewItem i in AnalysisResults.Items)
                 {
                     i.Background = Brushes.Yellow;
@@ -247,6 +245,8 @@ namespace RemoteCodeAnalyzer
             }
             else return fileName;
         }
+
+        //get the extension of the file which would be the last substring after the last dot
         private string GetExtension(string path)
         {
             List<string> pathSubstrings = new List<string>();
@@ -259,13 +259,15 @@ namespace RemoteCodeAnalyzer
             }
             else return extension;            
         }
+
+        //get the root of the path string which would be the first substring before the first forward slash
         private string GetRoot(string path)
         {
             List<string> pathSubstrings = new List<string>();
             string root = null;
-            if (path.Contains("/"))
+            if (path.Contains(@"\"))
             {
-                pathSubstrings = path.Split('/').ToList();
+                pathSubstrings = path.Split('\\').ToList();
                 root = pathSubstrings[0];
                 return root;
             }
@@ -282,7 +284,8 @@ namespace RemoteCodeAnalyzer
         public void PopulateTreeViewWithDirectory()
         {
             UsersProjectsTreeView.Items.Clear();
-            //DirectoryInfo root = new DirectoryInfo(usersDirectory + "\\" + userEmail);
+
+            //add the TreeViewItem to the tree of users directories
             UsersProjectsTreeView.Items.Add(CreateDirectoryTreeViewItem(client.GetSVC().GetUserDirectoryInfo(UsersComboBox.SelectedItem.ToString())));
         }
 
@@ -305,12 +308,12 @@ namespace RemoteCodeAnalyzer
         }
         private void ProjectNameTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
         {
-            ActivateBox(ProjectNameTextBox, "Project Name");
+            if(!isProjectNameBoxActive) ActivateBox(ProjectNameTextBox, "Project Name");
             isProjectNameBoxActive = true;
         }
         private void ProjectNameTextBox2_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            ActivateBox(ProjectNameTextBox2, "Project Name");
+            if(!isProjectNameBox2Active) ActivateBox(ProjectNameTextBox2, "Project Name");
             isProjectNameBox2Active = true;
         }
         private void RelativePathTextBox_ActivateOnClick(object sender, DependencyPropertyChangedEventArgs e)
@@ -318,11 +321,14 @@ namespace RemoteCodeAnalyzer
             if (!isRelativePathBoxActive) ActivateBox(RelativePathTextBox, "Enter Path");
             isRelativePathBoxActive = true;
         }
+
+        //trigger the View button when you press the "Enter" key on the keyboard
         private void RelativePathTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.Enter)) ViewButton_Click(sender, e);
         }
         
+        //double click on an item in the tree of directories in order to add it to the RelativePathTextBox
         private void UsersProjectsTreeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             AddToRelativePath();
@@ -331,18 +337,20 @@ namespace RemoteCodeAnalyzer
         {
             if (Keyboard.IsKeyDown(Key.Enter)) AddToRelativePath();
         }
+
+        //add the selected TreeViewItem to the RelativePathTextBox
         private void AddToRelativePath()
         {
             if (!isRelativePathBoxActive) ActivateBox(RelativePathTextBox, "Enter Path");
             string treeItemString = ((TreeViewItem)(UsersProjectsTreeView.SelectedItem)).Header.ToString();
-            if (this.GetExtension(treeItemString) != "xml")
-            { 
-                RelativePathTextBox.Text += treeItemString + @"\"; 
-            }
-            else
+            if(treeItemString != null)
             {
-                RelativePathTextBox.Text += treeItemString;
+                //don't add a backslash if the last item in the path doesn't have an extension of xml or cs
+                if (this.GetExtension(treeItemString) == "xml") RelativePathTextBox.Text += treeItemString;
+                else if(this.GetExtension(treeItemString) == "cs") RelativePathTextBox.Text += treeItemString;
+                else RelativePathTextBox.Text += treeItemString + @"\";
             }
+            else TreeViewError.Text = "Invalid selection.";
         }
 
         private void InitializeTextBoxes()
@@ -361,8 +369,7 @@ namespace RemoteCodeAnalyzer
             newlyActiveBox.Background = Brushes.AliceBlue;
             if (newlyActiveBox.Text == text) newlyActiveBox.Clear();
         }
-
-        
+    
         //choose a file, send it to service for analysis, and then retrieve the results from the service
         /*private async void AnalyzeFiles()
         {
