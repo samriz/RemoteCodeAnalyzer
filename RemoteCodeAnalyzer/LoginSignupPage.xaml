@@ -18,12 +18,12 @@
         </Menu>-->
             <!--<Label Content="Sign in:" />-->
             <Label Content="Don't have an account?" Canvas.Top="101" Canvas.Left="110"/>
-            <Button Name="NewAccountButton" Content="New Account" Height="25" Width="150" Canvas.Top="143" Canvas.Left="104" Click="NewAccount_Click"/>
+            <Button Name="NewAccountButton" Content="New Account" Height="25" Width="150" Canvas.Top="143" Canvas.Left="104" Click="NewAccountButton_Click"/>
             <Label Content="Already have an account?" Canvas.Top="66" Canvas.Left="357"/>
             <TextBox Name="EmailTextBox" Text="Email" Height="25" Width="150" Canvas.Top="93" Canvas.Left="357" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="EmailTextBox_ActivateOnClick" KeyDown="EmailTextBox_KeyDown"/>
             <!--<Label Content="Password" Canvas.Top="89" Canvas.Left="335"/>-->
             <PasswordBox Name="PasswordTextBox" Height="25" Width="150" Canvas.Top="118" Canvas.Left="357" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
-            <Button Name="LoginButton" Content="Login" Height="25" Width="150" Canvas.Top="143" Canvas.Left="357" Click="Login_Click"/>
+            <Button Name="LoginButton" Content="Login" Height="25" Width="150" Canvas.Top="143" Canvas.Left="357" Click="LoginButton_Click"/>
             <TextBlock Name="ErrorMessage" Height="Auto" Width="Auto" Canvas.Top="164" Canvas.Left="335" TextWrapping="NoWrap" FontSize="10" FontStyle="Italic" Foreground="Red"/>
         </Canvas>
     </ScrollViewer>

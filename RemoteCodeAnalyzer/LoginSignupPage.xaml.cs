@@ -62,7 +62,7 @@ namespace RemoteCodeAnalyzer
         }
         
         //event handler below
-        private void Login_Click(object sender, RoutedEventArgs e){Login();}
+        private void LoginButton_Click(object sender, RoutedEventArgs e){Login();}
         
         //functionality for logging into user page
         private async void Login()
@@ -84,7 +84,7 @@ namespace RemoteCodeAnalyzer
         }
 
         //go to NewAccountPage so user can create a new account if they wish
-        private void NewAccount_Click(object sender, RoutedEventArgs e)
+        private void NewAccountButton_Click(object sender, RoutedEventArgs e)
         {
             NewAccountPage NA = new NewAccountPage();
             this.NavigationService.Navigate(NA);

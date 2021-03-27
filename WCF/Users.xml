@@ -9,4 +9,7 @@
   <User FirstName="adam" LastName="smith">
     <Login Email="asmith@gmail.com" Password="hi" />
   </User>
+  <User FirstName="George" LastName="Washington">
+    <Login Email="gwash@yahoo.com" Password="george" />
+  </User>
 </Users>

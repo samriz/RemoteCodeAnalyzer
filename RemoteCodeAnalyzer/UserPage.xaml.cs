@@ -55,11 +55,11 @@ namespace RemoteCodeAnalyzer
     public partial class UserPage : Page
     {
         private readonly Client client; //object that allows us to communicate with service
-        private Microsoft.Win32.OpenFileDialog FileExplorer;
-        private readonly FolderBrowserDialog DirectoryExplorer;
+        private Microsoft.Win32.OpenFileDialog FileExplorer; //Window to choose file from local computer
+        private readonly FolderBrowserDialog DirectoryExplorer; //window to choose directory/folder from local computer
         private readonly User user;
         private bool anItemInComboBoxIsSelected;
-        private List<string> uploadedFileNames;
+        private List<string> uploadedFileNames; //I want just the names of the files without their full paths
         private bool isRelativePathBoxActive;
         private bool isProjectNameBoxActive;
         private bool isProjectNameBox2Active;
@@ -67,7 +67,7 @@ namespace RemoteCodeAnalyzer
         public UserPage()
         {
             InitializeComponent();
-            InitializeTextBoxes();
+            //InitializeTextBoxes();
             anItemInComboBoxIsSelected = false;
 
             DirectoryExplorer = new FolderBrowserDialog();
@@ -129,7 +129,7 @@ namespace RemoteCodeAnalyzer
                 }
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
-            AnalyzeFilesButton.IsEnabled = true;
+            AnalyzeFilesButton.IsEnabled = true; //enable analyze button now that we are ready to analyze
             UploadLabel.Content = "Uploading done.";
             UsersProjectsTreeView.Items.Refresh();          
         }
@@ -147,7 +147,7 @@ namespace RemoteCodeAnalyzer
                 await client.GetSVC().UploadFileAsync(fileName, fileLines, this.user.GetEmail(), ProjectNameTextBox2.Text);
                 if (UsersProjectsTreeView.HasItems) PopulateTreeViewWithDirectory();
             }
-            AnalyzeSingleFileButton.IsEnabled = true;
+            AnalyzeSingleFileButton.IsEnabled = true; //enable analyze button now that we are ready to analyze
             UploadLabel2.Content = "Uploading done.";
             UsersProjectsTreeView.Items.Refresh();
         }
@@ -156,13 +156,15 @@ namespace RemoteCodeAnalyzer
         private async void AnalyzeFilesButton_Click(object sender, RoutedEventArgs e) 
         {
             ErrorMessage2.Text = "";
+
+            //go through each file in directory and create their analysis XMLs
             foreach (var fileName in uploadedFileNames)
             {
                 await client.GetSVC().AnalyzeFileAndCreateXML(fileName, this.user.GetEmail(), ProjectNameTextBox.Text);
                 ErrorMessage2.Text = client.GetSVC().GetMessageFromServer();
                 client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             }
-            UsersProjectsTreeView.Items.Refresh();
+            UsersProjectsTreeView.Items.Refresh(); //refresh the view so we can see new files in there
             AnalyzeLabel.Content = "Analyzing done.";
         }
         private async void AnalyzeSingleFileButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +175,7 @@ namespace RemoteCodeAnalyzer
             ErrorMessage3.Text = client.GetSVC().GetMessageFromServer();
             client.GetSVC().SendMessage("I received the analysis results. Thank you.");
             AnalyzeLabel2.Content = "Analyzing done.";
-            UsersProjectsTreeView.Items.Refresh();          
+            UsersProjectsTreeView.Items.Refresh(); //refresh the view so we can see new files in there       
         }
 
         private void ViewButton_Click(object sender, RoutedEventArgs e)
@@ -218,11 +220,6 @@ namespace RemoteCodeAnalyzer
                 client.GetSVC().SendMessage("I received the analysis results. Thank you.");                          
                 AnalysisResults.ItemsSource = analysis;
                 if (AnalysisResults.Items != null) AnalysisResults.Items.Refresh();
-                 
-                /*foreach(ListViewItem i in AnalysisResults.Items)
-                {
-                    i.Background = Brushes.Yellow;
-                }*/
             }
         }
 
@@ -342,15 +339,15 @@ namespace RemoteCodeAnalyzer
         private void AddToRelativePath()
         {
             if (!isRelativePathBoxActive) ActivateBox(RelativePathTextBox, "Enter Path");
-            string treeItemString = ((TreeViewItem)(UsersProjectsTreeView.SelectedItem)).Header.ToString();
-            if(treeItemString != null)
+            if (UsersProjectsTreeView.SelectedItem != null)
             {
+                string treeItemString = ((TreeViewItem)(UsersProjectsTreeView.SelectedItem)).Header.ToString();
                 //don't add a backslash if the last item in the path doesn't have an extension of xml or cs
                 if (this.GetExtension(treeItemString) == "xml") RelativePathTextBox.Text += treeItemString;
-                else if(this.GetExtension(treeItemString) == "cs") RelativePathTextBox.Text += treeItemString;
+                else if (this.GetExtension(treeItemString) == "cs") RelativePathTextBox.Text += treeItemString;
                 else RelativePathTextBox.Text += treeItemString + @"\";
             }
-            else TreeViewError.Text = "Invalid selection.";
+            else return;
         }
 
         private void InitializeTextBoxes()
