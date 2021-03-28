@@ -170,26 +170,4 @@ namespace Server
         public void SetEmail(string email) => this.email = email;
         public void SetPassword(string password) => this.password = password;
     }
-    /*[MessageContract]
-    //send an object of this for messages
-    public class RemoteFileInfo : IDisposable
-    {
-        [MessageHeader(MustUnderstand = true)]
-        public string FileName;
-
-        [MessageHeader(MustUnderstand = true)]
-        public long Length;
-
-        [MessageBodyMember(Order = 1)]
-        public System.IO.Stream FileByteStream;
-
-        public void Dispose()
-        {
-            if(FileByteStream != null)
-            {
-                FileByteStream.Close();
-                FileByteStream = null;
-            }
-        }
-    }*/
 }

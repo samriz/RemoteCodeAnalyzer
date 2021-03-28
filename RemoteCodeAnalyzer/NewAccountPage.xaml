@@ -10,13 +10,13 @@
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Canvas Height="400" Width="600" Background="AliceBlue">
-            <Label Content="Create account:" Canvas.Left="215" Canvas.Top="70" FontSize="20"/>
-            <TextBox Name="FirstNameTextBox" Text="First Name" Width="100" Canvas.Top="117" Canvas.Left="235" IsMouseDirectlyOverChanged="FirstNameTextBox_IsMouseDirectlyOverChanged" FontStyle="Italic" Foreground="Gray" KeyDown="FirstNameTextBox_KeyDown"/>
-            <TextBox Name="LastNameTextBox" Text="Last Name" Width="100" IsMouseDirectlyOverChanged="LastNameTextBox_IsMouseDirectlyOverChanged" Canvas.Left="235" Canvas.Top="140" FontStyle="Italic" Foreground="Gray" KeyDown="LastNameTextBox_KeyDown"/>
-            <TextBox Name="EmailTextBox" Text="Email" Width="100" Canvas.Top="163" Canvas.Left="235" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged" KeyDown="EmailTextBox_KeyDown"/>
-            <TextBox Name="PasswordTextBox" Text="Password" Width="100" Canvas.Top="186" Canvas.Left="235" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged" KeyDown="PasswordTextBox_KeyDown"/>
-            <Button Name="SignUpButton" Content="Sign Up" Width="100" HorizontalAlignment="Left" Click="SignUp_Click" Canvas.Left="235" Canvas.Top="209" />
-            <TextBlock Name="ErrorMessage" Canvas.Left="262" TextWrapping="NoWrap" Height="Auto" Width="Auto" Canvas.Top="250" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+            <Label Content="Create account:" Canvas.Left="220" Canvas.Top="91" FontSize="20"/>
+            <TextBox Name="FirstNameTextBox" Text="First Name" Width="100" Canvas.Top="138" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="FirstNameTextBox_IsMouseDirectlyOverChanged" KeyDown="FirstNameTextBox_KeyDown"/>
+            <TextBox Name="LastNameTextBox" Text="Last Name" Width="100" Canvas.Top="161" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="LastNameTextBox_IsMouseDirectlyOverChanged" KeyDown="LastNameTextBox_KeyDown"/>
+            <TextBox Name="EmailTextBox" Text="Email" Width="100" Canvas.Top="184" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="EmailTextBox_IsMouseDirectlyOverChanged" KeyDown="EmailTextBox_KeyDown"/>
+            <TextBox Name="PasswordTextBox" Text="Password" Width="100" Canvas.Top="207" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="PasswordTextBox_IsMouseDirectlyOverChanged" KeyDown="PasswordTextBox_KeyDown"/>
+            <Button Name="SignUpButton" Content="Sign Up" Width="100" Canvas.Top="230" Canvas.Left="240" Click="SignUp_Click"/>
+            <TextBlock Name="ErrorMessage" Height="Auto" Width="Auto" Canvas.Top="250" Canvas.Left="262" TextWrapping="NoWrap" FontSize="10" FontStyle="Italic" Foreground="Red"/>
         </Canvas>
     </ScrollViewer>
 </Page>
