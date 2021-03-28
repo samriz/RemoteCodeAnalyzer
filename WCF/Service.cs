@@ -315,46 +315,6 @@ namespace Server
             }
         }
 
-        //create a new entry in Users.xml asynchronously
-        /*public async Task AddNewAccountAsync(NewAccountInfo newAccountInfo)
-        {
-            Task<bool> addUserTask = Task.Run(() =>
-            {
-                XmlDocument UsersXML = new XmlDocument();
-                UsersXML.Load(usersXML);
-
-                XmlElement userElem = UsersXML.CreateElement("User");
-                userElem.SetAttribute("FirstName", newAccountInfo.firstName);
-                userElem.SetAttribute("LastName", newAccountInfo.lastName);
-
-                XmlElement loginElem = UsersXML.CreateElement("Login");
-
-                //need to validate that this email doesn't already have an account associated with it
-                if (!AnAccountWithThisEmailAlreadyExists(newAccountInfo.email))
-                {
-                    loginElem.SetAttribute("Email", newAccountInfo.email);
-                    loginElem.SetAttribute("Password", newAccountInfo.password);
-                    userElem.AppendChild(loginElem);
-                    UsersXML.DocumentElement.AppendChild(userElem);
-                    UsersXML.Save(usersXML);
-                    CreateNewAccountFolder(newAccountInfo.email);
-                    return true;
-                }
-                else return false;
-            });
-            wasUserAdded = await addUserTask;
-            if (wasUserAdded)
-            {
-                serverMessage = "New account " + newAccountInfo.email + " successfully created.";
-                Console.WriteLine(serverMessage);
-            }
-            else
-            {
-                serverMessage = "An account associated with this email address already exists.";
-                Console.WriteLine(serverMessage);
-            }
-        }*/
-
         //create a new account folder when a new account is created
         public string CreateNewAccountFolder(string folderName)
         {
@@ -408,7 +368,6 @@ namespace Server
         }
         public void SendMessage(string message)
         {
-            //clientMessage = message;
             Console.WriteLine("Message received by service: {0}", clientMessage = message);
         }
 

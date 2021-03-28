@@ -53,10 +53,6 @@ namespace Server
         //[OperationContract]
         //bool IsLoginSuccessful();
 
-        //void AuthenticateUser(string email, string password);
-
-        //bool UserExists(out string firstName, out string lastName, string email, string password);
-
         [OperationContract]
         Task UploadFileAsync(string fileName, ConcurrentBag<string> fileText, string userEmail, string projectName);
 
@@ -68,19 +64,11 @@ namespace Server
 
         [OperationContract]
         Task<bool> AddNewAccountAsync(NewAccountInfo newAccountInfo);
-        //Task AddNewAccountAsync(NewAccountInfo newAccountInfo);
-
-        bool AnAccountWithThisEmailAlreadyExists(string email);
-
-        //[OperationContract]
-        //bool WasUserAdded();
-
-        string CreateNewAccountFolder(string folderName);
 
         [OperationContract]
         string CreateNewProjectFolder(string userEmail, string projectName);
 
-        //Getters below
+        //Getters below:
 
         [OperationContract]
         ConcurrentBag<string> GetUsers();
@@ -106,7 +94,12 @@ namespace Server
         [OperationContract, XmlSerializerFormat]
         Task<XmlDocument> RetrieveFileAndReturnXMLAsync(string relativePath);
         //Task<List<string>> RetrieveFileAsync(string relativePath);
-        //Task GetXMLFileFromServerAsync();
+
+        //helper functions:
+        //bool AnAccountWithThisEmailAlreadyExists(string email);
+        //string CreateNewAccountFolder(string folderName);
+        //void AuthenticateUser(string email, string password);
+        //bool UserExists(out string firstName, out string lastName, string email, string password);
     }
 
     [DataContract]

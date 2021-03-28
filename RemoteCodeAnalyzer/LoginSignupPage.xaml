@@ -25,6 +25,7 @@
             <PasswordBox Name="PasswordTextBox" Height="25" Width="150" Canvas.Top="118" Canvas.Left="357" IsMouseDirectlyOverChanged="PasswordTextBox_ActivateOnClick" KeyDown="PasswordTextBox_KeyDown"></PasswordBox>
             <Button Name="LoginButton" Content="Login" Height="25" Width="150" Canvas.Top="143" Canvas.Left="357" Click="LoginButton_Click"/>
             <TextBlock Name="ErrorMessage" Height="Auto" Width="Auto" Canvas.Top="164" Canvas.Left="335" TextWrapping="NoWrap" FontSize="10" FontStyle="Italic" Foreground="Red"/>
+            <Label Name="Footer" Content="Copyright © 2021 Sameer Rizvi" Canvas.Top="274" Canvas.Left="210"/>
         </Canvas>
     </ScrollViewer>
 </Page>
