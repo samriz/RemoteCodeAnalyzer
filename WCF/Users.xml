@@ -6,10 +6,4 @@
   <User FirstName="Sameer" LastName="Rizvi">
     <Login Email="srizv82@gmail.com" Password="123pass" />
   </User>
-  <User FirstName="adam" LastName="smith">
-    <Login Email="asmith@gmail.com" Password="hi" />
-  </User>
-  <User FirstName="George" LastName="Washington">
-    <Login Email="gwash@yahoo.com" Password="george" />
-  </User>
 </Users>

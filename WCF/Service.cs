@@ -113,8 +113,11 @@ namespace Server
                     else return false;
                 }
             });
-            if (await analysisTask) serverMessage = "Task " + analysisTask.Id + " has finished creating the analysis xml for " + fileName;
-            else 
+            if (await analysisTask) 
+            { 
+                Console.WriteLine("Task " + analysisTask.Id + " has finished creating the analysis xml for " + fileName);
+            }
+            else
             {
                 string message1 = fileName + " cannot be analyzed. It may not contain any classes and/or functions.";
                 Console.WriteLine("Task " + analysisTask.Id + " did not create the analysis xml for " + fileName);
