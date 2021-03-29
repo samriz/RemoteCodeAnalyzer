@@ -9,8 +9,8 @@
       Title="LoginOrCreateAccount">
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Height="300" Width="600" Background="AliceBlue" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" KeyDown="Canvas_KeyDown" Loaded="Canvas_Loaded">
-            <Label Content="Remote Code Analyzer" FontWeight="Bold" Foreground="Blue" BorderBrush="Black" BorderThickness=".9"/>
+        <Canvas Name="LoginCanvas" Height="300" Width="600" Background="AliceBlue" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" KeyDown="Canvas_KeyDown" Loaded="Canvas_Loaded">
+            <Label Name="ApplicationLabel" Content="Remote Code Analyzer" FontWeight="Bold" Foreground="Blue" BorderBrush="Black" BorderThickness=".9"/>
             <!--<Canvas.Resources>
                 <XmlDataProvider x:Key="UsersData" Source="Users.xml" XPath="Users"/>
             </Canvas.Resources>-->

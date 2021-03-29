@@ -9,7 +9,7 @@
       Title="User">
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Height="730" Width="600" Background="AliceBlue">
+        <Canvas Name="UserPageCanvas" Height="730" Width="600" Background="AliceBlue">
             <Label Name="FullNameLabel" Content="Sameer Rizvi (srizv82@gmail.com)" Height="Auto" Width="Auto" FontSize="20" Canvas.Left="140" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             <Label Content="Choose User and File" Canvas.Left="53" Canvas.Top="50" Height="Auto" Width="Auto"/>
             <ComboBox Name="UsersComboBox" Canvas.Left="10" Canvas.Top="75" Width="220" SelectionChanged="UsersComboBox_SelectionChanged"/>

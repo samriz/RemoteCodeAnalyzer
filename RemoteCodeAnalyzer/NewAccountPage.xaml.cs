@@ -204,5 +204,10 @@ namespace RemoteCodeAnalyzer
                 }
             }
         }
+
+        private void Label_IsMouseDirectlyOverChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
     }
 }

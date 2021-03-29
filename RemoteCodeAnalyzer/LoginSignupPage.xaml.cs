@@ -69,7 +69,6 @@ namespace RemoteCodeAnalyzer
         {
             //string message;
             UserPage userpage;
-            ;
             //if (client.GetSVC().Login(EmailTextBox.Text, PasswordTextBox.Password))
             //if(client.GetSVC().IsLoginSuccessful())
             if(await client.GetSVC().LoginAsync(EmailTextBox.Text, PasswordTextBox.Password))
@@ -147,12 +146,12 @@ namespace RemoteCodeAnalyzer
             PasswordTextBox.FontStyle = FontStyles.Italic;
         }
         /*
-            public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
-            public event RoutedEventHandler Click;
-             
-            Click += Login_Click //we are registering Login_Click method to the Click event
-            Click?.Invoke(sender,e); //invoke handler(s)
-            */
+   public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
+   public event RoutedEventHandler Click;
+
+   Click += Login_Click //we are registering Login_Click method to the Click event
+   Click?.Invoke(sender,e); //invoke handler(s)
+   */
         //sender is button
     }
 }

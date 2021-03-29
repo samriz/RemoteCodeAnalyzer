@@ -9,7 +9,8 @@
       Title="NewAccount">
 
     <ScrollViewer Height="Auto" Width="Auto" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Height="400" Width="600" Background="AliceBlue">
+        <Canvas Name="NewAccountCanvas" Height="400" Width="600" Background="AliceBlue">
+            <!--<Label Name="ApplicationLabel" Content="Remote Code Analyzer" FontWeight="Bold" Foreground="Blue" BorderBrush="Black" BorderThickness=".9"/>-->
             <Label Content="Create account:" Canvas.Left="220" Canvas.Top="91" FontSize="20"/>
             <TextBox Name="FirstNameTextBox" Text="First Name" Width="100" Canvas.Top="138" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="FirstNameTextBox_IsMouseDirectlyOverChanged" KeyDown="FirstNameTextBox_KeyDown"/>
             <TextBox Name="LastNameTextBox" Text="Last Name" Width="100" Canvas.Top="161" Canvas.Left="240" FontStyle="Italic" Foreground="Gray" IsMouseDirectlyOverChanged="LastNameTextBox_IsMouseDirectlyOverChanged" KeyDown="LastNameTextBox_KeyDown"/>
